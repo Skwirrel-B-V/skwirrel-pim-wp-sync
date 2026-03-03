@@ -47,7 +47,6 @@ class Skwirrel_WC_Sync_Admin_Settings {
         add_action('admin_post_skwirrel_wc_sync_test', [$this, 'handle_test_connection']);
         add_action('admin_post_skwirrel_wc_sync_run', [$this, 'handle_sync_now']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
-        add_action('admin_head', [$this, 'render_sync_busy_css']);
         add_action('wp_ajax_' . self::BG_SYNC_ACTION, [$this, 'handle_background_sync']);
         add_action('wp_ajax_nopriv_' . self::BG_SYNC_ACTION, [$this, 'handle_background_sync']);
         add_action('admin_post_skwirrel_wc_sync_purge', [$this, 'handle_purge_now']);
@@ -381,33 +380,51 @@ class Skwirrel_WC_Sync_Admin_Settings {
     }
 
     public function enqueue_assets(string $hook): void {
+        // Spinner CSS on all admin pages when sync is in progress.
+        if (get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
+            wp_register_style('skwirrel-sync-spinner', false, [], SKWIRREL_WC_SYNC_VERSION);
+            wp_enqueue_style('skwirrel-sync-spinner');
+            wp_add_inline_style(
+                'skwirrel-sync-spinner',
+                '@keyframes skwirrel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }'
+                . ' #toplevel_page_skwirrel-sync-now > a .dashicons-update { animation: skwirrel-spin 1.2s linear infinite; }'
+                . ' .skwirrel-sync-spinner { display: inline-block; animation: skwirrel-spin 1.2s linear infinite; vertical-align: middle; margin-right: 4px; }'
+            );
+        }
+
+        // Only load plugin page assets on our settings page.
         if (strpos($hook, self::PAGE_SLUG) === false) {
             return;
         }
-        wp_enqueue_style('skwirrel-admin', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/admin.css', [], SKWIRREL_WC_SYNC_VERSION);
-    }
 
-    public function render_sync_busy_css(): void {
-        if (!get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
-            return;
+        wp_enqueue_style('skwirrel-admin', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/admin.css', [], SKWIRREL_WC_SYNC_VERSION);
+
+        // Admin page JS (purge confirmation + auto-reload).
+        wp_register_script('skwirrel-admin', false, [], SKWIRREL_WC_SYNC_VERSION, true);
+        wp_enqueue_script('skwirrel-admin');
+
+        wp_localize_script('skwirrel-admin', 'skwirrelSync', [
+            'purgeConfirmPermanent' => __('WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?', 'skwirrel-pim-sync'),
+            'purgeConfirmTrash'     => __('All Skwirrel products will be moved to the trash.\n\nAre you sure?', 'skwirrel-pim-sync'),
+        ]);
+
+        wp_add_inline_script(
+            'skwirrel-admin',
+            '(function() {'
+            . ' var form = document.getElementById("skwirrel-purge-form");'
+            . ' if (!form) return;'
+            . ' form.addEventListener("submit", function(e) {'
+            . '  var permanent = document.getElementById("skwirrel-purge-permanent").checked;'
+            . '  var msg = permanent ? skwirrelSync.purgeConfirmPermanent : skwirrelSync.purgeConfirmTrash;'
+            . '  if (!confirm(msg)) { e.preventDefault(); }'
+            . ' });'
+            . '})();'
+        );
+
+        // Auto-reload when sync is in progress.
+        if (get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
+            wp_add_inline_script('skwirrel-admin', 'setTimeout(function(){ window.location.reload(); }, 5000);');
         }
-        ?>
-        <style>
-            @keyframes skwirrel-spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-            #toplevel_page_skwirrel-sync-now > a .dashicons-update {
-                animation: skwirrel-spin 1.2s linear infinite;
-            }
-            .skwirrel-sync-spinner {
-                display: inline-block;
-                animation: skwirrel-spin 1.2s linear infinite;
-                vertical-align: middle;
-                margin-right: 4px;
-            }
-        </style>
-        <?php
     }
 
     public function render_page(): void {
@@ -480,7 +497,6 @@ class Skwirrel_WC_Sync_Admin_Settings {
                     <?php esc_html_e('The page will refresh automatically when the sync is completed.', 'skwirrel-pim-sync'); ?>
                 </p>
             </div>
-            <script>setTimeout(function(){ window.location.reload(); }, 5000);</script>
         <?php elseif ($last_result) : ?>
             <div style="background: <?php echo $last_result['success'] ? '#d4edda' : '#f8d7da'; ?>; border: 1px solid <?php echo $last_result['success'] ? '#c3e6cb' : '#f5c6cb'; ?>; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: <?php echo $last_result['success'] ? '#155724' : '#721c24'; ?>;">
@@ -868,21 +884,6 @@ class Skwirrel_WC_Sync_Admin_Settings {
                 </p>
             </form>
         </div>
-        <script>
-        (function() {
-            var form = document.getElementById('skwirrel-purge-form');
-            if (!form) return;
-            form.addEventListener('submit', function(e) {
-                var permanent = document.getElementById('skwirrel-purge-permanent').checked;
-                var msg = permanent
-                    ? <?php echo wp_json_encode(__('WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?', 'skwirrel-pim-sync')); ?>
-                    : <?php echo wp_json_encode(__('All Skwirrel products will be moved to the trash.\n\nAre you sure?', 'skwirrel-pim-sync')); ?>;
-                if (!confirm(msg)) {
-                    e.preventDefault();
-                }
-            });
-        })();
-        </script>
         <?php
     }
 

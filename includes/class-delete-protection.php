@@ -37,8 +37,7 @@ class Skwirrel_WC_Sync_Delete_Protection {
         add_filter('product_cat_row_actions', [$this, 'modify_category_row_actions'], 10, 2);
 
         // JS bevestigingsdialoog op productlijst en categoriepagina
-        add_action('admin_footer-edit.php', [$this, 'product_list_script']);
-        add_action('admin_footer-edit-tags.php', [$this, 'category_list_script']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
 
         // Na verwijdering: forceer volledige sync zodat product terugkomt
         add_action('wp_trash_post', [$this, 'on_product_trashed']);
@@ -174,65 +173,51 @@ class Skwirrel_WC_Sync_Delete_Protection {
     }
 
     /**
-     * JavaScript bevestigingsdialoog voor producten in de productlijst.
+     * Enqueue JavaScript bevestigingsdialogen op productlijst en categoriepagina.
      */
-    public function product_list_script(): void {
+    public function enqueue_scripts(): void {
         if (!$this->is_enabled()) {
             return;
         }
 
         $screen = get_current_screen();
-        if (!$screen || $screen->id !== 'edit-product') {
+        if (!$screen) {
             return;
         }
 
-        $msg = __('This product is managed by Skwirrel and will be recreated during the next sync.\n\nAre you sure you want to trash this product?', 'skwirrel-pim-sync');
-        ?>
-        <script>
-        (function() {
-            var msg = <?php echo wp_json_encode($msg); ?>;
-            document.addEventListener('click', function(e) {
-                var link = e.target.closest('.skwirrel-protected-trash');
-                if (!link) return;
-                if (!confirm(msg)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }, true);
-        })();
-        </script>
-        <?php
-    }
-
-    /**
-     * JavaScript bevestigingsdialoog voor categorieën.
-     */
-    public function category_list_script(): void {
-        if (!$this->is_enabled()) {
-            return;
+        if ($screen->id === 'edit-product') {
+            $msg = __('This product is managed by Skwirrel and will be recreated during the next sync.\n\nAre you sure you want to trash this product?', 'skwirrel-pim-sync');
+            wp_register_script('skwirrel-delete-protection', false, [], SKWIRREL_WC_SYNC_VERSION, true);
+            wp_enqueue_script('skwirrel-delete-protection');
+            wp_add_inline_script(
+                'skwirrel-delete-protection',
+                '(function() {'
+                . ' var msg = ' . wp_json_encode($msg) . ';'
+                . ' document.addEventListener("click", function(e) {'
+                . '  var link = e.target.closest(".skwirrel-protected-trash");'
+                . '  if (!link) return;'
+                . '  if (!confirm(msg)) { e.preventDefault(); e.stopPropagation(); }'
+                . ' }, true);'
+                . '})();'
+            );
         }
 
-        $screen = get_current_screen();
-        if (!$screen || $screen->taxonomy !== 'product_cat') {
-            return;
+        if ($screen->taxonomy === 'product_cat') {
+            $msg = __('This category was created by Skwirrel Sync and will be recreated during the next sync.\n\nAre you sure you want to delete this category?', 'skwirrel-pim-sync');
+            wp_register_script('skwirrel-delete-protection-cat', false, [], SKWIRREL_WC_SYNC_VERSION, true);
+            wp_enqueue_script('skwirrel-delete-protection-cat');
+            wp_add_inline_script(
+                'skwirrel-delete-protection-cat',
+                '(function() {'
+                . ' var msg = ' . wp_json_encode($msg) . ';'
+                . ' document.addEventListener("click", function(e) {'
+                . '  var link = e.target.closest(".skwirrel-protected-delete");'
+                . '  if (!link) return;'
+                . '  if (!confirm(msg)) { e.preventDefault(); e.stopPropagation(); }'
+                . ' }, true);'
+                . '})();'
+            );
         }
-
-        $msg = __('This category was created by Skwirrel Sync and will be recreated during the next sync.\n\nAre you sure you want to delete this category?', 'skwirrel-pim-sync');
-        ?>
-        <script>
-        (function() {
-            var msg = <?php echo wp_json_encode($msg); ?>;
-            document.addEventListener('click', function(e) {
-                var link = e.target.closest('.skwirrel-protected-delete');
-                if (!link) return;
-                if (!confirm(msg)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }, true);
-        })();
-        </script>
-        <?php
     }
 
     /**
