@@ -2,6 +2,11 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.8.2]
+
+* Replace all inline `<script>` and `<style>` tags with proper `wp_enqueue_script`/`wp_add_inline_script`/`wp_add_inline_style` calls
+* Rename plugin display name to "Skwirrel PIM sync for WooCommerce"
+
 ## [1.8.1]
 
 * Fix variation attribute labels showing raw ETIM codes (e.g. "EF002671") instead of human-readable names
