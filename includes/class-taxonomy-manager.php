@@ -126,14 +126,9 @@ class Skwirrel_WC_Sync_Taxonomy_Manager {
 	 * Ensure the pa_skwirrel_variant WooCommerce attribute taxonomy exists.
 	 *
 	 * Creates the attribute in the WC attribute table and registers the taxonomy
-	 * if it does not already exist. Migrates from the old 'pa_variant' slug if present.
+	 * if it does not already exist.
 	 */
 	public function ensure_variant_taxonomy_exists(): void {
-		// Migrate legacy pa_variant → pa_skwirrel_variant (pre-1.9.0)
-		if ( ! wc_attribute_taxonomy_id_by_name( 'skwirrel_variant' ) && wc_attribute_taxonomy_id_by_name( 'variant' ) ) {
-			$this->migrate_variant_taxonomy();
-		}
-
 		if ( taxonomy_exists( 'pa_skwirrel_variant' ) ) {
 			return;
 		}
@@ -160,71 +155,6 @@ class Skwirrel_WC_Sync_Taxonomy_Manager {
 				'show_ui'      => true,
 				'query_var'    => true,
 				'rewrite'      => [ 'slug' => 'pa_skwirrel_variant' ],
-			]
-		);
-	}
-
-	/**
-	 * Migrate the legacy pa_variant taxonomy to pa_skwirrel_variant.
-	 *
-	 * Renames the WC attribute row, renames the taxonomy in the DB,
-	 * and updates product meta references.
-	 */
-	private function migrate_variant_taxonomy(): void {
-		global $wpdb;
-
-		$old_attr_id = wc_attribute_taxonomy_id_by_name( 'variant' );
-		if ( ! $old_attr_id ) {
-			return;
-		}
-
-		// Rename the attribute slug in the WC attributes table
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration
-		$wpdb->update(
-			$wpdb->prefix . 'woocommerce_attribute_taxonomies',
-			[ 'attribute_name' => 'skwirrel_variant' ],
-			[ 'attribute_id' => $old_attr_id ]
-		);
-		delete_transient( 'wc_attribute_taxonomies' );
-
-		// Rename the taxonomy in the term_taxonomy table
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration
-		$wpdb->update(
-			$wpdb->term_taxonomy,
-			[ 'taxonomy' => 'pa_skwirrel_variant' ],
-			[ 'taxonomy' => 'pa_variant' ]
-		);
-
-		// Update variation post meta: attribute_pa_variant → attribute_pa_skwirrel_variant
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration
-		$wpdb->update(
-			$wpdb->postmeta,
-			[ 'meta_key' => 'attribute_pa_skwirrel_variant' ],
-			[ 'meta_key' => 'attribute_pa_variant' ]
-		);
-
-		// Update _product_attributes serialized meta on parent products
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- one-time migration
-		$rows = $wpdb->get_results(
-			"SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_product_attributes' AND meta_value LIKE '%pa_variant%'",
-			ARRAY_A
-		);
-		foreach ( $rows as $row ) {
-			$attrs = maybe_unserialize( $row['meta_value'] );
-			if ( ! is_array( $attrs ) || ! isset( $attrs['pa_variant'] ) ) {
-				continue;
-			}
-			$attrs['pa_skwirrel_variant']         = $attrs['pa_variant'];
-			$attrs['pa_skwirrel_variant']['name'] = 'pa_skwirrel_variant';
-			unset( $attrs['pa_variant'] );
-			update_post_meta( (int) $row['post_id'], '_product_attributes', $attrs );
-		}
-
-		$this->logger->info(
-			'Migrated pa_variant → pa_skwirrel_variant',
-			[
-				'attribute_id'     => $old_attr_id,
-				'products_updated' => count( $rows ),
 			]
 		);
 	}
