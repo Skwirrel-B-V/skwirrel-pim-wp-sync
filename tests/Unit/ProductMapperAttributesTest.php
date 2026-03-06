@@ -10,7 +10,7 @@ beforeEach(function () {
 // get_attributes() — base attributes
 // ------------------------------------------------------------------
 
-test('get_attributes includes brand', function () {
+test('get_attributes does not include brand (handled by Brand_Sync)', function () {
 	$product = [
 		'product_id' => 1,
 		'brand_name' => 'Bosch',
@@ -18,7 +18,7 @@ test('get_attributes includes brand', function () {
 
 	$attrs = $this->mapper->get_attributes($product);
 
-	expect($attrs)->toHaveKey('Brand', 'Bosch');
+	expect($attrs)->not->toHaveKey('Brand');
 });
 
 test('get_attributes includes manufacturer', function () {
@@ -74,7 +74,7 @@ test('get_attributes combines base and ETIM attributes', function () {
 
 	$attrs = $this->mapper->get_attributes($product);
 
-	expect($attrs)->toHaveKey('Brand', 'Bosch');
+	expect($attrs)->not->toHaveKey('Brand');
 	expect($attrs)->toHaveKey('Draadloos', 'Ja');
 });
 

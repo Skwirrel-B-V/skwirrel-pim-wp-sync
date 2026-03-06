@@ -195,7 +195,7 @@ class Skwirrel_WC_Sync_Product_Mapper {
 
     /**
      * Get attributes/specs for product (custom attributes, no taxonomy needed).
-     * Includes Brand, Manufacturer, GTIN, and ETIM features from _product_groups._etim._etim_features.
+     * Includes Manufacturer, GTIN, and ETIM features from _product_groups._etim._etim_features.
      */
     public function get_attributes(array $product): array {
         $attrs = [];

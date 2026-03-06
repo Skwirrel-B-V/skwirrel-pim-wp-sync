@@ -47,6 +47,8 @@ class Skwirrel_WC_Sync_Admin_Settings {
         add_action('admin_post_skwirrel_wc_sync_test', [$this, 'handle_test_connection']);
         add_action('admin_post_skwirrel_wc_sync_run', [$this, 'handle_sync_now']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
+        // Background sync/purge handlers use nopriv because the loopback request is unauthenticated.
+        // Security: each handler validates a single-use transient token (skwirrel_wc_sync_bg_token / skwirrel_wc_sync_purge_token).
         add_action('wp_ajax_' . self::BG_SYNC_ACTION, [$this, 'handle_background_sync']);
         add_action('wp_ajax_nopriv_' . self::BG_SYNC_ACTION, [$this, 'handle_background_sync']);
         add_action('admin_post_skwirrel_wc_sync_purge', [$this, 'handle_purge_now']);
@@ -382,13 +384,13 @@ class Skwirrel_WC_Sync_Admin_Settings {
     public function enqueue_assets(string $hook): void {
         // Spinner CSS on all admin pages when sync is in progress.
         if (get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
-            wp_register_style('skwirrel-sync-spinner', false, [], SKWIRREL_WC_SYNC_VERSION);
-            wp_enqueue_style('skwirrel-sync-spinner');
+            wp_register_style('skwirrel-pim-sync-spinner', false, [], SKWIRREL_WC_SYNC_VERSION);
+            wp_enqueue_style('skwirrel-pim-sync-spinner');
             wp_add_inline_style(
-                'skwirrel-sync-spinner',
+                'skwirrel-pim-sync-spinner',
                 '@keyframes skwirrel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }'
                 . ' #toplevel_page_skwirrel-sync-now > a .dashicons-update { animation: skwirrel-spin 1.2s linear infinite; }'
-                . ' .skwirrel-sync-spinner { display: inline-block; animation: skwirrel-spin 1.2s linear infinite; vertical-align: middle; margin-right: 4px; }'
+                . ' .skwirrel-pim-sync-spinner { display: inline-block; animation: skwirrel-spin 1.2s linear infinite; vertical-align: middle; margin-right: 4px; }'
             );
         }
 
@@ -397,25 +399,25 @@ class Skwirrel_WC_Sync_Admin_Settings {
             return;
         }
 
-        wp_enqueue_style('skwirrel-admin', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/admin.css', [], SKWIRREL_WC_SYNC_VERSION);
+        wp_enqueue_style('skwirrel-pim-sync-admin', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/admin.css', [], SKWIRREL_WC_SYNC_VERSION);
 
         // Admin page JS (purge confirmation + auto-reload).
-        wp_register_script('skwirrel-admin', false, [], SKWIRREL_WC_SYNC_VERSION, true);
-        wp_enqueue_script('skwirrel-admin');
+        wp_register_script('skwirrel-pim-sync-admin', false, [], SKWIRREL_WC_SYNC_VERSION, true);
+        wp_enqueue_script('skwirrel-pim-sync-admin');
 
-        wp_localize_script('skwirrel-admin', 'skwirrelSync', [
+        wp_localize_script('skwirrel-pim-sync-admin', 'skwirrelPimSync', [
             'purgeConfirmPermanent' => __('WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?', 'skwirrel-pim-sync'),
             'purgeConfirmTrash'     => __('All Skwirrel products will be moved to the trash.\n\nAre you sure?', 'skwirrel-pim-sync'),
         ]);
 
         wp_add_inline_script(
-            'skwirrel-admin',
+            'skwirrel-pim-sync-admin',
             '(function() {'
             . ' var form = document.getElementById("skwirrel-purge-form");'
             . ' if (!form) return;'
             . ' form.addEventListener("submit", function(e) {'
             . '  var permanent = document.getElementById("skwirrel-purge-permanent").checked;'
-            . '  var msg = permanent ? skwirrelSync.purgeConfirmPermanent : skwirrelSync.purgeConfirmTrash;'
+            . '  var msg = permanent ? skwirrelPimSync.purgeConfirmPermanent : skwirrelPimSync.purgeConfirmTrash;'
             . '  if (!confirm(msg)) { e.preventDefault(); }'
             . ' });'
             . '})();'
@@ -423,7 +425,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
 
         // Auto-reload when sync is in progress.
         if (get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
-            wp_add_inline_script('skwirrel-admin', 'setTimeout(function(){ window.location.reload(); }, 5000);');
+            wp_add_inline_script('skwirrel-pim-sync-admin', 'setTimeout(function(){ window.location.reload(); }, 5000);');
         }
     }
 
@@ -455,9 +457,9 @@ class Skwirrel_WC_Sync_Admin_Settings {
             <hr class="wp-header-end">
 
             <nav class="nav-tab-wrapper">
-                <a href="<?php echo esc_url(add_query_arg('tab', 'sync', $base_url)); ?>" class="nav-tab <?php echo $active_tab === 'sync' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Sync Products', 'skwirrel-pim-sync'); ?></a>
-                <a href="<?php echo esc_url(add_query_arg('tab', 'settings', $base_url)); ?>" class="nav-tab <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Settings', 'skwirrel-pim-sync'); ?></a>
-                <a href="<?php echo esc_url(add_query_arg('tab', 'logs', $base_url)); ?>" class="nav-tab <?php echo $active_tab === 'logs' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Logs', 'skwirrel-pim-sync'); ?></a>
+                <a href="<?php echo esc_url(add_query_arg('tab', 'sync', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'sync' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Sync Products', 'skwirrel-pim-sync'); ?></a>
+                <a href="<?php echo esc_url(add_query_arg('tab', 'settings', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Settings', 'skwirrel-pim-sync'); ?></a>
+                <a href="<?php echo esc_url(add_query_arg('tab', 'logs', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'logs' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Logs', 'skwirrel-pim-sync'); ?></a>
             </nav>
 
             <div class="skwirrel-tab-content">
@@ -491,22 +493,22 @@ class Skwirrel_WC_Sync_Admin_Settings {
         <?php if ($sync_in_progress) : ?>
             <div style="background: #d1ecf1; border: 1px solid #bee5eb; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: #0c5460;">
-                    <span class="dashicons dashicons-update skwirrel-sync-spinner" style="color: #0c5460;"></span> <?php esc_html_e('Sync in progress…', 'skwirrel-pim-sync'); ?>
+                    <span class="dashicons dashicons-update skwirrel-pim-sync-spinner" style="color: #0c5460;"></span> <?php esc_html_e('Sync in progress…', 'skwirrel-pim-sync'); ?>
                 </h3>
                 <p style="margin: 0; color: #0c5460;">
                     <?php esc_html_e('The page will refresh automatically when the sync is completed.', 'skwirrel-pim-sync'); ?>
                 </p>
             </div>
         <?php elseif ($last_result) : ?>
-            <div style="background: <?php echo $last_result['success'] ? '#d4edda' : '#f8d7da'; ?>; border: 1px solid <?php echo $last_result['success'] ? '#c3e6cb' : '#f5c6cb'; ?>; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                <h3 style="margin-top: 0; color: <?php echo $last_result['success'] ? '#155724' : '#721c24'; ?>;">
+            <div style="background: <?php echo esc_attr($last_result['success'] ? '#d4edda' : '#f8d7da'); ?>; border: 1px solid <?php echo esc_attr($last_result['success'] ? '#c3e6cb' : '#f5c6cb'); ?>; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+                <h3 style="margin-top: 0; color: <?php echo esc_attr($last_result['success'] ? '#155724' : '#721c24'); ?>;">
                     <?php if ($last_result['success']) : ?>
                         ✓ <?php esc_html_e('Last sync successful', 'skwirrel-pim-sync'); ?>
                     <?php else : ?>
                         ✗ <?php esc_html_e('Last sync failed', 'skwirrel-pim-sync'); ?>
                     <?php endif; ?>
                 </h3>
-                <p style="margin: 0; color: <?php echo $last_result['success'] ? '#155724' : '#721c24'; ?>;">
+                <p style="margin: 0; color: <?php echo esc_attr($last_result['success'] ? '#155724' : '#721c24'); ?>;">
                     <?php echo $last_sync ? esc_html($this->format_datetime($last_sync)) : esc_html__('Unknown', 'skwirrel-pim-sync'); ?>
                 </p>
             </div>
@@ -522,14 +524,14 @@ class Skwirrel_WC_Sync_Admin_Settings {
                 <tbody>
                     <tr>
                         <td><strong><?php esc_html_e('Created', 'skwirrel-pim-sync'); ?></strong></td>
-                        <td style="text-align: right;"><span style="color: #00a32a; font-weight: bold; font-size: 16px;"><?php echo (int) ($last_result['created'] ?? 0); ?></span></td>
+                        <td style="text-align: right;"><span style="color: #00a32a; font-weight: bold; font-size: 16px;"><?php echo esc_html( (int) ( $last_result['created'] ?? 0 ) ); ?></span></td>
                     </tr>
                     <tr style="background-color: #f9f9f9;">
                         <td><strong><?php esc_html_e('Updated', 'skwirrel-pim-sync'); ?></strong></td>
-                        <td style="text-align: right;"><span style="color: #007cba; font-weight: bold; font-size: 16px;"><?php echo (int) ($last_result['updated'] ?? 0); ?></span></td>
+                        <td style="text-align: right;"><span style="color: #007cba; font-weight: bold; font-size: 16px;"><?php echo esc_html( (int) ( $last_result['updated'] ?? 0 ) ); ?></span></td>
                     </tr>
                     <?php $failed_count = (int) ($last_result['failed'] ?? 0); ?>
-                    <tr style="<?php echo $failed_count > 0 ? 'background-color: #f8d7da;' : ''; ?>">
+                    <tr style="<?php echo esc_attr( $failed_count > 0 ? 'background-color: #f8d7da;' : '' ); ?>">
                         <td><strong><?php esc_html_e('Failed', 'skwirrel-pim-sync'); ?></strong></td>
                         <td style="text-align: right;"><span style="color: #d63638; font-weight: bold; font-size: 16px;"><?php echo esc_html((string) $failed_count); ?></span></td>
                     </tr>
@@ -565,7 +567,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
                     <?php endif; ?>
                     <tr style="background-color: #e8f5e9; border-top: 2px solid #4caf50;">
                         <td><strong><?php esc_html_e('Total processed', 'skwirrel-pim-sync'); ?></strong></td>
-                        <td style="text-align: right;"><strong style="font-size: 16px;"><?php echo (int) ($last_result['created'] ?? 0) + (int) ($last_result['updated'] ?? 0) + (int) ($last_result['failed'] ?? 0); ?></strong></td>
+                        <td style="text-align: right;"><strong style="font-size: 16px;"><?php echo esc_html( (int) ( $last_result['created'] ?? 0 ) + (int) ( $last_result['updated'] ?? 0 ) + (int) ( $last_result['failed'] ?? 0 ) ); ?></strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -633,7 +635,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
                         ];
                         $trigger_label = $trigger_labels[$entry_trigger] ?? $trigger_labels[Skwirrel_WC_Sync_History::TRIGGER_MANUAL];
                         ?>
-                        <tr<?php echo $is_purge ? ' style="background: #fff3cd;"' : ''; ?>>
+                        <tr<?php echo $is_purge ? ' style="background: #fff3cd;"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static string ?>>
                             <td><?php echo esc_html($timestamp); ?></td>
                             <td><?php echo esc_html($trigger_label); ?></td>
                             <td>
@@ -793,7 +795,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
                             <?php endforeach; ?>
                             <option value="_custom" <?php selected($is_custom); ?>><?php esc_html_e('Other…', 'skwirrel-pim-sync'); ?></option>
                         </select>
-                        <span id="image_language_custom_wrap" style="display:<?php echo $is_custom ? 'inline-block' : 'none'; ?>;">
+                        <span id="image_language_custom_wrap" style="display:<?php echo esc_attr( $is_custom ? 'inline-block' : 'none' ); ?>;">
                             <input type="text" id="image_language_custom" name="<?php echo esc_attr(self::OPTION_KEY); ?>[image_language_custom]" value="<?php echo esc_attr($is_custom ? $current_lang : ''); ?>" size="6" pattern="[a-z]{2}(-[A-Z]{2})?" placeholder="e.g. es-ES" />
                         </span>
                         <p class="description"><?php esc_html_e('Language code for all text: image alt/caption, ETIM attributes.', 'skwirrel-pim-sync'); ?></p>

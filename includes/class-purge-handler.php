@@ -210,7 +210,7 @@ class Skwirrel_WC_Sync_Purge_Handler {
 		$attribute_rows = $wpdb->get_results(
 			"SELECT attribute_id, attribute_name FROM {$wpdb->prefix}woocommerce_attribute_taxonomies
             WHERE attribute_name LIKE 'etim\\_%'
-            OR attribute_name = 'variant'"
+            OR attribute_name = 'skwirrel_variant'"
 		);
 
 		$attributes_deleted = 0;
