@@ -2,6 +2,11 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.9.0]
+
+* Move remaining inline event handlers (onchange, onclick) to enqueued inline script for WordPress.org compliance
+* Fix stale debug log path in admin help text (now correctly points to uploads/skwirrel-pim-sync/ subfolder)
+
 ## [1.8.4]
 
 * Add non-variation ETIM and custom class attributes to parent variable products during sync

@@ -408,18 +408,35 @@ class Skwirrel_WC_Sync_Admin_Settings {
         wp_localize_script('skwirrel-pim-sync-admin', 'skwirrelPimSync', [
             'purgeConfirmPermanent' => __('WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?', 'skwirrel-pim-sync'),
             'purgeConfirmTrash'     => __('All Skwirrel products will be moved to the trash.\n\nAre you sure?', 'skwirrel-pim-sync'),
+            'clearHistoryConfirm'   => __('Delete all sync history?', 'skwirrel-pim-sync'),
         ]);
 
         wp_add_inline_script(
             'skwirrel-pim-sync-admin',
             '(function() {'
             . ' var form = document.getElementById("skwirrel-purge-form");'
-            . ' if (!form) return;'
-            . ' form.addEventListener("submit", function(e) {'
-            . '  var permanent = document.getElementById("skwirrel-purge-permanent").checked;'
-            . '  var msg = permanent ? skwirrelPimSync.purgeConfirmPermanent : skwirrelPimSync.purgeConfirmTrash;'
-            . '  if (!confirm(msg)) { e.preventDefault(); }'
-            . ' });'
+            . ' if (form) {'
+            . '  form.addEventListener("submit", function(e) {'
+            . '   var permanent = document.getElementById("skwirrel-purge-permanent").checked;'
+            . '   var msg = permanent ? skwirrelPimSync.purgeConfirmPermanent : skwirrelPimSync.purgeConfirmTrash;'
+            . '   if (!confirm(msg)) { e.preventDefault(); }'
+            . '  });'
+            . ' }'
+            . ' var langSelect = document.getElementById("image_language_select");'
+            . ' if (langSelect) {'
+            . '  langSelect.addEventListener("change", function() {'
+            . '   var c = document.getElementById("image_language_custom_wrap");'
+            . '   c.style.display = this.value === "_custom" ? "inline-block" : "none";'
+            . '   if (this.value !== "_custom") { document.getElementById("image_language_custom").value = ""; }'
+            . '  });'
+            . ' }'
+            . ' var historyBtn = document.getElementById("skwirrel-clear-history-btn");'
+            . ' if (historyBtn) {'
+            . '  historyBtn.addEventListener("click", function(e) {'
+            . '   var period = this.form.history_period.value;'
+            . '   if (period === "all" && !confirm(skwirrelPimSync.clearHistoryConfirm)) { e.preventDefault(); }'
+            . '  });'
+            . ' }'
             . '})();'
         );
 
@@ -596,7 +613,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
                         <option value="30"><?php esc_html_e('Older than 30 days', 'skwirrel-pim-sync'); ?></option>
                         <option value="90"><?php esc_html_e('Older than 90 days', 'skwirrel-pim-sync'); ?></option>
                     </select>
-                    <button type="submit" class="button" onclick="if(this.form.history_period.value==='all'){return confirm('<?php echo esc_js(__('Delete all sync history?', 'skwirrel-pim-sync')); ?>');}return true;"><?php esc_html_e('Delete history', 'skwirrel-pim-sync'); ?></button>
+                    <button type="submit" class="button" id="skwirrel-clear-history-btn"><?php esc_html_e('Delete history', 'skwirrel-pim-sync'); ?></button>
                 </form>
             </div>
             <table class="widefat striped" style="margin-top: 10px;">
@@ -789,7 +806,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
                         $current_lang = $opts['image_language'] ?? 'nl';
                         $is_custom = !isset(self::LANGUAGE_OPTIONS[$current_lang]);
                         ?>
-                        <select id="image_language_select" name="<?php echo esc_attr(self::OPTION_KEY); ?>[image_language_select]" onchange="var c=document.getElementById('image_language_custom_wrap');c.style.display=this.value==='_custom'?'inline-block':'none';if(this.value!=='_custom')document.getElementById('image_language_custom').value='';">
+                        <select id="image_language_select" name="<?php echo esc_attr(self::OPTION_KEY); ?>[image_language_select]">
                             <?php foreach (self::LANGUAGE_OPTIONS as $code => $label) : ?>
                                 <option value="<?php echo esc_attr($code); ?>" <?php selected($current_lang, $code); ?>><?php echo esc_html($label); ?></option>
                             <?php endforeach; ?>
@@ -908,7 +925,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
         <ol style="list-style: decimal; margin-left: 1.5em;">
             <li><?php esc_html_e('Add to wp-config.php: define(\'SKWIRREL_WC_SYNC_DEBUG_ETIM\', true);', 'skwirrel-pim-sync'); ?></li>
             <li><?php esc_html_e('Run "Sync Products".', 'skwirrel-pim-sync'); ?></li>
-            <li><?php esc_html_e('Check wp-content/uploads/skwirrel-variation-debug.log', 'skwirrel-pim-sync'); ?></li>
+            <li><?php esc_html_e('Check wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log', 'skwirrel-pim-sync'); ?></li>
             <li><?php esc_html_e('Check: etim_values_found empty? → API languages must match getProducts (e.g. en, en-GB).', 'skwirrel-pim-sync'); ?></li>
             <li><?php esc_html_e('ATTR VERIFY FAIL in the log? → meta is not being written correctly; check wp_postmeta for attribute_pa_color/attribute_pa_cups.', 'skwirrel-pim-sync'); ?></li>
         </ol>
