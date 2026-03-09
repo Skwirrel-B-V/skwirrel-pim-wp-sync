@@ -245,23 +245,7 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			);
 		}
 
-		if ( ! empty( $attrs ) ) {
-			$wc_attrs = [];
-			$position = 0;
-			foreach ( $attrs as $name => $value ) {
-				$attr = new WC_Product_Attribute();
-				$attr->set_id( 0 );
-				$attr->set_name( $name );
-				$attr->set_options( [ (string) $value ] );
-				$attr->set_position( $position++ );
-				$attr->set_visible( true );
-				$attr->set_variation( false );
-				$wc_attrs[ sanitize_title( $name ) ] = $attr;
-			}
-			$wc_product->set_attributes( $wc_attrs );
-		}
-
-		$wc_product->save();
+			$wc_product->save();
 
 		$id = $wc_product->get_id();
 		update_post_meta( $id, $this->mapper->get_external_id_meta_key(), $key );
@@ -302,30 +286,43 @@ class Skwirrel_WC_Sync_Product_Upserter {
 		$this->category_sync->assign_categories( $id, $product, $this->mapper );
 		$this->brand_sync->assign_brand( $id, $product );
 
+		// Save attributes as global WooCommerce taxonomy-based attributes
+		// so they appear in layered navigation and product filters.
 		if ( ! empty( $attrs ) ) {
-			$product_attrs = [];
-			$position      = 0;
+			$wc_attrs = [];
+			$position = 0;
 			foreach ( $attrs as $name => $value ) {
-				$slug                   = sanitize_title( $name );
-				$product_attrs[ $slug ] = [
-					'name'         => $name,
-					'value'        => (string) $value,
-					'position'     => (string) $position++,
-					'is_visible'   => 1,
-					'is_variation' => 0,
-					'is_taxonomy'  => 0,
-				];
+				$term_data = $this->taxonomy_manager->ensure_attribute_term( $name, (string) $value );
+				if ( ! $term_data ) {
+					continue;
+				}
+				$tax  = $term_data['taxonomy'];
+				$slug = $this->taxonomy_manager->get_attribute_slug( $name );
+
+				wp_set_object_terms( $id, [ $term_data['term_id'] ], $tax, false );
+
+				$attr = new WC_Product_Attribute();
+				$attr->set_id( wc_attribute_taxonomy_id_by_name( $slug ) );
+				$attr->set_name( $tax );
+				$attr->set_options( [ $term_data['term_id'] ] );
+				$attr->set_position( $position++ );
+				$attr->set_visible( true );
+				$attr->set_variation( false );
+				$wc_attrs[ $tax ] = $attr;
 			}
-			update_post_meta( $id, '_product_attributes', $product_attrs );
-			clean_post_cache( $id );
-			if ( function_exists( 'wc_delete_product_transients' ) ) {
-				wc_delete_product_transients( $id );
+			if ( ! empty( $wc_attrs ) ) {
+				$wc_product->set_attributes( $wc_attrs );
+				$wc_product->save();
+				clean_post_cache( $id );
+				if ( function_exists( 'wc_delete_product_transients' ) ) {
+					wc_delete_product_transients( $id );
+				}
 			}
 			$this->logger->verbose(
-				'Attributes saved (product+meta)',
+				'Attributes saved as global taxonomies',
 				[
 					'wc_id'      => $id,
-					'attr_count' => count( $attrs ),
+					'attr_count' => count( $wc_attrs ),
 					'names'      => array_keys( $attrs ),
 				]
 			);
