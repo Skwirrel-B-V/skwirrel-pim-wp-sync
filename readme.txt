@@ -4,7 +4,7 @@ Tags: woocommerce, sync, erp, pim, skwirrel
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.9.2
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,8 +53,29 @@ The plugin uses the Skwirrel external ID as a unique key. Existing products are 
 
 == Changelog ==
 
+= 1.9.7 =
+* Add configurable "Product manufacturer base" slug on Settings → Permalinks page
+
+= 1.9.6 =
+* Fix product sync failing when downloadable files are not in WooCommerce's approved directory
+* Downloads/documents errors no longer block category, brand and manufacturer assignment
+
+= 1.9.5 =
+* Brand sync always active (uses WooCommerce native product_brand taxonomy)
+* Add "Sync manufacturers" setting with product_manufacturer taxonomy
+* Default product list columns: hide Tags, show Manufacturers
+* Add "Filter by manufacturer" dropdown on product list page
+* Manufacturers column ordered after Brands, before Date
+
+= 1.9.3 =
+* Fix variable product variation attributes: recover parent attribute options from child variation post meta when deferred terms are empty
+* Convert non-variation parent attributes to global WooCommerce taxonomy-based attributes
+* Fix brand not assigned to variable products: propagate brand from child variations to parent
+* Fix categories not assigned to variable products: propagate categories from child variations to parent
+
 = 1.9.2 =
 * Remove legacy pa_variant migration code (no live installs to migrate)
+* Fix simple product attributes: save as global WooCommerce taxonomy-based attributes instead of custom text attributes, so they appear in layered navigation and product filters
 
 = 1.9.1 =
 * Remove legacy pre-1.8.0 Action Scheduler cleanup code (old slug reference)

@@ -143,6 +143,7 @@ class Skwirrel_WC_Sync_Service {
 		}
 
 		// Sync all brands (independent of products)
+		// Brands always sync (product_brand taxonomy is provided by WooCommerce core)
 		$this->brand_sync->sync_all_brands( $client );
 
 		// Sync all custom classes as WooCommerce attributes (independent of products)

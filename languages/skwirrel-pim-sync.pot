@@ -652,3 +652,11 @@ msgstr ""
 #: includes/class-permalink-settings.php
 msgid "When enabled, product slugs are updated on every sync based on the source field above. When disabled, only new products get a slug from Skwirrel."
 msgstr ""
+
+#: includes/class-permalink-settings.php:104
+msgid "Product manufacturer base"
+msgstr ""
+
+#: includes/class-permalink-settings.php:177
+msgid "The base slug for the product manufacturer taxonomy URLs."
+msgstr ""

@@ -327,4 +327,59 @@ class Skwirrel_WC_Sync_Taxonomy_Manager {
 			'attribute_public'  => 1,
 		];
 	}
+
+	/**
+	 * Generate a WooCommerce-safe attribute slug from a label.
+	 *
+	 * Sanitizes the label and truncates to 28 characters (WC attribute_name limit).
+	 *
+	 * @param string $label Attribute label (e.g. "Manufacturer", "GTIN").
+	 * @return string Sanitized slug, max 28 characters.
+	 */
+	public function get_attribute_slug( string $label ): string {
+		$slug = sanitize_title( $label );
+		return strlen( $slug ) > 28 ? substr( $slug, 0, 28 ) : $slug;
+	}
+
+	/**
+	 * Ensure a global WC attribute taxonomy exists and insert a term for the given value.
+	 *
+	 * Returns the taxonomy name and term ID, or null if creation failed.
+	 *
+	 * @param string $label Attribute label (e.g. "Manufacturer").
+	 * @param string $value Attribute value (e.g. "Bosch").
+	 * @return array{taxonomy: string, term_id: int, term_slug: string}|null
+	 */
+	public function ensure_attribute_term( string $label, string $value ): ?array {
+		$slug = $this->get_attribute_slug( $label );
+		if ( '' === $slug ) {
+			return null;
+		}
+		$tax = $this->ensure_product_attribute_exists( $slug, $label );
+		if ( ! taxonomy_exists( $tax ) ) {
+			return null;
+		}
+
+		$term_slug = sanitize_title( $value );
+		$term      = get_term_by( 'slug', $term_slug, $tax );
+		if ( ! $term ) {
+			$term = get_term_by( 'name', $value, $tax );
+		}
+		if ( ! $term || is_wp_error( $term ) ) {
+			$insert = wp_insert_term( $value, $tax, [ 'slug' => $term_slug ] );
+			if ( is_wp_error( $insert ) ) {
+				return null;
+			}
+			$term = get_term( $insert['term_id'], $tax );
+			if ( ! $term || is_wp_error( $term ) ) {
+				return null;
+			}
+		}
+
+		return [
+			'taxonomy'  => $tax,
+			'term_id'   => $term->term_id,
+			'term_slug' => $term->slug,
+		];
+	}
 }

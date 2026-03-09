@@ -2,9 +2,34 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.9.7]
+
+* Add configurable "Product manufacturer base" slug on Settings → Permalinks page — allows customizing the URL base for the product_manufacturer taxonomy (like WooCommerce's brand base field)
+
+## [1.9.6]
+
+* Fix product sync failing when downloadable files are not in WooCommerce's approved directory — downloads/documents errors are now caught and logged as warnings, so category, brand and manufacturer assignment always proceeds
+
+## [1.9.5]
+
+* Brand sync is now always active — uses WooCommerce native product_brand taxonomy (available since WC 9.4)
+* Add "Sync manufacturers" setting: registers product_manufacturer taxonomy, syncs manufacturer_name from Skwirrel products
+* Manufacturer attribute no longer duplicated as product attribute when synced as taxonomy
+* Default product list columns: hide Tags, show Manufacturers
+* Add "Filter by manufacturer" dropdown on product list page
+* Manufacturers column ordered after Brands, before Date
+
+## [1.9.3]
+
+* Fix variable product variation attributes: recover parent attribute options from child variation post meta when deferred terms are empty (e.g. when getProducts lacks _etim_features)
+* Convert non-variation parent attributes to global WooCommerce taxonomy-based attributes (consistent with simple products)
+* Fix brand not assigned to variable products: propagate brand_name from child variations to parent, since getGroupedProducts response lacks brand_name
+* Fix categories not assigned to variable products: propagate _categories from child variations to parent (same root cause)
+
 ## [1.9.2]
 
 * Remove legacy pa_variant migration code (no live installs to migrate)
+* Fix simple product attributes: save as global WooCommerce taxonomy-based attributes instead of custom text attributes, so they appear in layered navigation and product filters
 
 ## [1.9.1]
 

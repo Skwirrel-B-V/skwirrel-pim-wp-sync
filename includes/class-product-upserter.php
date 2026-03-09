@@ -245,22 +245,6 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			);
 		}
 
-		if ( ! empty( $attrs ) ) {
-			$wc_attrs = [];
-			$position = 0;
-			foreach ( $attrs as $name => $value ) {
-				$attr = new WC_Product_Attribute();
-				$attr->set_id( 0 );
-				$attr->set_name( $name );
-				$attr->set_options( [ (string) $value ] );
-				$attr->set_position( $position++ );
-				$attr->set_visible( true );
-				$attr->set_variation( false );
-				$wc_attrs[ sanitize_title( $name ) ] = $attr;
-			}
-			$wc_product->set_attributes( $wc_attrs );
-		}
-
 		$wc_product->save();
 
 		$id = $wc_product->get_id();
@@ -275,15 +259,35 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			$wc_product->save();
 		}
 
-		$downloads = $this->mapper->get_downloadable_files( $product, $id );
-		if ( ! empty( $downloads ) ) {
-			$wc_product->set_downloadable( true );
-			$wc_product->set_downloads( $this->format_downloads( $downloads ) );
-			$wc_product->save();
+		try {
+			$downloads = $this->mapper->get_downloadable_files( $product, $id );
+			if ( ! empty( $downloads ) ) {
+				$wc_product->set_downloadable( true );
+				$wc_product->set_downloads( $this->format_downloads( $downloads ) );
+				$wc_product->save();
+			}
+		} catch ( \Throwable $e ) {
+			$this->logger->warning(
+				'Downloadable files save failed, continuing with sync',
+				[
+					'wc_id' => $id,
+					'error' => $e->getMessage(),
+				]
+			);
 		}
 
-		$documents = $this->mapper->get_document_attachments( $product, $id );
-		update_post_meta( $id, '_skwirrel_document_attachments', $documents );
+		try {
+			$documents = $this->mapper->get_document_attachments( $product, $id );
+			update_post_meta( $id, '_skwirrel_document_attachments', $documents );
+		} catch ( \Throwable $e ) {
+			$this->logger->warning(
+				'Document attachments save failed, continuing with sync',
+				[
+					'wc_id' => $id,
+					'error' => $e->getMessage(),
+				]
+			);
+		}
 
 		// Save custom class text meta (T/B types)
 		if ( ! empty( $cc_text_meta ) ) {
@@ -301,31 +305,47 @@ class Skwirrel_WC_Sync_Product_Upserter {
 
 		$this->category_sync->assign_categories( $id, $product, $this->mapper );
 		$this->brand_sync->assign_brand( $id, $product );
+		if ( ! empty( $this->get_options()['sync_manufacturers'] ) ) {
+			$this->brand_sync->assign_manufacturer( $id, $product );
+		}
 
+		// Save attributes as global WooCommerce taxonomy-based attributes
+		// so they appear in layered navigation and product filters.
 		if ( ! empty( $attrs ) ) {
-			$product_attrs = [];
-			$position      = 0;
+			$wc_attrs = [];
+			$position = 0;
 			foreach ( $attrs as $name => $value ) {
-				$slug                   = sanitize_title( $name );
-				$product_attrs[ $slug ] = [
-					'name'         => $name,
-					'value'        => (string) $value,
-					'position'     => (string) $position++,
-					'is_visible'   => 1,
-					'is_variation' => 0,
-					'is_taxonomy'  => 0,
-				];
+				$term_data = $this->taxonomy_manager->ensure_attribute_term( $name, (string) $value );
+				if ( ! $term_data ) {
+					continue;
+				}
+				$tax  = $term_data['taxonomy'];
+				$slug = $this->taxonomy_manager->get_attribute_slug( $name );
+
+				wp_set_object_terms( $id, [ $term_data['term_id'] ], $tax, false );
+
+				$attr = new WC_Product_Attribute();
+				$attr->set_id( wc_attribute_taxonomy_id_by_name( $slug ) );
+				$attr->set_name( $tax );
+				$attr->set_options( [ $term_data['term_id'] ] );
+				$attr->set_position( $position++ );
+				$attr->set_visible( true );
+				$attr->set_variation( false );
+				$wc_attrs[ $tax ] = $attr;
 			}
-			update_post_meta( $id, '_product_attributes', $product_attrs );
-			clean_post_cache( $id );
-			if ( function_exists( 'wc_delete_product_transients' ) ) {
-				wc_delete_product_transients( $id );
+			if ( ! empty( $wc_attrs ) ) {
+				$wc_product->set_attributes( $wc_attrs );
+				$wc_product->save();
+				clean_post_cache( $id );
+				if ( function_exists( 'wc_delete_product_transients' ) ) {
+					wc_delete_product_transients( $id );
+				}
 			}
 			$this->logger->verbose(
-				'Attributes saved (product+meta)',
+				'Attributes saved as global taxonomies',
 				[
 					'wc_id'      => $id,
-					'attr_count' => count( $attrs ),
+					'attr_count' => count( $wc_attrs ),
 					'names'      => array_keys( $attrs ),
 				]
 			);
@@ -574,9 +594,22 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			}
 		}
 
+		// Assign brand and manufacturer from variation product to parent variable product.
+		// The grouped product data from getGroupedProducts usually lacks these fields,
+		// so we propagate from the first variation that has them.
+		$this->brand_sync->assign_brand( $wc_variable_id, $product );
+		$cc_options = $this->get_options();
+		if ( ! empty( $cc_options['sync_manufacturers'] ) ) {
+			$this->brand_sync->assign_manufacturer( $wc_variable_id, $product );
+		}
+
+		// Assign categories from variation product to parent variable product.
+		// Same issue: getGroupedProducts lacks _categories, but individual
+		// variation products from getProducts do have them.
+		$this->category_sync->assign_categories( $wc_variable_id, $product, $this->mapper );
+
 		// Collect non-variation ETIM + custom class attributes for parent product
 		$non_var_attrs = $this->mapper->get_attributes( $product );
-		$cc_options    = $this->get_options();
 		if ( ! empty( $cc_options['sync_custom_classes'] ) || ! empty( $cc_options['sync_trade_item_custom_classes'] ) ) {
 			$cc_filter_mode = $cc_options['custom_class_filter_mode'] ?? '';
 			$cc_parsed      = Skwirrel_WC_Sync_Product_Mapper::parse_custom_class_filter( $cc_options['custom_class_filter_ids'] ?? '' );
@@ -873,6 +906,9 @@ class Skwirrel_WC_Sync_Product_Upserter {
 
 		$this->category_sync->assign_categories( $id, $group, $this->mapper );
 		$this->brand_sync->assign_brand( $id, $group );
+		if ( ! empty( $this->get_options()['sync_manufacturers'] ) ) {
+			$this->brand_sync->assign_manufacturer( $id, $group );
+		}
 
 		return $is_new ? 'created' : 'updated';
 	}
@@ -921,8 +957,15 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			return;
 		}
 
-		foreach ( $this->deferred_parent_terms as $parent_id => $taxonomies ) {
-			// Clear all caches to ensure we get the freshest product data
+		// Collect all parent IDs that need variation attribute processing
+		$all_parent_ids = array_unique(
+			array_merge(
+				array_keys( $this->deferred_parent_terms ),
+				array_keys( $this->deferred_parent_attrs )
+			)
+		);
+
+		foreach ( $all_parent_ids as $parent_id ) {
 			clean_post_cache( $parent_id );
 			wc_delete_product_transients( $parent_id );
 
@@ -930,9 +973,7 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			if ( ! $wc_product || ! $wc_product->is_type( 'variable' ) ) {
 				$this->logger->warning(
 					'Deferred parent term flush: product not found or not variable',
-					[
-						'parent_id' => $parent_id,
-					]
+					[ 'parent_id' => $parent_id ]
 				);
 				continue;
 			}
@@ -941,51 +982,63 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			if ( empty( $attrs ) ) {
 				$this->logger->warning(
 					'Deferred parent term flush: no attributes on parent',
-					[
-						'parent_id' => $parent_id,
-					]
+					[ 'parent_id' => $parent_id ]
 				);
 				continue;
 			}
 
-			$changed = false;
-			foreach ( $taxonomies as $taxonomy => $term_ids ) {
-				if ( ! isset( $attrs[ $taxonomy ] ) ) {
-					$this->logger->warning(
-						'Deferred parent term flush: attribute not found on parent',
-						[
-							'parent_id'       => $parent_id,
-							'taxonomy'        => $taxonomy,
-							'available_attrs' => array_keys( $attrs ),
-						]
-					);
+			// Step 1: Apply deferred terms collected during variation processing
+			$deferred = $this->deferred_parent_terms[ $parent_id ] ?? [];
+			$changed  = false;
+			foreach ( $deferred as $taxonomy => $term_ids ) {
+				if ( ! isset( $attrs[ $taxonomy ] ) || ! $attrs[ $taxonomy ]->is_taxonomy() ) {
 					continue;
 				}
-
-				$attr = $attrs[ $taxonomy ];
-				if ( ! $attr->is_taxonomy() ) {
-					continue;
-				}
-
-				// Merge existing options with all new term IDs, deduplicated
-				$existing = $attr->get_options();
-				$existing = is_array( $existing ) ? array_map( 'intval', $existing ) : [];
+				$attr     = $attrs[ $taxonomy ];
+				$existing = is_array( $attr->get_options() ) ? array_map( 'intval', $attr->get_options() ) : [];
 				$merged   = array_unique( array_merge( $existing, array_map( 'intval', $term_ids ) ) );
 				$attr->set_options( $merged );
 				$attrs[ $taxonomy ] = $attr;
-
-				// Set term relationships directly in DB
 				wp_set_object_terms( $parent_id, $merged, $taxonomy, false );
 				$changed = true;
+			}
 
-				$this->logger->verbose(
-					'Parent attribute terms set',
-					[
-						'parent_id' => $parent_id,
-						'taxonomy'  => $taxonomy,
-						'term_ids'  => $merged,
-					]
-				);
+			// Step 2: Safety net — recover terms from child variation post meta.
+			// If deferred_parent_terms was empty (e.g. getProducts didn't return
+			// _etim_features), we read the actual attribute_pa_* meta from each
+			// variation and populate the parent's attribute options from those.
+			$variation_ids = $wc_product->get_children();
+			foreach ( $attrs as $taxonomy => $attr ) {
+				if ( ! $attr->is_taxonomy() || ! $attr->get_variation() ) {
+					continue;
+				}
+				$current_options = is_array( $attr->get_options() ) ? array_map( 'intval', $attr->get_options() ) : [];
+				$recovered_ids   = [];
+				foreach ( $variation_ids as $vid ) {
+					$slug = get_post_meta( $vid, 'attribute_' . $taxonomy, true );
+					if ( empty( $slug ) ) {
+						continue;
+					}
+					$term = get_term_by( 'slug', $slug, $taxonomy );
+					if ( $term && ! is_wp_error( $term ) && ! in_array( $term->term_id, $current_options, true ) ) {
+						$recovered_ids[] = $term->term_id;
+					}
+				}
+				if ( ! empty( $recovered_ids ) ) {
+					$merged = array_unique( array_merge( $current_options, $recovered_ids ) );
+					$attr->set_options( $merged );
+					$attrs[ $taxonomy ] = $attr;
+					wp_set_object_terms( $parent_id, $merged, $taxonomy, false );
+					$changed = true;
+					$this->logger->info(
+						'Recovered variation terms from child meta',
+						[
+							'parent_id'     => $parent_id,
+							'taxonomy'      => $taxonomy,
+							'recovered_ids' => $recovered_ids,
+						]
+					);
+				}
 			}
 
 			if ( $changed ) {
@@ -1001,7 +1054,7 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			}
 		}
 
-		// Merge non-variation attributes onto parent variable products
+		// Merge non-variation attributes onto parent variable products as global taxonomies
 		foreach ( $this->deferred_parent_attrs as $parent_id => $attr_map ) {
 			$wc_product = wc_get_product( $parent_id );
 			if ( ! $wc_product || ! $wc_product->is_type( 'variable' ) ) {
@@ -1012,65 +1065,53 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			$position = count( $attrs );
 
 			foreach ( $attr_map as $label => $values ) {
-				$slug = sanitize_title( $label );
-				// Skip if this attribute already exists (e.g. a variation axis)
-				if ( isset( $attrs[ $slug ] ) || isset( $attrs[ 'pa_' . $slug ] ) ) {
-					continue;
-				}
 				$unique_values = array_values( array_unique( array_filter( $values ) ) );
 				if ( empty( $unique_values ) ) {
 					continue;
 				}
+
+				// Register as global taxonomy attribute (same approach as simple products)
+				$term_ids = [];
+				$tax      = null;
+				foreach ( $unique_values as $value ) {
+					$term_data = $this->taxonomy_manager->ensure_attribute_term( $label, $value );
+					if ( ! $term_data ) {
+						continue;
+					}
+					$tax        = $term_data['taxonomy'];
+					$term_ids[] = $term_data['term_id'];
+				}
+				if ( empty( $term_ids ) || null === $tax ) {
+					continue;
+				}
+
+				// Skip if this attribute already exists as a variation axis
+				if ( isset( $attrs[ $tax ] ) ) {
+					continue;
+				}
+
+				$slug = $this->taxonomy_manager->get_attribute_slug( $label );
+				wp_set_object_terms( $parent_id, $term_ids, $tax, false );
+
 				$attr = new WC_Product_Attribute();
-				$attr->set_id( 0 );
-				$attr->set_name( $label );
-				$attr->set_options( $unique_values );
+				$attr->set_id( wc_attribute_taxonomy_id_by_name( $slug ) );
+				$attr->set_name( $tax );
+				$attr->set_options( $term_ids );
 				$attr->set_position( $position++ );
 				$attr->set_visible( true );
 				$attr->set_variation( false );
-				$attrs[ $slug ] = $attr;
+				$attrs[ $tax ] = $attr;
 			}
 
 			$wc_product->set_attributes( $attrs );
 			$wc_product->save();
-
-			// Also persist as _product_attributes meta for WC compatibility
-			$product_attrs_meta = get_post_meta( $parent_id, '_product_attributes', true );
-			if ( ! is_array( $product_attrs_meta ) ) {
-				$product_attrs_meta = [];
-			}
-			$meta_position = count( $product_attrs_meta );
-			foreach ( $attr_map as $label => $values ) {
-				$slug = sanitize_title( $label );
-				if ( isset( $product_attrs_meta[ $slug ] ) ) {
-					// Merge values into existing meta entry
-					$existing                             = $product_attrs_meta[ $slug ]['value'] ?? '';
-					$existing_arr                         = '' !== $existing ? array_map( 'trim', explode( ' | ', $existing ) ) : [];
-					$merged                               = array_values( array_unique( array_merge( $existing_arr, array_filter( $values ) ) ) );
-					$product_attrs_meta[ $slug ]['value'] = implode( ' | ', $merged );
-					continue;
-				}
-				$unique_values = array_values( array_unique( array_filter( $values ) ) );
-				if ( empty( $unique_values ) ) {
-					continue;
-				}
-				$product_attrs_meta[ $slug ] = [
-					'name'         => $label,
-					'value'        => implode( ' | ', $unique_values ),
-					'position'     => (string) $meta_position++,
-					'is_visible'   => 1,
-					'is_variation' => 0,
-					'is_taxonomy'  => 0,
-				];
-			}
-			update_post_meta( $parent_id, '_product_attributes', $product_attrs_meta );
 			clean_post_cache( $parent_id );
 			if ( function_exists( 'wc_delete_product_transients' ) ) {
 				wc_delete_product_transients( $parent_id );
 			}
 
 			$this->logger->verbose(
-				'Non-variation attributes merged onto parent',
+				'Non-variation attributes merged onto parent as global taxonomies',
 				[
 					'parent_id'  => $parent_id,
 					'attr_count' => count( $attr_map ),

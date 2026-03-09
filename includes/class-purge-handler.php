@@ -182,27 +182,36 @@ class Skwirrel_WC_Sync_Purge_Handler {
 			$this->logger->info( "Purge: {$categories_deleted} categories deleted." );
 		}
 
-		// --- Step 5: Delete product_brand terms that were assigned to Skwirrel products ---
-		$brands_deleted = 0;
-		if ( taxonomy_exists( 'product_brand' ) ) {
-			$brand_terms = get_terms(
+		// --- Step 5: Delete product_brand and product_manufacturer terms ---
+		$brands_deleted        = 0;
+		$manufacturers_deleted = 0;
+		$purge_taxonomies      = [
+			Skwirrel_WC_Sync_Brand_Sync::BRAND_TAXONOMY => &$brands_deleted,
+			Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY => &$manufacturers_deleted,
+		];
+		foreach ( $purge_taxonomies as $purge_tax => &$deleted_count ) {
+			if ( ! taxonomy_exists( $purge_tax ) ) {
+				continue;
+			}
+			$terms = get_terms(
 				[
-					'taxonomy'   => 'product_brand',
+					'taxonomy'   => $purge_tax,
 					'hide_empty' => false,
 					'fields'     => 'ids',
 				]
 			);
-			if ( ! is_wp_error( $brand_terms ) && ! empty( $brand_terms ) ) {
-				$this->logger->info( 'Purge: ' . count( $brand_terms ) . ' product brands found, deleting...' );
-				foreach ( $brand_terms as $brand_term_id ) {
-					$result = wp_delete_term( (int) $brand_term_id, 'product_brand' );
+			if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+				$this->logger->info( 'Purge: ' . count( $terms ) . " {$purge_tax} terms found, deleting..." );
+				foreach ( $terms as $term_id ) {
+					$result = wp_delete_term( (int) $term_id, $purge_tax );
 					if ( true === $result ) {
-						++$brands_deleted;
+						++$deleted_count;
 					}
 				}
-				$this->logger->info( "Purge: {$brands_deleted} brands deleted." );
+				$this->logger->info( "Purge: {$deleted_count} {$purge_tax} terms deleted." );
 			}
 		}
+		unset( $deleted_count );
 
 		// --- Step 6: Delete Skwirrel-created attribute taxonomies ---
 		// Matches: etim_* (all ETIM-based attributes) and variant (fallback attribute)
@@ -233,16 +242,17 @@ class Skwirrel_WC_Sync_Purge_Handler {
 		$this->logger->info( 'Purge: sync state options reset (last sync result preserved).' );
 
 		// --- Step 8: Store purge result + add history entry ---
-		$this->logger->info( "Purge completed: {$deleted} products, {$attachments_deleted} media, {$categories_deleted} categories, {$brands_deleted} brands, {$attributes_deleted} attributes (mode: {$mode_label})" );
+		$this->logger->info( "Purge completed: {$deleted} products, {$attachments_deleted} media, {$categories_deleted} categories, {$brands_deleted} brands, {$manufacturers_deleted} manufacturers, {$attributes_deleted} attributes (mode: {$mode_label})" );
 
 		$purge_result = [
-			'timestamp'   => time(),
-			'mode'        => $mode_label,
-			'products'    => $deleted,
-			'attachments' => $attachments_deleted,
-			'categories'  => $categories_deleted,
-			'brands'      => $brands_deleted,
-			'attributes'  => $attributes_deleted,
+			'timestamp'     => time(),
+			'mode'          => $mode_label,
+			'products'      => $deleted,
+			'attachments'   => $attachments_deleted,
+			'categories'    => $categories_deleted,
+			'brands'        => $brands_deleted,
+			'manufacturers' => $manufacturers_deleted,
+			'attributes'    => $attributes_deleted,
 		];
 
 		update_option( 'skwirrel_wc_sync_last_purge', $purge_result, false );
