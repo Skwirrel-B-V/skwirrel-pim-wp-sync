@@ -5,6 +5,7 @@ All notable changes to Skwirrel PIM sync for WooCommerce will be documented in t
 ## [1.9.2]
 
 * Remove legacy pa_variant migration code (no live installs to migrate)
+* Fix simple product attributes: save as global WooCommerce taxonomy-based attributes instead of custom text attributes, so they appear in layered navigation and product filters
 
 ## [1.9.1]
 

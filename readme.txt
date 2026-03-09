@@ -55,6 +55,7 @@ The plugin uses the Skwirrel external ID as a unique key. Existing products are 
 
 = 1.9.2 =
 * Remove legacy pa_variant migration code (no live installs to migrate)
+* Fix simple product attributes: save as global WooCommerce taxonomy-based attributes instead of custom text attributes, so they appear in layered navigation and product filters
 
 = 1.9.1 =
 * Remove legacy pre-1.8.0 Action Scheduler cleanup code (old slug reference)
