@@ -576,6 +576,11 @@ class Skwirrel_WC_Sync_Product_Upserter {
 		// so we propagate from the first variation that has one.
 		$this->brand_sync->assign_brand( $wc_variable_id, $product );
 
+		// Assign categories from variation product to parent variable product.
+		// Same issue: getGroupedProducts lacks _categories, but individual
+		// variation products from getProducts do have them.
+		$this->category_sync->assign_categories( $wc_variable_id, $product, $this->mapper );
+
 		// Collect non-variation ETIM + custom class attributes for parent product
 		$non_var_attrs = $this->mapper->get_attributes( $product );
 		$cc_options    = $this->get_options();
