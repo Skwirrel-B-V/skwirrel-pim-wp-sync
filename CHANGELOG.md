@@ -6,6 +6,7 @@ All notable changes to Skwirrel PIM sync for WooCommerce will be documented in t
 
 * Fix variable product variation attributes: recover parent attribute options from child variation post meta when deferred terms are empty (e.g. when getProducts lacks _etim_features)
 * Convert non-variation parent attributes to global WooCommerce taxonomy-based attributes (consistent with simple products)
+* Fix brand not assigned to variable products: propagate brand_name from child variations to parent, since getGroupedProducts response lacks brand_name
 
 ## [1.9.2]
 

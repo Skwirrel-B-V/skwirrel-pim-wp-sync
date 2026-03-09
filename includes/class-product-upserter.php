@@ -571,6 +571,11 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			}
 		}
 
+		// Assign brand from variation product to parent variable product.
+		// The grouped product data from getGroupedProducts usually lacks brand_name,
+		// so we propagate from the first variation that has one.
+		$this->brand_sync->assign_brand( $wc_variable_id, $product );
+
 		// Collect non-variation ETIM + custom class attributes for parent product
 		$non_var_attrs = $this->mapper->get_attributes( $product );
 		$cc_options    = $this->get_options();
