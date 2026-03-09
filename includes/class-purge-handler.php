@@ -186,7 +186,7 @@ class Skwirrel_WC_Sync_Purge_Handler {
 		$brands_deleted        = 0;
 		$manufacturers_deleted = 0;
 		$purge_taxonomies      = [
-			Skwirrel_WC_Sync_Brand_Sync::BRAND_TAXONOMY        => &$brands_deleted,
+			Skwirrel_WC_Sync_Brand_Sync::BRAND_TAXONOMY => &$brands_deleted,
 			Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY => &$manufacturers_deleted,
 		];
 		foreach ( $purge_taxonomies as $purge_tax => &$deleted_count ) {
