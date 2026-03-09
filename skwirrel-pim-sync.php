@@ -114,12 +114,104 @@ final class Skwirrel_WC_Sync_Plugin {
             add_action('init', [$brand_sync, 'maybe_register_manufacturer_taxonomy']);
         }
 
+        // Default product list columns: hide Tags, show Manufacturers
+        add_filter('default_hidden_columns', [$this, 'default_hidden_product_columns'], 10, 2);
+
+        // Add "Filter by manufacturer" dropdown on product list
+        if (!empty($options['sync_manufacturers'])) {
+            add_action('restrict_manage_posts', [$this, 'add_manufacturer_filter_dropdown'], 20);
+            add_filter('parse_query', [$this, 'filter_products_by_manufacturer']);
+        }
+
         Skwirrel_WC_Sync_Admin_Settings::instance();
         Skwirrel_WC_Sync_Permalink_Settings::instance();
         Skwirrel_WC_Sync_Action_Scheduler::instance();
         Skwirrel_WC_Sync_Product_Documents::instance();
         Skwirrel_WC_Sync_Variation_Attributes_Fix::init();
         Skwirrel_WC_Sync_Delete_Protection::instance();
+    }
+
+    /**
+     * Render "Filter by manufacturer" dropdown on the product list page.
+     *
+     * @param string $post_type Current post type.
+     */
+    public function add_manufacturer_filter_dropdown(string $post_type): void {
+        if ($post_type !== 'product' || !taxonomy_exists(Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY)) {
+            return;
+        }
+
+        $terms = get_terms([
+            'taxonomy'   => Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY,
+            'hide_empty' => false,
+        ]);
+        if (is_wp_error($terms) || empty($terms)) {
+            return;
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only filter
+        $selected = sanitize_text_field($_GET[Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY] ?? '');
+        echo '<select name="' . esc_attr(Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY) . '">';
+        echo '<option value="">' . esc_html__('Filter by manufacturer', 'skwirrel-pim-sync') . '</option>';
+        foreach ($terms as $term) {
+            printf(
+                '<option value="%s"%s>%s</option>',
+                esc_attr($term->slug),
+                selected($selected, $term->slug, false),
+                esc_html($term->name)
+            );
+        }
+        echo '</select>';
+    }
+
+    /**
+     * Filter products by manufacturer taxonomy when dropdown is used.
+     *
+     * @param \WP_Query $query Current query.
+     */
+    public function filter_products_by_manufacturer(\WP_Query $query): void {
+        global $pagenow;
+        if (!is_admin() || $pagenow !== 'edit.php' || ($query->get('post_type') !== 'product')) {
+            return;
+        }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only filter
+        $manufacturer = sanitize_text_field($_GET[Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY] ?? '');
+        if ($manufacturer === '') {
+            return;
+        }
+        $tax_query = $query->get('tax_query') ?: [];
+        $tax_query[] = [
+            'taxonomy' => Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY,
+            'field'    => 'slug',
+            'terms'    => $manufacturer,
+        ];
+        $query->set('tax_query', $tax_query);
+    }
+
+    /**
+     * Set default hidden columns for the WooCommerce product list screen.
+     *
+     * Hides the Tags column and ensures Manufacturers is visible by default.
+     * Only applies to users who have not yet customised their column preferences.
+     *
+     * @param string[]   $hidden Default hidden column IDs.
+     * @param \WP_Screen $screen Current admin screen.
+     * @return string[]
+     */
+    public function default_hidden_product_columns(array $hidden, \WP_Screen $screen): array {
+        if ($screen->id !== 'edit-product') {
+            return $hidden;
+        }
+
+        // Hide Tags by default
+        if (!in_array('product_tag', $hidden, true)) {
+            $hidden[] = 'product_tag';
+        }
+
+        // Show Manufacturers by default (remove from hidden list)
+        $hidden = array_values(array_diff($hidden, ['taxonomy-product_manufacturer']));
+
+        return $hidden;
     }
 
     private function woocommerce_missing_notice(): void {
