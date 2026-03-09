@@ -117,6 +117,9 @@ final class Skwirrel_WC_Sync_Plugin {
         // Default product list columns: hide Tags, show Manufacturers
         add_filter('default_hidden_columns', [$this, 'default_hidden_product_columns'], 10, 2);
 
+        // Reorder columns: place Manufacturers after Brands, before Date
+        add_filter('manage_edit-product_columns', [$this, 'reorder_product_columns'], 99);
+
         // Add "Filter by manufacturer" dropdown on product list
         if (!empty($options['sync_manufacturers'])) {
             add_action('restrict_manage_posts', [$this, 'add_manufacturer_filter_dropdown'], 20);
@@ -129,6 +132,47 @@ final class Skwirrel_WC_Sync_Plugin {
         Skwirrel_WC_Sync_Product_Documents::instance();
         Skwirrel_WC_Sync_Variation_Attributes_Fix::init();
         Skwirrel_WC_Sync_Delete_Protection::instance();
+    }
+
+    /**
+     * Reorder product list columns: place Manufacturers after Brands, before Date.
+     *
+     * @param array<string,string> $columns Existing columns.
+     * @return array<string,string>
+     */
+    public function reorder_product_columns(array $columns): array {
+        $manufacturer_key = 'taxonomy-' . Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY;
+        if (!isset($columns[$manufacturer_key])) {
+            return $columns;
+        }
+
+        // Remove manufacturer from current position
+        $manufacturer_label = $columns[$manufacturer_key];
+        unset($columns[$manufacturer_key]);
+
+        // Find the best insertion point: after Brands, or before Date
+        $brand_key = 'taxonomy-' . Skwirrel_WC_Sync_Brand_Sync::BRAND_TAXONOMY;
+        $reordered = [];
+        $inserted = false;
+        foreach ($columns as $key => $label) {
+            $reordered[$key] = $label;
+            if (!$inserted && $key === $brand_key) {
+                $reordered[$manufacturer_key] = $manufacturer_label;
+                $inserted = true;
+            }
+            if (!$inserted && $key === 'date') {
+                // No brand column found — insert before date
+                $reordered = array_slice($reordered, 0, -1, true)
+                    + [$manufacturer_key => $manufacturer_label]
+                    + [$key => $label];
+                $inserted = true;
+            }
+        }
+        if (!$inserted) {
+            $reordered[$manufacturer_key] = $manufacturer_label;
+        }
+
+        return $reordered;
     }
 
     /**
