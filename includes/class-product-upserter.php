@@ -245,7 +245,7 @@ class Skwirrel_WC_Sync_Product_Upserter {
 			);
 		}
 
-			$wc_product->save();
+		$wc_product->save();
 
 		$id = $wc_product->get_id();
 		update_post_meta( $id, $this->mapper->get_external_id_meta_key(), $key );
