@@ -527,10 +527,8 @@ class Skwirrel_WC_Sync_Service {
 			];
 		}
 
-		$options    = $this->get_options();
-		$get_params = [
-			'page'                         => 1,
-			'limit'                        => (int) ( $options['batch_size'] ?? 100 ),
+		$options     = $this->get_options();
+		$req_options = [
 			'include_product_status'       => true,
 			'include_product_translations' => true,
 			'include_attachments'          => true,
@@ -543,27 +541,51 @@ class Skwirrel_WC_Sync_Service {
 			'include_etim_translations'    => true,
 			'include_languages'            => $this->get_include_languages(),
 			'include_contexts'             => [ 1 ],
-			'product_ids'                  => [ $skwirrel_product_id ],
 		];
 
 		$sync_cc    = ! empty( $options['sync_custom_classes'] );
 		$sync_ti_cc = ! empty( $options['sync_trade_item_custom_classes'] );
 		if ( $sync_cc ) {
-			$get_params['include_custom_classes'] = true;
+			$req_options['include_custom_classes'] = true;
 		}
 		if ( $sync_ti_cc ) {
-			$get_params['include_trade_item_custom_classes'] = true;
+			$req_options['include_trade_item_custom_classes'] = true;
 		}
 
 		$collection_ids = $this->get_collection_ids();
 		if ( ! empty( $collection_ids ) ) {
-			$get_params['collection_ids'] = $collection_ids;
+			$req_options['collection_ids'] = $collection_ids;
 		}
 
-		$result = $client->call( 'getProducts', $get_params );
+		$this->logger->info(
+			'Single product sync: fetching product from API',
+			[ 'skwirrel_product_id' => $skwirrel_product_id ]
+		);
+
+		$result = $client->call(
+			'getProductsByFilter',
+			[
+				'filter'  => [
+					'product_id' => [
+						'int'      => $skwirrel_product_id,
+						'operator' => '=',
+					],
+				],
+				'options' => $req_options,
+				'page'    => 1,
+				'limit'   => 1,
+			]
+		);
 
 		if ( ! $result['success'] ) {
 			$err = $result['error'] ?? [ 'message' => 'Unknown error' ];
+			$this->logger->error(
+				'Single product sync: API error',
+				[
+					'skwirrel_product_id' => $skwirrel_product_id,
+					'error'               => $err,
+				]
+			);
 			return [
 				'success' => false,
 				'error'   => $err['message'] ?? 'API error',
@@ -573,14 +595,15 @@ class Skwirrel_WC_Sync_Service {
 		$data     = $result['result'] ?? [];
 		$products = $data['products'] ?? [];
 
-		// If the API does not support product_ids filtering, search through results.
-		$product = null;
-		foreach ( $products as $p ) {
-			if ( (int) ( $p['product_id'] ?? 0 ) === $skwirrel_product_id ) {
-				$product = $p;
-				break;
-			}
-		}
+		$this->logger->info(
+			'Single product sync: API returned products',
+			[
+				'skwirrel_product_id' => $skwirrel_product_id,
+				'products_returned'   => count( $products ),
+			]
+		);
+
+		$product = $products[0] ?? null;
 
 		if ( null === $product ) {
 			return [
