@@ -21,6 +21,9 @@ class Skwirrel_WC_Sync_Media_Importer {
 	/** Image attachment type codes (from Skwirrel schema: PPI=Picture, PHI=Picture print, LOG=Logo, SCH=Diagram, PRT=Presentation, OTV=Other visual). */
 	private const IMAGE_TYPES = [ 'IMG', 'PPI', 'PHI', 'LOG', 'SCH', 'PRT', 'OTV' ];
 
+	/** File extensions that are never images (even if the type code says otherwise). */
+	private const NON_IMAGE_EXTENSIONS = [ 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'txt', 'zip', 'rar' ];
+
 	public function __construct() {
 		$this->logger = new Skwirrel_WC_Sync_Logger();
 	}
@@ -233,6 +236,19 @@ class Skwirrel_WC_Sync_Media_Importer {
 
 	public function is_image_attachment_type( string $code ): bool {
 		return in_array( strtoupper( $code ), self::IMAGE_TYPES, true );
+	}
+
+	/**
+	 * Check if URL points to a file that is definitely not an image (by extension).
+	 * Used to override type code classification when the API misclassifies documents.
+	 */
+	public function url_has_non_image_extension( string $url ): bool {
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		if ( ! $path ) {
+			return false;
+		}
+		$ext = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
+		return in_array( $ext, self::NON_IMAGE_EXTENSIONS, true );
 	}
 
 	/**
