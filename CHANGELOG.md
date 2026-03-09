@@ -2,6 +2,10 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.9.6]
+
+* Fix product sync failing when downloadable files are not in WooCommerce's approved directory — downloads/documents errors are now caught and logged as warnings, so category, brand and manufacturer assignment always proceeds
+
 ## [1.9.5]
 
 * Brand sync is now always active — uses WooCommerce native product_brand taxonomy (available since WC 9.4)

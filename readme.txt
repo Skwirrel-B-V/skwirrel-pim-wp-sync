@@ -4,7 +4,7 @@ Tags: woocommerce, sync, erp, pim, skwirrel
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.9.3
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 1.9.6 =
+* Fix product sync failing when downloadable files are not in WooCommerce's approved directory
+* Downloads/documents errors no longer block category, brand and manufacturer assignment
 
 = 1.9.5 =
 * Brand sync always active (uses WooCommerce native product_brand taxonomy)
