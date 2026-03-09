@@ -192,7 +192,6 @@ class Skwirrel_WC_Sync_Admin_Settings {
         $cc_parts = preg_split('/[\s,]+/', is_string($raw_cc_filter) ? $raw_cc_filter : '', -1, PREG_SPLIT_NO_EMPTY);
         $out['custom_class_filter_ids'] = implode(', ', array_map('sanitize_text_field', array_map('trim', $cc_parts)));
 
-        $out['sync_brands'] = !empty($input['sync_brands']);
         $out['sync_manufacturers'] = !empty($input['sync_manufacturers']);
         $out['verbose_logging'] = !empty($input['verbose_logging']);
         $out['purge_stale_products'] = !empty($input['purge_stale_products']);
@@ -760,13 +759,6 @@ class Skwirrel_WC_Sync_Admin_Settings {
                     <th scope="row"><?php esc_html_e('Sync grouped products', 'skwirrel-pim-sync'); ?></th>
                     <td>
                         <label><input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[sync_grouped_products]" value="1" <?php checked(!empty($opts['sync_grouped_products'])); ?> /> <?php esc_html_e('Fetch grouped products via getGroupedProducts (products within a group can be variable)', 'skwirrel-pim-sync'); ?></label>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><?php esc_html_e('Sync brands', 'skwirrel-pim-sync'); ?></th>
-                    <td>
-                        <label><input type="checkbox" name="<?php echo esc_attr(self::OPTION_KEY); ?>[sync_brands]" value="1" <?php checked(!empty($opts['sync_brands'])); ?> /> <?php esc_html_e('Sync brand_name to product_brand taxonomy', 'skwirrel-pim-sync'); ?></label>
-                        <p class="description"><?php esc_html_e('Registers the product_brand taxonomy if not provided by another plugin (e.g. WooCommerce Brands).', 'skwirrel-pim-sync'); ?></p>
                     </td>
                 </tr>
                 <tr>

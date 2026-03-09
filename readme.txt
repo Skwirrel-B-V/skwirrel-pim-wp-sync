@@ -54,7 +54,7 @@ The plugin uses the Skwirrel external ID as a unique key. Existing products are 
 == Changelog ==
 
 = 1.9.5 =
-* Add "Sync brands" setting with built-in product_brand taxonomy fallback
+* Brand sync always active (uses WooCommerce native product_brand taxonomy)
 * Add "Sync manufacturers" setting with product_manufacturer taxonomy
 * Default product list columns: hide Tags, show Manufacturers
 * Add "Filter by manufacturer" dropdown on product list page

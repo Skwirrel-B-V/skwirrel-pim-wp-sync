@@ -284,11 +284,8 @@ class Skwirrel_WC_Sync_Product_Upserter {
 		}
 
 		$this->category_sync->assign_categories( $id, $product, $this->mapper );
-		$options = $this->get_options();
-		if ( ! empty( $options['sync_brands'] ) ) {
-			$this->brand_sync->assign_brand( $id, $product );
-		}
-		if ( ! empty( $options['sync_manufacturers'] ) ) {
+		$this->brand_sync->assign_brand( $id, $product );
+		if ( ! empty( $this->get_options()['sync_manufacturers'] ) ) {
 			$this->brand_sync->assign_manufacturer( $id, $product );
 		}
 
@@ -580,10 +577,8 @@ class Skwirrel_WC_Sync_Product_Upserter {
 		// Assign brand and manufacturer from variation product to parent variable product.
 		// The grouped product data from getGroupedProducts usually lacks these fields,
 		// so we propagate from the first variation that has them.
+		$this->brand_sync->assign_brand( $wc_variable_id, $product );
 		$cc_options = $this->get_options();
-		if ( ! empty( $cc_options['sync_brands'] ) ) {
-			$this->brand_sync->assign_brand( $wc_variable_id, $product );
-		}
 		if ( ! empty( $cc_options['sync_manufacturers'] ) ) {
 			$this->brand_sync->assign_manufacturer( $wc_variable_id, $product );
 		}
@@ -890,9 +885,7 @@ class Skwirrel_WC_Sync_Product_Upserter {
 		}
 
 		$this->category_sync->assign_categories( $id, $group, $this->mapper );
-		if ( ! empty( $this->get_options()['sync_brands'] ) ) {
-			$this->brand_sync->assign_brand( $id, $group );
-		}
+		$this->brand_sync->assign_brand( $id, $group );
 		if ( ! empty( $this->get_options()['sync_manufacturers'] ) ) {
 			$this->brand_sync->assign_manufacturer( $id, $group );
 		}
