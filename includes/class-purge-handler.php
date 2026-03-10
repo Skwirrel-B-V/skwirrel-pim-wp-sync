@@ -47,6 +47,10 @@ class Skwirrel_WC_Sync_Purge_Handler {
 	 * @return void
 	 */
 	public function purge_all( bool $permanent ): void {
+		if ( function_exists( 'set_time_limit' ) ) {
+			@set_time_limit( 0 ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged,Squiz.PHP.DiscouragedFunctions.Discouraged -- long-running purge requires no time limit
+		}
+
 		$mode_label = $permanent ? 'permanent delete' : 'trash';
 		$this->logger->info( "Purge all Skwirrel products started (mode: {$mode_label})" );
 

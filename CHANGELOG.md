@@ -2,6 +2,10 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.9.9]
+
+* Fix Danger Zone purge silently timing out on large datasets — add set_time_limit(0) to prevent PHP timeout
+
 ## [1.9.8]
 
 * Add "Skwirrel" meta box on the WooCommerce product edit screen (above Publish) — shows Skwirrel product ID, last sync time, and a "Sync this product" button for quick single-product sync via the API
