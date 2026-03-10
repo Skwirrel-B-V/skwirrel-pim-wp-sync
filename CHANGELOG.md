@@ -2,6 +2,10 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.10.1]
+
+* Restore `load_plugin_textdomain()` call so bundled translations in `languages/` are loaded — fixes plugin showing English text regardless of site language
+
 ## [1.10.0]
 
 * Phased sync architecture — sync now runs in 5 sequential phases (fetch, products, taxonomy, attributes, media) instead of processing everything per product in one pass
