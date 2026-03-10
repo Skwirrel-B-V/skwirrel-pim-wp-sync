@@ -76,22 +76,19 @@ class Skwirrel_WC_Sync_Service {
 		$delta_since = get_option( Skwirrel_WC_Sync_History::OPTION_LAST_SYNC, '' );
 
 		$collection_ids = $this->get_collection_ids();
+		$batch_size     = (int) ( $options['batch_size'] ?? 100 );
 
-		$get_params = [
-			'page'                         => 1,
-			'limit'                        => (int) ( $options['batch_size'] ?? 100 ),
+		// API options (include flags) — passed as 'options' to getProductsByFilter.
+		$api_options = [
 			'include_product_status'       => true,
 			'include_product_translations' => true,
 			'include_attachments'          => true,
 			'include_trade_items'          => true,
 			'include_trade_item_prices'    => true,
 			'include_categories'           => ! empty( $options['sync_categories'] ),
-			// Product groups: needed for _product_groups (eTIM can be nested here)
 			'include_product_groups'       => ! empty( $options['sync_categories'] ) || ! empty( $options['sync_grouped_products'] ),
-			// Grouped products: include when product is a variation (may affect eTIM structure)
 			'include_grouped_products'     => ! empty( $options['sync_grouped_products'] ),
 			'include_etim'                 => true,
-			// Note: include_etim_features exists only for getGroupedProducts, not getProducts
 			'include_etim_translations'    => true,
 			'include_languages'            => $this->get_include_languages(),
 			'include_contexts'             => [ 1 ],
@@ -101,29 +98,35 @@ class Skwirrel_WC_Sync_Service {
 		$sync_cc    = ! empty( $options['sync_custom_classes'] );
 		$sync_ti_cc = ! empty( $options['sync_trade_item_custom_classes'] );
 		if ( $sync_cc ) {
-			$get_params['include_custom_classes'] = true;
-			// Whitelist: pass specific IDs to the API for efficient filtering
-			$cc_filter_mode = $options['custom_class_filter_mode'] ?? '';
-			$cc_raw         = $options['custom_class_filter_ids'] ?? '';
-			$cc_parsed      = Skwirrel_WC_Sync_Product_Mapper::parse_custom_class_filter( $cc_raw );
+			$api_options['include_custom_classes'] = true;
+			$cc_filter_mode                        = $options['custom_class_filter_mode'] ?? '';
+			$cc_raw                                = $options['custom_class_filter_ids'] ?? '';
+			$cc_parsed                             = Skwirrel_WC_Sync_Product_Mapper::parse_custom_class_filter( $cc_raw );
 			if ( 'whitelist' === $cc_filter_mode && ! empty( $cc_parsed['ids'] ) ) {
-				$get_params['include_custom_class_id'] = $cc_parsed['ids'];
+				$api_options['include_custom_class_id'] = $cc_parsed['ids'];
 			}
 		}
 		if ( $sync_ti_cc ) {
-			$get_params['include_trade_item_custom_classes'] = true;
-			$cc_filter_mode                                  = $cc_filter_mode ?? ( $options['custom_class_filter_mode'] ?? '' );
+			$api_options['include_trade_item_custom_classes'] = true;
+			$cc_filter_mode                                   = $cc_filter_mode ?? ( $options['custom_class_filter_mode'] ?? '' );
 			$cc_raw    = $cc_raw ?? ( $options['custom_class_filter_ids'] ?? '' );
 			$cc_parsed = $cc_parsed ?? Skwirrel_WC_Sync_Product_Mapper::parse_custom_class_filter( $cc_raw );
 			if ( 'whitelist' === $cc_filter_mode && ! empty( $cc_parsed['ids'] ) ) {
-				$get_params['include_trade_item_custom_class_id'] = $cc_parsed['ids'];
+				$api_options['include_trade_item_custom_class_id'] = $cc_parsed['ids'];
 			}
 		}
 
-		// Collection ID filter: only sync products from these collections (empty = all)
-		// Note: exact API parameter name may need adjustment — logged for debugging
+		// Build filter for getProductsByFilter.
+		$filter = [];
+		if ( $delta && ! empty( $delta_since ) ) {
+			$filter['updated_on'] = [
+				'datetime' => $delta_since,
+				'operator' => '>=',
+			];
+		}
 		if ( ! empty( $collection_ids ) ) {
-			$get_params['collection_ids'] = $collection_ids;
+			// API accepts one dynamic_selection_id at a time; use the first configured ID.
+			$filter['dynamic_selection_id'] = $collection_ids[0];
 		}
 
 		$this->logger->verbose(
@@ -131,9 +134,10 @@ class Skwirrel_WC_Sync_Service {
 			[
 				'delta'          => $delta,
 				'delta_since'    => $delta_since,
-				'batch_size'     => $get_params['limit'],
+				'batch_size'     => $batch_size,
 				'include_etim'   => true,
 				'collection_ids' => $collection_ids ? $collection_ids : '(all)',
+				'filter'         => $filter ? $filter : '(none)',
 			]
 		);
 
@@ -159,26 +163,15 @@ class Skwirrel_WC_Sync_Service {
 			$updated             += $grouped_result['updated'];
 		}
 
-		if ( $delta && ! empty( $delta_since ) ) {
-			$req_options = $get_params;
-			unset( $req_options['page'], $req_options['limit'] );
-			$result = $client->call(
-				'getProductsByFilter',
-				[
-					'filter'  => [
-						'updated_on' => [
-							'datetime' => $delta_since,
-							'operator' => '>=',
-						],
-					],
-					'options' => $req_options,
-					'page'    => 1,
-					'limit'   => $get_params['limit'],
-				]
-			);
-		} else {
-			$result = $client->call( 'getProducts', $get_params );
-		}
+		$result = $client->call(
+			'getProductsByFilter',
+			[
+				'filter'  => $filter,
+				'options' => $api_options,
+				'page'    => 1,
+				'limit'   => $batch_size,
+			]
+		);
 
 		if ( ! $result['success'] ) {
 			$err = $result['error'] ?? [ 'message' => 'Unknown error' ];
@@ -404,32 +397,20 @@ class Skwirrel_WC_Sync_Service {
 			}
 
 			$total_processed += count( $products );
-			if ( count( $products ) < $get_params['limit'] ) {
+			if ( count( $products ) < $batch_size ) {
 				break;
 			}
 
 			++$page;
-			$get_params['page'] = $page;
-			if ( $delta && ! empty( $delta_since ) ) {
-				$req_options = $get_params;
-				unset( $req_options['page'], $req_options['limit'] );
-				$result = $client->call(
-					'getProductsByFilter',
-					[
-						'filter'  => [
-							'updated_on' => [
-								'datetime' => $delta_since,
-								'operator' => '>=',
-							],
-						],
-						'options' => $req_options,
-						'page'    => $page,
-						'limit'   => $get_params['limit'],
-					]
-				);
-			} else {
-				$result = $client->call( 'getProducts', $get_params );
-			}
+			$result = $client->call(
+				'getProductsByFilter',
+				[
+					'filter'  => $filter,
+					'options' => $api_options,
+					'page'    => $page,
+					'limit'   => $batch_size,
+				]
+			);
 			if ( ! $result['success'] ) {
 				$this->logger->error( 'Pagination failed', $result['error'] ?? [] );
 				break;
@@ -507,6 +488,134 @@ class Skwirrel_WC_Sync_Service {
 	 */
 	public function upsert_product( array $product ): string {
 		return $this->upserter->upsert_product( $product );
+	}
+
+	/**
+	 * Sync a single product by its Skwirrel product_id.
+	 *
+	 * Fetches the product from the API using getProducts with a product_ids filter,
+	 * then upserts it into WooCommerce including categories, brands, and attributes.
+	 *
+	 * @param int $skwirrel_product_id Skwirrel product_id.
+	 * @return array{success: bool, outcome?: string, error?: string}
+	 */
+	public function sync_single_product( int $skwirrel_product_id ): array {
+		$client = $this->get_client();
+		if ( ! $client ) {
+			return [
+				'success' => false,
+				'error'   => 'Invalid API configuration',
+			];
+		}
+
+		$options     = $this->get_options();
+		$req_options = [
+			'include_product_status'       => true,
+			'include_product_translations' => true,
+			'include_attachments'          => true,
+			'include_trade_items'          => true,
+			'include_trade_item_prices'    => true,
+			'include_categories'           => ! empty( $options['sync_categories'] ),
+			'include_product_groups'       => ! empty( $options['sync_categories'] ) || ! empty( $options['sync_grouped_products'] ),
+			'include_grouped_products'     => ! empty( $options['sync_grouped_products'] ),
+			'include_etim'                 => true,
+			'include_etim_translations'    => true,
+			'include_languages'            => $this->get_include_languages(),
+			'include_contexts'             => [ 1 ],
+		];
+
+		$sync_cc    = ! empty( $options['sync_custom_classes'] );
+		$sync_ti_cc = ! empty( $options['sync_trade_item_custom_classes'] );
+		if ( $sync_cc ) {
+			$req_options['include_custom_classes'] = true;
+		}
+		if ( $sync_ti_cc ) {
+			$req_options['include_trade_item_custom_classes'] = true;
+		}
+
+		$this->logger->info(
+			'Single product sync: fetching product from API',
+			[ 'skwirrel_product_id' => $skwirrel_product_id ]
+		);
+
+		$result = $client->call(
+			'getProductsByFilter',
+			[
+				'filter'  => [
+					'code' => [
+						'type'  => 'product_id',
+						'codes' => [ (string) $skwirrel_product_id ],
+					],
+				],
+				'options' => $req_options,
+				'page'    => 1,
+				'limit'   => 1,
+			]
+		);
+
+		if ( ! $result['success'] ) {
+			$err = $result['error'] ?? [ 'message' => 'Unknown error' ];
+			$this->logger->error(
+				'Single product sync: API error',
+				[
+					'skwirrel_product_id' => $skwirrel_product_id,
+					'error'               => $err,
+				]
+			);
+			return [
+				'success' => false,
+				'error'   => $err['message'] ?? 'API error',
+			];
+		}
+
+		$data     = $result['result'] ?? [];
+		$products = $data['products'] ?? [];
+
+		$this->logger->info(
+			'Single product sync: API returned products',
+			[
+				'skwirrel_product_id' => $skwirrel_product_id,
+				'products_returned'   => count( $products ),
+			]
+		);
+
+		$product = $products[0] ?? null;
+
+		if ( null === $product ) {
+			return [
+				'success' => false,
+				'error'   => 'Product not found in Skwirrel API',
+			];
+		}
+
+		try {
+			$outcome = $this->upserter->upsert_product( $product );
+
+			$this->logger->info(
+				'Single product sync completed',
+				[
+					'skwirrel_product_id' => $skwirrel_product_id,
+					'outcome'             => $outcome,
+				]
+			);
+
+			return [
+				'success' => true,
+				'outcome' => $outcome,
+			];
+		} catch ( Throwable $e ) {
+			$this->logger->error(
+				'Single product sync failed',
+				[
+					'skwirrel_product_id' => $skwirrel_product_id,
+					'error'               => $e->getMessage(),
+				]
+			);
+			return [
+				'success' => false,
+				'error'   => $e->getMessage(),
+			];
+		}
 	}
 
 	private function get_client(): ?Skwirrel_WC_Sync_JsonRpc_Client {

@@ -660,3 +660,39 @@ msgstr "Product manufacturer base"
 #: includes/class-permalink-settings.php:177
 msgid "The base slug for the product manufacturer taxonomy URLs."
 msgstr "The base slug for the product manufacturer taxonomy URLs."
+
+#: includes/class-product-sync-meta-box.php:70
+msgid "This product is not managed by Skwirrel."
+msgstr "This product is not managed by Skwirrel."
+
+#: includes/class-product-sync-meta-box.php:78
+msgid "Product ID:"
+msgstr "Product ID:"
+
+#: includes/class-product-sync-meta-box.php:83
+msgid "Last synced:"
+msgstr "Last synced:"
+
+#: includes/class-product-sync-meta-box.php:93
+msgid "Sync this product"
+msgstr "Sync this product"
+
+#: includes/class-product-sync-meta-box.php:167
+msgid "Product synced successfully (%s)."
+msgstr "Product synced successfully (%s)."
+
+#: includes/class-product-sync-meta-box.php:133
+msgid "Sync failed."
+msgstr "Sync failed."
+
+#: includes/class-product-sync-meta-box.php:139
+msgid "Network error. Please try again."
+msgstr "Network error. Please try again."
+
+#: includes/class-product-sync-meta-box.php:153
+msgid "Invalid product ID."
+msgstr "Invalid product ID."
+
+#: includes/class-product-sync-meta-box.php:158
+msgid "No Skwirrel product ID found for this product."
+msgstr "No Skwirrel product ID found for this product."

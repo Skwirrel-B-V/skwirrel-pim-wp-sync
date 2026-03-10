@@ -2,6 +2,10 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.9.8]
+
+* Add "Skwirrel" meta box on the WooCommerce product edit screen (above Publish) — shows Skwirrel product ID, last sync time, and a "Sync this product" button for quick single-product sync via the API
+
 ## [1.9.7]
 
 * Add configurable "Product manufacturer base" slug on Settings → Permalinks page — allows customizing the URL base for the product_manufacturer taxonomy (like WooCommerce's brand base field)
