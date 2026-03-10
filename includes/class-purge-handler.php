@@ -180,25 +180,17 @@ class Skwirrel_WC_Sync_Purge_Handler {
 		}
 		$this->logger->info( "Purge: {$deleted} products processed (mode: {$mode_label})" );
 
-		// --- Step 4: Delete Skwirrel-related categories ---
-		// Skip the default WooCommerce "Uncategorized" category.
+		// --- Step 4: Delete Skwirrel-related categories via bulk SQL ---
 		$default_cat_id     = (int) get_option( 'default_product_cat', 0 );
-		$categories_deleted = 0;
-		if ( ! empty( $all_cat_term_ids ) ) {
-			$this->logger->info( 'Purge: ' . count( $all_cat_term_ids ) . ' Skwirrel categories found, deleting...' );
-			foreach ( $all_cat_term_ids as $term_id ) {
-				if ( $term_id === $default_cat_id ) {
-					continue;
-				}
-				$result = wp_delete_term( $term_id, 'product_cat' );
-				if ( true === $result ) {
-					++$categories_deleted;
-				}
-			}
+		$cat_ids_to_delete  = array_filter( $all_cat_term_ids, static fn( int $id ) => $id !== $default_cat_id );
+		$categories_deleted = count( $cat_ids_to_delete );
+		if ( $categories_deleted > 0 ) {
+			$this->logger->info( "Purge: {$categories_deleted} Skwirrel categories found, deleting via SQL..." );
+			$this->bulk_delete_terms( $cat_ids_to_delete, 'product_cat' );
 			$this->logger->info( "Purge: {$categories_deleted} categories deleted." );
 		}
 
-		// --- Step 5: Delete product_brand and product_manufacturer terms ---
+		// --- Step 5: Delete product_brand and product_manufacturer terms via bulk SQL ---
 		$brands_deleted        = 0;
 		$manufacturers_deleted = 0;
 		$purge_taxonomies      = [
@@ -206,30 +198,24 @@ class Skwirrel_WC_Sync_Purge_Handler {
 			Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY => &$manufacturers_deleted,
 		];
 		foreach ( $purge_taxonomies as $purge_tax => &$deleted_count ) {
-			if ( ! taxonomy_exists( $purge_tax ) ) {
-				continue;
-			}
-			$terms = get_terms(
-				[
-					'taxonomy'   => $purge_tax,
-					'hide_empty' => false,
-					'fields'     => 'ids',
-				]
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- bulk purge operation
+			$term_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT tt.term_id FROM {$wpdb->term_taxonomy} tt WHERE tt.taxonomy = %s",
+					$purge_tax
+				)
 			);
-			if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
-				$this->logger->info( 'Purge: ' . count( $terms ) . " {$purge_tax} terms found, deleting..." );
-				foreach ( $terms as $term_id ) {
-					$result = wp_delete_term( (int) $term_id, $purge_tax );
-					if ( true === $result ) {
-						++$deleted_count;
-					}
-				}
+			$term_ids = array_map( 'intval', $term_ids );
+			if ( ! empty( $term_ids ) ) {
+				$deleted_count = count( $term_ids );
+				$this->logger->info( "Purge: {$deleted_count} {$purge_tax} terms found, deleting via SQL..." );
+				$this->bulk_delete_terms( $term_ids, $purge_tax );
 				$this->logger->info( "Purge: {$deleted_count} {$purge_tax} terms deleted." );
 			}
 		}
 		unset( $deleted_count );
 
-		// --- Step 6: Delete Skwirrel-created attribute taxonomies ---
+		// --- Step 6: Delete Skwirrel-created attribute taxonomies via bulk SQL ---
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- bulk purge operation
 		$attribute_rows = $wpdb->get_results(
 			"SELECT attribute_id, attribute_name FROM {$wpdb->prefix}woocommerce_attribute_taxonomies
@@ -239,15 +225,33 @@ class Skwirrel_WC_Sync_Purge_Handler {
 
 		$attributes_deleted = 0;
 		if ( ! empty( $attribute_rows ) ) {
-			$this->logger->info( 'Purge: ' . count( $attribute_rows ) . ' Skwirrel attributes found, deleting...' );
+			$this->logger->info( 'Purge: ' . count( $attribute_rows ) . ' Skwirrel attribute taxonomies found, deleting via SQL...' );
+			$attr_ids = [];
 			foreach ( $attribute_rows as $attr ) {
-				if ( function_exists( 'wc_delete_attribute' ) ) {
-					wc_delete_attribute( (int) $attr->attribute_id );
+				$attr_ids[] = (int) $attr->attribute_id;
+				$taxonomy   = 'pa_' . $attr->attribute_name;
+				// Bulk delete all terms belonging to this attribute taxonomy.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- bulk purge operation
+				$attr_term_ids = $wpdb->get_col(
+					$wpdb->prepare(
+						"SELECT tt.term_id FROM {$wpdb->term_taxonomy} tt WHERE tt.taxonomy = %s",
+						$taxonomy
+					)
+				);
+				if ( ! empty( $attr_term_ids ) ) {
+					$this->bulk_delete_terms( array_map( 'intval', $attr_term_ids ), $taxonomy );
 				}
 				++$attributes_deleted;
 			}
+			// Bulk delete the attribute taxonomy registrations.
+			foreach ( array_chunk( $attr_ids, self::BULK_CHUNK_SIZE ) as $chunk ) {
+				$ids = implode( ',', $chunk );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- IDs are intval-sanitized
+				$wpdb->query( "DELETE FROM {$wpdb->prefix}woocommerce_attribute_taxonomies WHERE attribute_id IN ({$ids})" );
+			}
 			delete_transient( 'wc_attribute_taxonomies' );
-			$this->logger->info( "Purge: {$attributes_deleted} attributes deleted." );
+			wp_cache_delete( 'woocommerce-attributes', 'woocommerce' );
+			$this->logger->info( "Purge: {$attributes_deleted} attribute taxonomies deleted." );
 		}
 
 		// --- Step 7: Reset sync state options ---
@@ -386,6 +390,59 @@ class Skwirrel_WC_Sync_Purge_Handler {
 
 			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
+	}
+
+	/**
+	 * Bulk delete taxonomy terms and all related data via direct SQL.
+	 *
+	 * Deletes in correct order: term_relationships → termmeta → term_taxonomy → terms.
+	 * Also recounts term_taxonomy counts for affected taxonomies.
+	 *
+	 * @param int[]  $term_ids Term IDs to permanently delete.
+	 * @param string $taxonomy Taxonomy name (for targeted term_taxonomy deletion).
+	 * @return void
+	 */
+	private function bulk_delete_terms( array $term_ids, string $taxonomy ): void {
+		if ( empty( $term_ids ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		foreach ( array_chunk( $term_ids, self::BULK_CHUNK_SIZE ) as $chunk ) {
+			$ids = implode( ',', $chunk );
+
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- bulk purge with intval-sanitized IDs
+
+			// Remove term ↔ object relationships.
+			$wpdb->query(
+				"DELETE tr FROM {$wpdb->term_relationships} tr
+				INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+				WHERE tt.term_id IN ({$ids})"
+			);
+
+			// Remove term meta.
+			$wpdb->query( "DELETE FROM {$wpdb->termmeta} WHERE term_id IN ({$ids})" );
+
+			// Remove term_taxonomy rows (scoped to taxonomy for safety).
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->term_taxonomy} WHERE term_id IN ({$ids}) AND taxonomy = %s",
+					$taxonomy
+				)
+			);
+
+			// Remove terms themselves (only if no other taxonomy references remain).
+			$wpdb->query(
+				"DELETE t FROM {$wpdb->terms} t
+				LEFT JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
+				WHERE t.term_id IN ({$ids}) AND tt.term_id IS NULL"
+			);
+
+			// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		}
+
+		clean_term_cache( $term_ids, $taxonomy );
 	}
 
 	/**
