@@ -195,7 +195,7 @@ final class Skwirrel_WC_Sync_Plugin {
 		}
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only filter
-		$selected = sanitize_text_field( $_GET[ Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY ] ?? '' );
+		$selected = sanitize_text_field( wp_unslash( $_GET[ Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY ] ?? '' ) );
 		echo '<select name="' . esc_attr( Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY ) . '">';
 		echo '<option value="">' . esc_html__( 'Filter by manufacturer', 'skwirrel-pim-sync' ) . '</option>';
 		foreach ( $terms as $term ) {
@@ -220,7 +220,7 @@ final class Skwirrel_WC_Sync_Plugin {
 			return;
 		}
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only filter
-		$manufacturer = sanitize_text_field( $_GET[ Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY ] ?? '' );
+		$manufacturer = sanitize_text_field( wp_unslash( $_GET[ Skwirrel_WC_Sync_Brand_Sync::MANUFACTURER_TAXONOMY ] ?? '' ) );
 		if ( $manufacturer === '' ) {
 			return;
 		}
