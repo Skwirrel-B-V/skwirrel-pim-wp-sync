@@ -338,11 +338,15 @@ class Skwirrel_WC_Sync_Service {
 		// =====================================================================
 		// Phase 2: Taxonomy — categories, brands, manufacturers
 		// =====================================================================
+		$taxonomy_label = ! empty( $options['sync_manufacturers'] )
+			? __( 'Assigning categories, brands & manufacturers…', 'skwirrel-pim-sync' )
+			: __( 'Assigning categories & brands…', 'skwirrel-pim-sync' );
+
 		Skwirrel_WC_Sync_History::update_phase_progress(
 			Skwirrel_WC_Sync_History::PHASE_TAXONOMY,
 			0,
 			$total,
-			__( 'Assigning categories & brands…', 'skwirrel-pim-sync' )
+			$taxonomy_label
 		);
 
 		foreach ( $sync_items as $i => $item ) {
@@ -368,7 +372,7 @@ class Skwirrel_WC_Sync_Service {
 					Skwirrel_WC_Sync_History::PHASE_TAXONOMY,
 					$i + 1,
 					$total,
-					__( 'Assigning categories & brands…', 'skwirrel-pim-sync' )
+					$taxonomy_label
 				);
 			}
 		}

@@ -682,10 +682,15 @@ class Skwirrel_WC_Sync_Admin_Settings {
         $progress = Skwirrel_WC_Sync_History::get_sync_progress();
 
         // Phase display configuration: [phase_key => label]
+        $opts = get_option('skwirrel_wc_sync_settings', []);
+        $taxonomy_label = ! empty($opts['sync_manufacturers'])
+            ? __('Assign categories, brands & manufacturers', 'skwirrel-pim-sync')
+            : __('Assign categories & brands', 'skwirrel-pim-sync');
+
         $phases = [
             Skwirrel_WC_Sync_History::PHASE_FETCH      => __('Fetch products from API', 'skwirrel-pim-sync'),
             Skwirrel_WC_Sync_History::PHASE_PRODUCTS    => __('Create & update products', 'skwirrel-pim-sync'),
-            Skwirrel_WC_Sync_History::PHASE_TAXONOMY    => __('Assign categories & brands', 'skwirrel-pim-sync'),
+            Skwirrel_WC_Sync_History::PHASE_TAXONOMY    => $taxonomy_label,
             Skwirrel_WC_Sync_History::PHASE_ATTRIBUTES  => __('Connect attributes', 'skwirrel-pim-sync'),
             Skwirrel_WC_Sync_History::PHASE_MEDIA       => __('Download images & documents', 'skwirrel-pim-sync'),
             Skwirrel_WC_Sync_History::PHASE_CLEANUP     => __('Cleanup & finalize', 'skwirrel-pim-sync'),

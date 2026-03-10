@@ -696,3 +696,80 @@ msgstr ""
 #: includes/class-product-sync-meta-box.php:158
 msgid "No Skwirrel product ID found for this product."
 msgstr ""
+
+#: includes/class-admin-settings.php:691
+#: includes/class-sync-service.php:179
+msgid "Fetch products from API"
+msgstr ""
+
+#: includes/class-sync-service.php:267
+#, php-format
+msgid "Fetching products from API… (%d found)"
+msgstr ""
+
+#: includes/class-admin-settings.php:692
+#: includes/class-sync-service.php:294
+msgid "Create & update products"
+msgstr ""
+
+#: includes/class-sync-service.php:294
+msgid "Creating & updating products…"
+msgstr ""
+
+#: includes/class-admin-settings.php:688
+#: includes/class-sync-service.php:343
+msgid "Assign categories & brands"
+msgstr ""
+
+#: includes/class-sync-service.php:343
+msgid "Assigning categories & brands…"
+msgstr ""
+
+#: includes/class-admin-settings.php:687
+#: includes/class-sync-service.php:342
+msgid "Assign categories, brands & manufacturers"
+msgstr ""
+
+#: includes/class-sync-service.php:342
+msgid "Assigning categories, brands & manufacturers…"
+msgstr ""
+
+#: includes/class-admin-settings.php:694
+#: includes/class-sync-service.php:390
+msgid "Connect attributes"
+msgstr ""
+
+#: includes/class-sync-service.php:390
+msgid "Connecting attributes…"
+msgstr ""
+
+#: includes/class-admin-settings.php:695
+#: includes/class-sync-service.php:436
+msgid "Download images & documents"
+msgstr ""
+
+#: includes/class-sync-service.php:436
+msgid "Downloading images & documents…"
+msgstr ""
+
+#: includes/class-admin-settings.php:696
+#: includes/class-sync-service.php:503
+msgid "Cleanup & finalize"
+msgstr ""
+
+#: includes/class-sync-service.php:503
+msgid "Cleaning up…"
+msgstr ""
+
+#: includes/class-admin-settings.php:730
+#, php-format
+msgid "%d fetched"
+msgstr ""
+
+#: includes/class-admin-settings.php:739
+msgid "This page refreshes automatically every 5 seconds."
+msgstr ""
+
+#: includes/class-sync-service.php:179
+msgid "Fetching products from API…"
+msgstr ""
