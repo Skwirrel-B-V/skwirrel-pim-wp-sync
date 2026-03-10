@@ -35,10 +35,11 @@ class Skwirrel_WC_Sync_Purge_Handler {
 	 *
 	 * This is the "danger zone" full purge. Uses bulk SQL for attachments and products
 	 * instead of per-item wp_delete_post/wp_delete_attachment calls — orders of magnitude
-	 * faster on large stores. Media files are deleted from disk before DB records are removed.
+	 * faster on large stores. Media files on disk are left as orphans (use a media cleanup
+	 * tool to reclaim space if needed).
 	 *
 	 * Steps performed:
-	 * 1. Delete Skwirrel media files from disk and their DB records via bulk SQL.
+	 * 1. Delete Skwirrel media attachment DB records via bulk SQL (files left on disk).
 	 * 2. Find products with _skwirrel_external_id or _skwirrel_grouped_product_id meta
 	 *    and collect their category term IDs.
 	 * 3. Delete or trash products via bulk SQL (including WC lookup tables, comments, meta).
@@ -61,61 +62,24 @@ class Skwirrel_WC_Sync_Purge_Handler {
 
 		global $wpdb;
 
-		// --- Step 1: Delete Skwirrel media files from disk + bulk SQL ---
+		// --- Step 1: Delete Skwirrel media attachment DB records ---
+		// Files on disk are left as orphans (harmless) — use a media cleanup tool to reclaim space.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- bulk purge operation
-		$attachments = $wpdb->get_results(
-			"SELECT p.ID,
-				pm_file.meta_value AS attached_file,
-				pm_meta.meta_value AS attachment_metadata
-			FROM {$wpdb->posts} p
-			INNER JOIN {$wpdb->postmeta} pm_src ON p.ID = pm_src.post_id
-				AND pm_src.meta_key = '_skwirrel_source_url'
-			LEFT JOIN {$wpdb->postmeta} pm_file ON p.ID = pm_file.post_id
-				AND pm_file.meta_key = '_wp_attached_file'
-			LEFT JOIN {$wpdb->postmeta} pm_meta ON p.ID = pm_meta.post_id
-				AND pm_meta.meta_key = '_wp_attachment_metadata'
-			WHERE p.post_type = 'attachment'"
+		$attachment_ids = array_map(
+			'intval',
+			$wpdb->get_col(
+				"SELECT DISTINCT p.ID FROM {$wpdb->posts} p
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+				WHERE p.post_type = 'attachment'
+				AND pm.meta_key = '_skwirrel_source_url'"
+			)
 		);
 
-		$attachments_deleted = 0;
-		if ( ! empty( $attachments ) ) {
-			$this->logger->info( 'Purge: ' . count( $attachments ) . ' Skwirrel media files found, deleting...' );
-			$upload_dir     = wp_get_upload_dir();
-			$basedir        = $upload_dir['basedir'];
-			$attachment_ids = [];
-
-			foreach ( $attachments as $att ) {
-				$attachment_ids[] = (int) $att->ID;
-
-				// Delete main file and thumbnails from disk.
-				if ( ! empty( $att->attached_file ) ) {
-					$main_file = $basedir . '/' . $att->attached_file;
-					if ( file_exists( $main_file ) ) {
-						wp_delete_file( $main_file );
-					}
-
-					// Delete generated thumbnail sizes.
-					if ( ! empty( $att->attachment_metadata ) ) {
-						$meta = maybe_unserialize( $att->attachment_metadata );
-						if ( is_array( $meta ) && ! empty( $meta['sizes'] ) ) {
-							$file_dir = dirname( $main_file );
-							foreach ( $meta['sizes'] as $size ) {
-								if ( ! empty( $size['file'] ) ) {
-									$thumb_file = $file_dir . '/' . $size['file'];
-									if ( file_exists( $thumb_file ) ) {
-										wp_delete_file( $thumb_file );
-									}
-								}
-							}
-						}
-					}
-				}
-				++$attachments_deleted;
-			}
-
-			// Bulk delete attachment DB records (postmeta, term_relationships, posts).
+		$attachments_deleted = count( $attachment_ids );
+		if ( $attachments_deleted > 0 ) {
+			$this->logger->info( "Purge: {$attachments_deleted} Skwirrel media attachments found, deleting DB records..." );
 			$this->bulk_delete_post_records( $attachment_ids );
-			$this->logger->info( "Purge: {$attachments_deleted} media files deleted." );
+			$this->logger->info( "Purge: {$attachments_deleted} media attachments deleted (files left on disk as orphans)." );
 		}
 
 		// --- Step 2: Find products and collect their category term IDs ---
