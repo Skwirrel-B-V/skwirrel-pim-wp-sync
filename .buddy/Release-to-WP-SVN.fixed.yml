@@ -12,7 +12,7 @@
     execute_commands:
     - composer validate
     - composer install
-    - vendor/bin/phpunit
+    - vendor/bin/pest
     setup_commands:
     - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/buddy.ini
     - apt-get update && apt-get install -y git zip
