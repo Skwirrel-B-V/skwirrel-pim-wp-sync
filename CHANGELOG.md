@@ -2,6 +2,13 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [1.10.1]
+
+* Add `Domain Path: /languages` header for automatic translation loading on WordPress 6.7+
+* Add `load_plugin_textdomain()` fallback for older WordPress versions
+* Add `nl.mo`/`nl.po` locale files for sites using `nl` instead of `nl_NL`
+* Fix Danger Zone purge not removing all product attribute taxonomies — now cleans up all orphaned `pa_*` attributes, not just `etim_*` and `skwirrel_variant`
+
 ## [1.10.0]
 
 * Phased sync architecture — sync now runs in 5 sequential phases (fetch, products, taxonomy, attributes, media) instead of processing everything per product in one pass

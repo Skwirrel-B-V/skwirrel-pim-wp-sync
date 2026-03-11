@@ -12,6 +12,7 @@
  * WC tested up to: 10.5
  * License: GPL v2 or later
  * Text Domain: skwirrel-pim-sync
+ * Domain Path: /languages
  * Requires Plugins: woocommerce
  */
 

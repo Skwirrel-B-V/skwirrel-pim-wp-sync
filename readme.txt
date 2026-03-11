@@ -4,7 +4,7 @@ Tags: woocommerce, sync, erp, pim, skwirrel
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 1.10.0
+Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,12 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 1.10.1 =
+* Add Domain Path header for automatic translation loading on WordPress 6.7+
+* Add load_plugin_textdomain() fallback for older WordPress versions
+* Add nl.mo/nl.po locale files for sites using "nl" instead of "nl_NL"
+* Fix Danger Zone purge not removing all product attribute taxonomies — now cleans up all orphaned attributes, not just etim_* and skwirrel_variant
 
 = 1.10.0 =
 * Phased sync architecture — sync now runs in 5 sequential phases (fetch, products, taxonomy, attributes, media) instead of processing everything per product

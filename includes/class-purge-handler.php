@@ -168,26 +168,6 @@ class Skwirrel_WC_Sync_Purge_Handler {
 
 		$all_cat_term_ids = array_unique( array_map( 'intval', array_merge( $skwirrel_cat_term_ids, $meta_cat_term_ids ) ) );
 
-		// Collect attribute taxonomy names (pa_*) assigned to Skwirrel products BEFORE deleting them.
-		$skwirrel_attr_taxonomies = [];
-		if ( ! empty( $all_product_ids ) ) {
-			foreach ( array_chunk( $all_product_ids, self::BULK_CHUNK_SIZE ) as $chunk ) {
-				$id_list = implode( ',', $chunk );
-				// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- IDs are intval-sanitized
-				$skwirrel_attr_taxonomies = array_merge(
-					$skwirrel_attr_taxonomies,
-					$wpdb->get_col(
-						"SELECT DISTINCT tt.taxonomy FROM {$wpdb->term_relationships} tr
-						INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-						WHERE tr.object_id IN ({$id_list})
-						AND tt.taxonomy LIKE 'pa\\_%'"
-					)
-				);
-				// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			}
-			$skwirrel_attr_taxonomies = array_unique( $skwirrel_attr_taxonomies );
-		}
-
 		// --- Step 3: Delete or trash products via bulk SQL ---
 		$deleted = count( $all_product_ids );
 		if ( ! empty( $all_product_ids ) ) {
@@ -236,22 +216,14 @@ class Skwirrel_WC_Sync_Purge_Handler {
 		}
 		unset( $deleted_count );
 
-		// --- Step 6: Delete Skwirrel-related attribute taxonomies via bulk SQL ---
-		// Build the full set: attributes used by Skwirrel products (collected before step 3)
-		// plus known Skwirrel prefixes (etim_%, skwirrel_variant) as safety net.
-		$attr_names_from_products = array_map(
-			static fn( string $tax ) => preg_replace( '/^pa_/', '', $tax ),
-			$skwirrel_attr_taxonomies
-		);
-
+		// --- Step 6: Delete orphaned attribute taxonomies via bulk SQL ---
+		// After Skwirrel products are removed, find ALL pa_* attribute taxonomies that have
+		// zero remaining non-trashed products. This catches etim_*, skwirrel_variant, custom
+		// class attributes, and any other attributes that were only used by Skwirrel products.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- bulk purge operation
-		$known_skwirrel_attrs = $wpdb->get_col(
-			"SELECT attribute_name FROM {$wpdb->prefix}woocommerce_attribute_taxonomies
-			WHERE attribute_name LIKE 'etim\\_%'
-			OR attribute_name = 'skwirrel_variant'"
+		$all_attr_names = $wpdb->get_col(
+			"SELECT attribute_name FROM {$wpdb->prefix}woocommerce_attribute_taxonomies"
 		);
-
-		$all_attr_names = array_unique( array_merge( $attr_names_from_products, $known_skwirrel_attrs ) );
 
 		$attributes_deleted = 0;
 		if ( ! empty( $all_attr_names ) ) {
