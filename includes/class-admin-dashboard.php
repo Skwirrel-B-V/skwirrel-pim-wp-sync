@@ -529,7 +529,8 @@ class Skwirrel_WC_Sync_Admin_Dashboard {
 						</div>
 						<div class="skw-field">
 							<label for="batch_size" class="skw-label"><?php esc_html_e( 'Batch size', 'skwirrel-pim-sync' ); ?></label>
-							<input type="number" id="batch_size" name="<?php echo esc_attr( self::OPTION_KEY ); ?>[batch_size]" value="<?php echo esc_attr( (string) ( $opts['batch_size'] ?? 100 ) ); ?>" min="10" max="500" class="skw-input skw-input-sm" />
+							<input type="number" id="batch_size" name="<?php echo esc_attr( self::OPTION_KEY ); ?>[batch_size]" value="<?php echo esc_attr( (string) ( $opts['batch_size'] ?? 100 ) ); ?>" min="1" max="500" class="skw-input skw-input-sm" />
+							<p class="skw-field-hint"><?php esc_html_e( 'Products per API request (1–500).', 'skwirrel-pim-sync' ); ?></p>
 						</div>
 					</div>
 				</div>
@@ -663,8 +664,8 @@ class Skwirrel_WC_Sync_Admin_Dashboard {
 				<div class="skw-fieldgroup">
 					<h3 class="skw-fieldgroup-title"><?php esc_html_e( 'Permalinks', 'skwirrel-pim-sync' ); ?></h3>
 
-					<?php if ( $resync_needed ) : ?>
-					<div class="skw-notice skw-notice-warning">
+					<?php if ( $resync_needed && $update_on_resync ) : ?>
+					<div class="skw-notice skw-notice-warning" id="skwirrel-slug-warning">
 						<strong><?php esc_html_e( 'Slug settings have changed.', 'skwirrel-pim-sync' ); ?></strong>
 						<?php esc_html_e( 'Run a full sync to update product URLs. Changing slugs may break existing links and SEO rankings.', 'skwirrel-pim-sync' ); ?>
 					</div>
@@ -681,9 +682,18 @@ class Skwirrel_WC_Sync_Admin_Dashboard {
 						</tr>
 						<tr>
 							<th><?php esc_html_e( 'Update on re-sync', 'skwirrel-pim-sync' ); ?></th>
-							<td><?php echo $update_on_resync ? esc_html__( 'Yes', 'skwirrel-pim-sync' ) : esc_html__( 'No', 'skwirrel-pim-sync' ); ?></td>
+							<td>
+								<select id="skwirrel-update-slug-resync" class="skw-inline-select">
+									<option value="0" <?php selected( ! $update_on_resync ); ?>><?php esc_html_e( 'No', 'skwirrel-pim-sync' ); ?></option>
+									<option value="1" <?php selected( $update_on_resync ); ?>><?php esc_html_e( 'Yes', 'skwirrel-pim-sync' ); ?></option>
+								</select>
+								<span id="skwirrel-slug-saved" class="skw-saved-indicator" style="display:none;">✓</span>
+							</td>
 						</tr>
 					</table>
+					<p class="skw-field-hint" id="skwirrel-slug-resync-hint" <?php echo $update_on_resync ? '' : 'style="display:none;"'; ?>>
+						<?php esc_html_e( 'Existing product URLs will be overwritten on the next sync. This may break existing links and SEO rankings.', 'skwirrel-pim-sync' ); ?>
+					</p>
 					<p class="skw-field-hint">
 						<a href="<?php echo esc_url( $permalinks_url ); ?>"><?php esc_html_e( 'Edit permalink settings', 'skwirrel-pim-sync' ); ?> →</a>
 					</p>

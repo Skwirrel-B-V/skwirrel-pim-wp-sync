@@ -845,6 +845,21 @@
 	color: var(--skw-dark);
 }
 
+.skw-inline-select {
+	font-size: 13px;
+	padding: 2px 6px;
+	border: 1px solid #d1d5db;
+	border-radius: 4px;
+	background: #fff;
+	color: var(--skw-dark);
+}
+
+.skw-saved-indicator {
+	color: #16a34a;
+	font-size: 13px;
+	margin-left: 6px;
+}
+
 /* ==========================================================================
    Buttons
    ========================================================================== */

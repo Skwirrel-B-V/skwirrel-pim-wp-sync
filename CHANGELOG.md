@@ -2,6 +2,13 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [2.0.4]
+
+* Inline "Update on re-sync" toggle in Permalinks section — saves instantly via AJAX with ✓ indicator
+* Slug change warning only shown when "Update on re-sync" is enabled and settings have actually changed
+* Persistent hint below the toggle when enabled: warns about URL overwrite and SEO impact
+* Add batch size field hint: "Products per API request (1–500)."
+
 ## [2.0.3]
 
 * Add Permalinks section in Settings showing current slug configuration with link to Settings → Permalinks

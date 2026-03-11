@@ -55,6 +55,7 @@ class Skwirrel_WC_Sync_Admin_Settings {
         add_action('admin_post_skwirrel_wc_sync_clear_history', [$this, 'handle_clear_history']);
         add_action('wp_ajax_' . self::BG_PURGE_ACTION, [$this, 'handle_background_purge']);
         add_action('wp_ajax_nopriv_' . self::BG_PURGE_ACTION, [$this, 'handle_background_purge']);
+        add_action('wp_ajax_skwirrel_wc_sync_save_slug_resync', [$this, 'handle_save_slug_resync']);
     }
 
     public function add_menu(): void {
@@ -382,6 +383,21 @@ class Skwirrel_WC_Sync_Admin_Settings {
         exit;
     }
 
+    /**
+     * AJAX handler: save the "update slug on re-sync" toggle.
+     */
+    public function handle_save_slug_resync(): void {
+        check_ajax_referer( 'skwirrel_slug_resync_nonce', '_nonce' );
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            wp_send_json_error( 'Access denied', 403 );
+        }
+        $enabled = ! empty( $_POST['enabled'] );
+        $opts    = get_option( Skwirrel_WC_Sync_Permalink_Settings::OPTION_KEY, [] );
+        $opts['update_slug_on_resync'] = $enabled;
+        update_option( Skwirrel_WC_Sync_Permalink_Settings::OPTION_KEY, $opts );
+        wp_send_json_success();
+    }
+
     public function enqueue_assets(string $hook): void {
         // Spinner CSS on all admin pages when sync is in progress.
         if (get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
@@ -412,6 +428,8 @@ class Skwirrel_WC_Sync_Admin_Settings {
             'purgeConfirmPermanent' => __('WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?', 'skwirrel-pim-sync'),
             'purgeConfirmTrash'     => __('All Skwirrel products will be moved to the trash.\n\nAre you sure?', 'skwirrel-pim-sync'),
             'clearHistoryConfirm'   => __('Delete all sync history?', 'skwirrel-pim-sync'),
+            'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
+            'slugResyncNonce'       => wp_create_nonce( 'skwirrel_slug_resync_nonce' ),
         ]);
 
         wp_add_inline_script(
@@ -471,6 +489,31 @@ class Skwirrel_WC_Sync_Admin_Settings {
             . ' if (!container) return;'
             . ' var notices = container.querySelectorAll(":scope > .notice, :scope > .updated, :scope > .error, :scope > .update-nag, .wrap > .notice, .wrap > .updated, .wrap > .error, .wrap > .update-nag");'
             . ' notices.forEach(function(n) { slot.appendChild(n); });'
+            . '})();'
+        );
+
+        // Inline toggle: save "update slug on re-sync" via AJAX.
+        wp_add_inline_script(
+            'skwirrel-pim-sync-admin',
+            '(function() {'
+            . ' var sel = document.getElementById("skwirrel-update-slug-resync");'
+            . ' if (!sel) return;'
+            . ' sel.addEventListener("change", function() {'
+            . '  var enabled = this.value === "1";'
+            . '  var hint = document.getElementById("skwirrel-slug-resync-hint");'
+            . '  var warn = document.getElementById("skwirrel-slug-warning");'
+            . '  if (hint) hint.style.display = enabled ? "" : "none";'
+            . '  if (warn) warn.style.display = enabled ? "" : "none";'
+            . '  var fd = new FormData();'
+            . '  fd.append("action", "skwirrel_wc_sync_save_slug_resync");'
+            . '  fd.append("_nonce", skwirrelPimSync.slugResyncNonce);'
+            . '  fd.append("enabled", enabled ? "1" : "0");'
+            . '  fetch(skwirrelPimSync.ajaxUrl, { method: "POST", body: fd })'
+            . '   .then(function() {'
+            . '    var ok = document.getElementById("skwirrel-slug-saved");'
+            . '    if (ok) { ok.style.display = "inline"; setTimeout(function() { ok.style.display = "none"; }, 1500); }'
+            . '   });'
+            . ' });'
             . '})();'
         );
 
