@@ -49,14 +49,14 @@
     - "# Step 1: Ensure we have an SVN trunk working copy"
     - "if [ -d \"$SVN_DIR/.svn\" ]; then"
     - '  echo "SVN working copy found. Updating..."'
-    - "  svn up \"${SVN_DIR}\" \\"
-    - "    --username ${WP_SVN_USERNAME} --password ${$WP_SVN_PASSWORD} \\"
+    - '  svn up $SVN_DIR \'
+    - '    --username $WP_SVN_USERNAME --password $WP_SVN_PASSWORD \'
     - '    --non-interactive --trust-server-cert'
     - else
     - '  echo "No SVN working copy found. Checking out trunk..."'
-    - "  mkdir -p \"{$SVN_DIR}\""
-    - "  svn co ${SVN_URL} ${SVN_DIR} \\"
-    - "    --username ${WP_SVN_USERNAME} --password ${WP_SVN_PASSWORD} \\"
+    - '  mkdir -p $SVN_DIR"'
+    - '  svn co $SVN_URL $SVN_DIR \'
+    - '    --username $WP_SVN_USERNAME --password $WP_SVN_PASSWORD \'
     - '    --non-interactive --trust-server-cert'
     - fi
     - ""
@@ -73,12 +73,12 @@
     - '  "$BUDDY_PIPELINE_WORKSPACE/" "$SVN_DIR/"'
     - ""
     - "# Step 3: Stage and commit changes"
-    - "cd ${SVN_DIR}"
+    - cd $SVN_DIR
     - svn add --force .
     - "svn status | grep '^\\!' | awk '{print $2}' | xargs -r svn rm"
     - ""
     - svn ci -m "Deploy new version" \
-    - "  --username ${WP_SVN_USERNAME} --password ${WP_SVN_PASSWORD} \\"
+    - '  --username $WP_SVN_USERNAME --password $WP_SVN_PASSWORD \'
     - '  --non-interactive --trust-server-cert'
     setup_commands:
     - apt-get update -qq && apt-get install -y -qq subversion rsync
