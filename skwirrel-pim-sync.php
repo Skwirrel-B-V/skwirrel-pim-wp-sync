@@ -76,8 +76,6 @@ final class Skwirrel_WC_Sync_Plugin {
 	}
 
 	public function init(): void {
-		load_plugin_textdomain( 'skwirrel-pim-sync', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			add_action( 'admin_notices', fn() => $this->woocommerce_missing_notice() );
 			return;
