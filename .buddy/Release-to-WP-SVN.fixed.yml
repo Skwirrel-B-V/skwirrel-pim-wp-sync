@@ -38,3 +38,20 @@
     shell: BASH
     docker_image_name: library/php
     docker_image_tag: 8.5
+  - action: /phpcbf.phar --standard=PSR4 .
+    type: BUILD
+    execute_commands:
+    - "# Fix violations of coding standards in PHP, JS and CSS files"
+    - "# Available coding standards: MySource, PEAR, PHPCS, PSR1, PSR2, Squiz and Zend"
+    - "# More options https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage"
+    - /phpcbf.phar --standard=PSR4 .
+    - "# Detect without auto correction"
+    - "# /phpcs.phar -n --standard=PSR2 "
+    setup_commands:
+    - apt-get update && apt-get install -y curl
+    - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+    - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+    - chmod +x phpcs.phar phpcbf.phar
+    shell: BASH
+    docker_image_name: library/php
+    docker_image_tag: 8.3
