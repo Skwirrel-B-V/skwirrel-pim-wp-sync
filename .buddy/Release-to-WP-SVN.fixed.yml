@@ -55,7 +55,7 @@
     - else
     - '  echo "No SVN working copy found. Checking out trunk..."'
     - "  mkdir -p ${SVN_DIR}"
-    - "  svn co ${SVN_URL $SVN_DIR} \\"
+    - ' svn co "$SVN_URL" "$SVN_DIR"  \'
     - "    --username ${WP_SVN_USERNAME} --password ${WP_SVN_PASSWORD} \\"
     - '    --non-interactive --trust-server-cert'
     - fi
