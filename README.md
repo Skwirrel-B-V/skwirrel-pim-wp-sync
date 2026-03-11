@@ -1,122 +1,163 @@
 # Skwirrel PIM sync for WooCommerce
 
-**Versie 1.1.1** — WordPress-plugin die producten synchroniseert van de Skwirrel JSON-RPC API naar WooCommerce.
+**Version 2.0.4** — WordPress plugin that synchronises products from the Skwirrel ERP/PIM system to WooCommerce via a JSON-RPC 2.0 API.
 
-## Vereisten
+## Description
 
-- WordPress 6.x
-- WooCommerce 8+ (getest t/m 10.5)
-- PHP 8.1+
+Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
 
-## Installatie
+**Features:**
 
-1. Kopieer de map `skwirrel-pim-sync` naar `wp-content/plugins/`
-2. Activeer de plugin in **Plugins** → **Geïnstalleerde plugins**
-3. Ga naar **WooCommerce** → **Skwirrel Sync** en configureer de instellingen
+* Full and delta (incremental) product synchronisation
+* Simple and variable product support with ETIM classification for variation axes
+* Automatic category tree sync with parent-child hierarchy
+* Brand sync via WooCommerce native `product_brand` taxonomy
+* Manufacturer sync with dedicated `product_manufacturer` taxonomy
+* Product image and document import into the WordPress media library
+* Custom class attributes (alphanumeric, logical, numeric, range, date, multi)
+* Configurable product URL slugs (source field, suffix, update on re-sync)
+* GTIN and manufacturer product code search filter on the product list page
+* Scheduled synchronisation via WP-Cron or Action Scheduler
+* Manual synchronisation from the admin dashboard
+* Sync progress banner with live phase checklist and counters
+* Date-grouped sync history (last 20 runs)
+* Stale product and category purge after full sync
+* Delete protection: warnings and automatic full re-sync when Skwirrel items are deleted in WooCommerce
+* Multilingual support with 7 locales (nl_NL, nl_BE, de_DE, fr_FR, fr_BE, en_US, en_GB)
 
-## Instellingen
+## Requirements
 
-| Veld | Beschrijving |
-|------|--------------|
-| **JSON-RPC Endpoint URL** | Volledige URL naar het Skwirrel endpoint (bijv. `https://xxx.skwirrel.eu/jsonrpc`) |
-| **Authenticatie type** | Bearer token of API static token (X-Skwirrel-Api-Token) |
-| **Token** | Het authenticatietoken. Na opslaan wordt dit gemaskeerd weergegeven. |
-| **Timeout** | Request timeout in seconden (5–120) |
-| **Aantal retries** | Aantal herhaalde pogingen bij fout (0–5) |
-| **Sync interval** | Uitgeschakeld, elk uur, twee keer per dag, dagelijks of wekelijks |
-| **Batch size** | Producten per API-pagina (10–500) |
-| **Categorieën syncen** | Productcategorieën uit Skwirrel aanmaken en koppelen |
-| **Afbeeldingen importeren** | Ja (naar media library) of Nee (overslaan). Kies "Nee" als upload faalt door een security plugin. |
-| **SKU veld** | `internal_product_code` of `manufacturer_product_code` |
-| **Collectie-IDs** | Comma-separated collectie-IDs om alleen specifieke collecties te synchroniseren. Leeg = alles. |
-| **Verwijderde producten opruimen** | Na een volledige sync: producten die niet meer in Skwirrel staan naar de prullenbak verplaatsen. Standaard **uit**. |
-| **Verwijderwaarschuwing tonen** | Toon een waarschuwingsbanner bij het verwijderen van Skwirrel-beheerde items in WooCommerce. Standaard **aan**. |
-| **Talen** | Welke taalcodes meegestuurd worden in de API-call + voorkeurstaal voor afbeeldingstitels. |
+- WordPress 6.0 or higher
+- WooCommerce 8.0 or higher (tested up to 10.5)
+- PHP 8.1 or higher
+- An active Skwirrel account with API access
 
-## Hoe sync werkt
+## Installation
 
-1. **Handmatig**: Klik op **Sync nu** op de instellingenpagina. De sync draait op de achtergrond via een asynchrone HTTP-request om timeouts te voorkomen. De pagina herlaadt direct; vernieuw de pagina om het resultaat te zien zodra de sync klaar is.
-2. **Automatisch**: Stel een sync interval in; de plugin gebruikt WP-Cron of Action Scheduler (indien beschikbaar).
-3. **Upsert-logica**: Bestaande producten (op basis van SKU of external ID) worden bijgewerkt; nieuwe producten worden aangemaakt.
-4. **Delta sync**: Bij geplande sync wordt alleen gefilterd op producten die na de laatste sync zijn gewijzigd (`updated_on >= last_sync`).
-5. **Purge**: Na een volledige sync (indien ingeschakeld) worden producten en categorieën die niet meer in Skwirrel voorkomen automatisch naar de prullenbak verplaatst.
+1. Upload the plugin files to `/wp-content/plugins/skwirrel-pim-sync/`, or install the plugin directly through the WordPress plugin screen.
+2. Activate the plugin through the **Plugins** screen in WordPress.
+3. Navigate to **WooCommerce** → **Skwirrel Sync** to configure the plugin.
+4. Enter your Skwirrel subdomain and API authentication token.
+5. Click **Test connection** to verify the API connection.
+6. Click **Sync now** to start the first synchronisation.
 
-## Verwijderbescherming
+## Settings
 
-Skwirrel is leidend: producten die via Skwirrel worden beheerd worden bij de volgende sync opnieuw aangemaakt als ze in WooCommerce zijn verwijderd.
+| Setting | Description |
+|---------|-------------|
+| **Skwirrel subdomain** | Your Skwirrel subdomain (e.g. `yourcompany` → `yourcompany.skwirrel.eu/jsonrpc`) |
+| **API token** | Authentication token for the Skwirrel API |
+| **Timeout** | HTTP request timeout in seconds (5–120) |
+| **Retries** | Number of retry attempts on failure (0–5) |
+| **Sync interval** | Disabled, hourly, twice daily, daily, or weekly |
+| **Batch size** | Products per API request (1–500) |
+| **Selection IDs** | Comma-separated selection IDs to sync specific selections only. Leave empty for all. |
+| **Super category ID** | Root category ID for category tree sync |
+| **Sync categories** | Create and assign WooCommerce categories from Skwirrel |
+| **Sync manufacturers** | Sync manufacturer names into `product_manufacturer` taxonomy |
+| **Sync images** | Download product images into the WordPress media library |
+| **SKU field** | `internal_product_code` or `manufacturer_product_code` |
+| **Purge stale products** | Trash products no longer in Skwirrel after a full sync |
+| **Delete warning** | Show warning banners on Skwirrel-managed items |
+| **Languages** | Language codes sent with API calls + preferred language for image titles |
+| **Verbose logging** | Enable detailed per-product log output |
 
-- **Waarschuwingsbanner**: op de product-bewerkpagina wordt een gele banner getoond met de tekst dat het product door Skwirrel wordt beheerd.
-- **Bevestigingsdialoog**: bij het verwijderen van een Skwirrel-product of -categorie in de lijst verschijnt een JavaScript-bevestiging.
-- **Automatische volledige sync**: wanneer een Skwirrel-item in WooCommerce wordt verwijderd, wordt de eerstvolgende geplande sync automatisch een volledige sync.
+### Permalink Settings
 
-De waarschuwing is uit te schakelen via de instelling "Verwijderwaarschuwing tonen".
+Product URL slug settings are configured on **Settings** → **Permalinks**:
 
-## Gemapte velden
+| Setting | Description |
+|---------|-------------|
+| **Slug source field** | Primary field for the product URL slug (product name, SKU, manufacturer code, external ID, or Skwirrel ID) |
+| **Slug suffix field** | Suffix appended when the slug already exists (or leave empty for WP auto-numbering) |
+| **Update slug on re-sync** | Also update slugs for existing products during sync (not just new products) |
+
+## How sync works
+
+1. **Manual**: Click **Sync now** on the dashboard. The sync runs in the background via an asynchronous HTTP request. Progress is shown live on the dashboard.
+2. **Scheduled**: Configure a sync interval; the plugin uses WP-Cron or Action Scheduler.
+3. **Upsert logic**: Existing products (matched by external ID, SKU, or Skwirrel ID) are updated; new products are created.
+4. **Delta sync**: Scheduled syncs only fetch products modified since the last sync (`updated_on >= last_sync`).
+5. **Purge**: After a full sync (if enabled), products and categories no longer in Skwirrel are moved to trash.
+
+## Delete protection
+
+Skwirrel is the source of truth: products managed by Skwirrel will be recreated on the next sync if deleted in WooCommerce.
+
+- **Warning banner**: a yellow banner on the product edit page indicates the product is managed by Skwirrel.
+- **Confirmation dialog**: deleting a Skwirrel product or category in the list shows a JavaScript confirmation.
+- **Automatic full sync**: when a Skwirrel item is deleted in WooCommerce, the next scheduled sync automatically runs as a full sync.
+
+The warning can be disabled via the "Delete warning" setting.
+
+## Field mapping
 
 | Skwirrel | WooCommerce |
 |----------|-------------|
 | `internal_product_code` / `manufacturer_product_code` | SKU |
-| `external_product_id` | Postmeta `_skwirrel_external_id` |
-| `product_erp_description` | Productnaam |
-| `_product_translations[].product_description` | Korte omschrijving |
-| `_product_translations[].product_long_description` | Lange omschrijving |
-| `_trade_item_prices[].net_price` | Regular price (eerste trade item) |
-| `getGroupedProducts` (optioneel) | Variable producten; producten in _products worden variations |
-| `_attachments` (type IMG) | Featured image + galerij |
-| `_attachments` (type MAN, DAT, etc.) | Downloadbare bestanden |
-| `brand_name`, `manufacturer_name` | Productattributen |
-| `_categories[]` / `_product_groups[]` | Productcategorieën (met parent-child hiërarchie) |
+| `external_product_id` | Post meta `_skwirrel_external_id` |
+| `product_erp_description` | Product name |
+| `_product_translations[].product_description` | Short description |
+| `_product_translations[].product_long_description` | Long description |
+| `_trade_item_prices[].net_price` | Regular price (first trade item) |
+| `getGroupedProducts` (optional) | Variable products; grouped products become variations |
+| `_attachments` (type IMG) | Featured image + gallery |
+| `_attachments` (type MAN, DAT, etc.) | Downloadable files / documents |
+| `brand_name` | Product brand (`product_brand` taxonomy) |
+| `manufacturer_name` | Product manufacturer (`product_manufacturer` taxonomy) |
+| `_categories[]` / `_product_groups[]` | Product categories (with parent-child hierarchy) |
+| `_etim` / `_custom_classes` | Product attributes |
 
 ## Troubleshooting
 
-### Verbinding test mislukt
-- Controleer of de endpoint-URL correct is (inclusief `/jsonrpc`)
-- Controleer of het token geldig is en niet verlopen
-- Controleer of de server uitgaande HTTPS-verbindingen toestaat
+### Connection test fails
+- Verify the subdomain is correct
+- Check that the API token is valid and not expired
+- Ensure the server allows outgoing HTTPS connections
 
-### Sync loopt vast of timeout
-- De sync draait op de achtergrond; er zou geen timeout meer moeten zijn op de pagina.
-- Verlaag de batch size (bijv. 50) als de achtergrond-sync nog steeds problemen geeft.
-- Verhoog de timeout (bijv. 60 seconden) in de instellingen.
+### Sync times out
+- The sync runs in the background; there should be no page timeout.
+- Lower the batch size (e.g. 50) if background sync still has issues.
+- Increase the timeout (e.g. 60 seconds) in settings.
 
-### Sync start niet op de achtergrond
-- Sommige hosts blokkeren HTTP-requests van de server naar zichzelf. Vraag dan aan je host of "loopback requests" zijn toegestaan.
+### Sync does not start in the background
+- Some hosts block HTTP requests from the server to itself (loopback requests). Ask your host to allow loopback requests.
 
-### Geen producten gesynchroniseerd
-- Controleer of `include_product_translations`, `include_attachments`, `include_trade_items` en `include_trade_item_prices` in de API-call worden meegestuurd (de plugin doet dit automatisch)
-- Controleer de logs via **Bekijk logs** of WooCommerce → Status → Logs
+### No products synchronised
+- Check the logs via the dashboard **Sync Logs** link or **WooCommerce** → **Status** → **Logs**
+- Verify that the API token has the correct permissions
 
-### Duplicaten
-- De plugin gebruikt `external_product_id` of `internal_product_code` als unieke sleutel. Zorg dat deze velden in Skwirrel correct zijn ingevuld.
+### Duplicate products
+- The plugin uses `external_product_id` or `internal_product_code` as unique key. Ensure these fields are correctly filled in Skwirrel.
 
 ## Logging
 
-De plugin gebruikt de WooCommerce logger (`wc_get_logger`). Logs zijn te vinden in:
-- **WooCommerce** → **Status** → **Logs** → bron: `skwirrel-pim-sync`
+The plugin uses the WooCommerce logger (`wc_get_logger`). Logs are available at:
+- **WooCommerce** → **Status** → **Logs** → source: `skwirrel-pim-sync`
 
-## Vertalingen
+## Translations
 
-De plugin bevat vertalingen voor de volgende talen:
+The plugin includes translations for the following languages:
 
-| Taal | Bestand |
-|------|---------|
-| Nederlands (Nederland) | `nl_NL` |
-| Nederlands (België) | `nl_BE` |
+| Language | Locale |
+|----------|--------|
+| Dutch (Netherlands) | `nl_NL` |
+| Dutch (Belgium) | `nl_BE` |
 | English (US) | `en_US` |
 | English (GB) | `en_GB` |
-| Deutsch | `de_DE` |
-| Français (France) | `fr_FR` |
-| Français (Belgique) | `fr_BE` |
+| German | `de_DE` |
+| French (France) | `fr_FR` |
+| French (Belgium) | `fr_BE` |
 
-## Ontwikkeling
+## Development
 
-### Vereisten
+### Prerequisites
 
 ```bash
 composer install
 ```
 
-### Tests draaien
+### Running tests
 
 ```bash
 vendor/bin/pest
@@ -131,13 +172,18 @@ vendor/bin/phpstan analyse
 ### Code style
 
 ```bash
-vendor/bin/phpcs        # controleren
-vendor/bin/phpcbf       # automatisch fixen
+vendor/bin/phpcs        # check
+vendor/bin/phpcbf       # auto-fix
 ```
 
-## Minimale testflow
+### Quality checks (run before every commit)
 
-1. Configureer endpoint en token
-2. Klik **Test verbinding** → controleer of de test slaagt
-3. Klik **Sync nu** → controleer de status weergave
-4. Open de logs en verifieer dat er geen errors zijn
+```bash
+vendor/bin/pest            # Unit tests
+vendor/bin/phpstan analyse # Static analysis (level 6)
+vendor/bin/phpcs           # Code style (WordPress standards)
+```
+
+## License
+
+GPL v2 or later. See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.html).

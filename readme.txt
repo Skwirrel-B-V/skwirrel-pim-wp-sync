@@ -12,20 +12,30 @@ Synchronises products from the Skwirrel ERP/PIM system to WooCommerce via a JSON
 
 == Description ==
 
-Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, images and documents are synchronised automatically.
+Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
 
 **Features:**
 
-* Full and delta product synchronisation
-* Support for simple and variable products
-* Automatic import of product images and documents
+* Full and delta (incremental) product synchronisation
+* Simple and variable product support with ETIM classification for variation axes
+* Automatic category tree sync with parent-child hierarchy
+* Brand sync via WooCommerce native product_brand taxonomy
+* Manufacturer sync with dedicated product_manufacturer taxonomy
+* Product image and document import into the WordPress media library
+* Custom class attributes (alphanumeric, logical, numeric, range, date, multi)
+* Configurable product URL slugs (source field, suffix, update on re-sync)
+* GTIN and manufacturer product code search filter on the product list page
 * Scheduled synchronisation via WP-Cron or Action Scheduler
-* Manual synchronisation from the WordPress admin panel
-* ETIM classification support for variation axes
+* Manual synchronisation from the admin dashboard with live progress tracking
+* Date-grouped sync history (last 20 runs)
+* Stale product and category purge after full sync
+* Delete protection with warnings and automatic full re-sync
+* Multilingual support with 7 locales (nl_NL, nl_BE, de_DE, fr_FR, fr_BE, en_US, en_GB)
 
 **Requirements:**
 
-* WooCommerce 8.0 or higher
+* WordPress 6.0 or higher
+* WooCommerce 8.0 or higher (tested up to 10.5)
 * PHP 8.1 or higher
 * An active Skwirrel account with API access
 
