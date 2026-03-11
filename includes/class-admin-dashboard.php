@@ -561,6 +561,15 @@ class Skwirrel_WC_Sync_Admin_Dashboard {
 						<div class="skw-field">
 							<label for="collection_ids" class="skw-label"><?php esc_html_e( 'Selection IDs', 'skwirrel-pim-sync' ); ?></label>
 							<input type="text" id="collection_ids" name="<?php echo esc_attr( self::OPTION_KEY ); ?>[collection_ids]" value="<?php echo esc_attr( $opts['collection_ids'] ?? '' ); ?>" class="skw-input" placeholder="<?php esc_attr_e( 'e.g. 123, 456', 'skwirrel-pim-sync' ); ?>" />
+							<p class="skw-field-hint">
+								<?php
+								printf(
+									/* translators: %s = link to Skwirrel selections page */
+									esc_html__( 'Find your selection IDs at %s.', 'skwirrel-pim-sync' ),
+									'<a href="https://' . esc_attr( $subdomain ? $subdomain : '<sub>' ) . '.skwirrel.eu/data/selections" target="_blank" id="skwirrel-selections-link">https://<span class="skwirrel-link-domain">' . esc_html( $subdomain ? $subdomain : '&lt;your-subdomain&gt;' ) . '</span>.skwirrel.eu/data/selections</a>'
+								);
+								?>
+							</p>
 						</div>
 					</div>
 					<div class="skw-field-row">
@@ -631,6 +640,53 @@ class Skwirrel_WC_Sync_Admin_Dashboard {
 						</div>
 						<input type="text" name="<?php echo esc_attr( self::OPTION_KEY ); ?>[include_languages_custom]" value="<?php echo esc_attr( implode( ', ', $custom_langs ) ); ?>" class="skw-input" placeholder="<?php esc_attr_e( 'Additional: e.g. es, pt-BR', 'skwirrel-pim-sync' ); ?>" style="margin-top: 6px;" />
 					</div>
+				</div>
+
+				<?php
+				// -- Permalinks -- .
+				$permalink_opts   = Skwirrel_WC_Sync_Permalink_Settings::get_options();
+				$slug_labels      = [
+					'product_name'              => __( 'Product name', 'skwirrel-pim-sync' ),
+					'internal_product_code'     => __( 'Internal product code (SKU)', 'skwirrel-pim-sync' ),
+					'manufacturer_product_code' => __( 'Manufacturer product code', 'skwirrel-pim-sync' ),
+					'external_product_id'       => __( 'External product ID', 'skwirrel-pim-sync' ),
+					'product_id'                => __( 'Skwirrel product ID', 'skwirrel-pim-sync' ),
+				];
+				$current_source   = $slug_labels[ $permalink_opts['slug_source_field'] ] ?? $permalink_opts['slug_source_field'];
+				$current_suffix   = '' !== $permalink_opts['slug_suffix_field']
+					? ( $slug_labels[ $permalink_opts['slug_suffix_field'] ] ?? $permalink_opts['slug_suffix_field'] )
+					: __( 'None (auto-number)', 'skwirrel-pim-sync' );
+				$update_on_resync = ! empty( $permalink_opts['update_slug_on_resync'] );
+				$permalinks_url   = admin_url( 'options-permalink.php#skwirrel_slug_source_field' );
+				$resync_needed    = get_option( 'skwirrel_wc_sync_slug_resync_needed', false );
+				?>
+				<div class="skw-fieldgroup">
+					<h3 class="skw-fieldgroup-title"><?php esc_html_e( 'Permalinks', 'skwirrel-pim-sync' ); ?></h3>
+
+					<?php if ( $resync_needed ) : ?>
+					<div class="skw-notice skw-notice-warning">
+						<strong><?php esc_html_e( 'Slug settings have changed.', 'skwirrel-pim-sync' ); ?></strong>
+						<?php esc_html_e( 'Run a full sync to update product URLs. Changing slugs may break existing links and SEO rankings.', 'skwirrel-pim-sync' ); ?>
+					</div>
+					<?php endif; ?>
+
+					<table class="skw-summary-table">
+						<tr>
+							<th><?php esc_html_e( 'Slug source', 'skwirrel-pim-sync' ); ?></th>
+							<td><?php echo esc_html( $current_source ); ?></td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Suffix on duplicate', 'skwirrel-pim-sync' ); ?></th>
+							<td><?php echo esc_html( $current_suffix ); ?></td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e( 'Update on re-sync', 'skwirrel-pim-sync' ); ?></th>
+							<td><?php echo $update_on_resync ? esc_html__( 'Yes', 'skwirrel-pim-sync' ) : esc_html__( 'No', 'skwirrel-pim-sync' ); ?></td>
+						</tr>
+					</table>
+					<p class="skw-field-hint">
+						<a href="<?php echo esc_url( $permalinks_url ); ?>"><?php esc_html_e( 'Edit permalink settings', 'skwirrel-pim-sync' ); ?> →</a>
+					</p>
 				</div>
 
 				<?php // -- Advanced -- ?>

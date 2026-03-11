@@ -4,7 +4,7 @@ Tags: woocommerce, sync, erp, pim, skwirrel
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,11 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 2.0.3 =
+* Add Permalinks section in Settings showing current slug configuration with link to Permalinks page
+* Show warning when slug settings change, advising a full resync and potential link breakage
+* Add Selection IDs hint link to Skwirrel selections page (dynamic subdomain URL)
 
 = 2.0.2 =
 * Add GTIN / Manufacturer product code search filter on product list page

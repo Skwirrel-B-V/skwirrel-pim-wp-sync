@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Skwirrel PIM sync for WooCommerce 1.7.0\n"
 "Report-Msgid-Bugs-To: https://skwirrel.eu\n"
-"POT-Creation-Date: 2026-03-11 20:01+0100\n"
+"POT-Creation-Date: 2026-03-11 20:14+0100\n"
 "PO-Revision-Date: 2026-02-26 12:00+0000\n"
 "Last-Translator: Skwirrel Sync <info@skwirrel.eu>\n"
 "Language-Team: Français (France)\n"
@@ -45,11 +45,11 @@ msgstr "Skwirrel PIM sync"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: includes/class-admin-dashboard.php:138 includes/class-admin-settings.php:520
+#: includes/class-admin-dashboard.php:138 includes/class-admin-settings.php:522
 msgid "Last sync successful"
 msgstr "Dernière synchronisation réussie"
 
-#: includes/class-admin-dashboard.php:138 includes/class-admin-settings.php:522
+#: includes/class-admin-dashboard.php:138 includes/class-admin-settings.php:524
 msgid "Last sync failed"
 msgstr "Dernière synchronisation échouée"
 
@@ -66,7 +66,7 @@ msgid "failed"
 msgstr "échoués"
 
 #: includes/class-admin-dashboard.php:163
-#: includes/class-admin-dashboard.php:289 includes/class-admin-settings.php:704
+#: includes/class-admin-dashboard.php:289 includes/class-admin-settings.php:706
 msgid "Sync in progress…"
 msgstr "Synchronisation en cours…"
 
@@ -114,9 +114,8 @@ msgid "Debug"
 msgstr "Débogage"
 
 #: includes/class-admin-dashboard.php:232
-#, fuzzy
 msgid "Troubleshoot variation attribute issues."
-msgstr "Déboguer les attributs de variation"
+msgstr "Résoudre les problèmes d'attributs de variation."
 
 #: includes/class-admin-dashboard.php:243
 msgid "Danger Zone"
@@ -134,40 +133,40 @@ msgstr "Synchronisations récentes"
 msgid "View all"
 msgstr "Voir tout"
 
-#: includes/class-admin-dashboard.php:273 includes/class-admin-settings.php:688
+#: includes/class-admin-dashboard.php:273 includes/class-admin-settings.php:690
 msgid "Assign categories, brands & manufacturers"
 msgstr "Attribuer catégories, marques & fabricants"
 
-#: includes/class-admin-dashboard.php:274 includes/class-admin-settings.php:689
+#: includes/class-admin-dashboard.php:274 includes/class-admin-settings.php:691
 msgid "Assign categories & brands"
 msgstr "Attribuer catégories & marques"
 
-#: includes/class-admin-dashboard.php:277 includes/class-admin-settings.php:692
+#: includes/class-admin-dashboard.php:277 includes/class-admin-settings.php:694
 msgid "Fetch products from API"
 msgstr "Récupérer les produits via l'API"
 
-#: includes/class-admin-dashboard.php:278 includes/class-admin-settings.php:693
+#: includes/class-admin-dashboard.php:278 includes/class-admin-settings.php:695
 msgid "Create & update products"
 msgstr "Créer & mettre à jour les produits"
 
-#: includes/class-admin-dashboard.php:280 includes/class-admin-settings.php:695
+#: includes/class-admin-dashboard.php:280 includes/class-admin-settings.php:697
 msgid "Connect attributes"
 msgstr "Connecter les attributs"
 
-#: includes/class-admin-dashboard.php:281 includes/class-admin-settings.php:696
+#: includes/class-admin-dashboard.php:281 includes/class-admin-settings.php:698
 msgid "Download images & documents"
 msgstr "Télécharger images & documents"
 
-#: includes/class-admin-dashboard.php:282 includes/class-admin-settings.php:697
+#: includes/class-admin-dashboard.php:282 includes/class-admin-settings.php:699
 msgid "Cleanup & finalize"
 msgstr "Nettoyage & finalisation"
 
-#: includes/class-admin-dashboard.php:304 includes/class-admin-settings.php:731
+#: includes/class-admin-dashboard.php:304 includes/class-admin-settings.php:733
 #, php-format
 msgid "%d fetched"
 msgstr "%d récupérés"
 
-#: includes/class-admin-dashboard.php:324 includes/class-admin-settings.php:747
+#: includes/class-admin-dashboard.php:324 includes/class-admin-settings.php:749
 msgid "This page refreshes automatically every 5 seconds."
 msgstr "Cette page se rafraîchit automatiquement toutes les 5 secondes."
 
@@ -175,23 +174,23 @@ msgstr "Cette page se rafraîchit automatiquement toutes les 5 secondes."
 msgid "Overview of all synchronization runs, grouped by date."
 msgstr "Aperçu de toutes les exécutions de synchronisation, regroupées par date."
 
-#: includes/class-admin-dashboard.php:345 includes/class-admin-settings.php:608
+#: includes/class-admin-dashboard.php:345 includes/class-admin-settings.php:610
 msgid "All"
 msgstr "Tout"
 
-#: includes/class-admin-dashboard.php:346 includes/class-admin-settings.php:609
+#: includes/class-admin-dashboard.php:346 includes/class-admin-settings.php:611
 msgid "Older than 7 days"
 msgstr "Plus ancien que 7 jours"
 
-#: includes/class-admin-dashboard.php:347 includes/class-admin-settings.php:610
+#: includes/class-admin-dashboard.php:347 includes/class-admin-settings.php:612
 msgid "Older than 30 days"
 msgstr "Plus ancien que 30 jours"
 
-#: includes/class-admin-dashboard.php:348 includes/class-admin-settings.php:611
+#: includes/class-admin-dashboard.php:348 includes/class-admin-settings.php:613
 msgid "Older than 90 days"
 msgstr "Plus ancien que 90 jours"
 
-#: includes/class-admin-dashboard.php:350 includes/class-admin-settings.php:613
+#: includes/class-admin-dashboard.php:350 includes/class-admin-settings.php:615
 msgid "Delete history"
 msgstr "Supprimer l'historique"
 
@@ -199,16 +198,16 @@ msgstr "Supprimer l'historique"
 msgid "No sync history available."
 msgstr "Aucun historique de synchronisation disponible."
 
-#: includes/class-admin-dashboard.php:370 includes/class-admin-settings.php:646
+#: includes/class-admin-dashboard.php:370 includes/class-admin-settings.php:648
 msgctxt "sync trigger"
 msgid "Manual"
 msgstr "Manuel"
 
-#: includes/class-admin-dashboard.php:371 includes/class-admin-settings.php:647
+#: includes/class-admin-dashboard.php:371 includes/class-admin-settings.php:649
 msgid "Scheduled"
 msgstr "Planifié"
 
-#: includes/class-admin-dashboard.php:372 includes/class-admin-settings.php:648
+#: includes/class-admin-dashboard.php:372 includes/class-admin-settings.php:650
 msgid "Purge"
 msgstr "Purge"
 
@@ -216,35 +215,35 @@ msgstr "Purge"
 msgid "Time"
 msgstr "Heure"
 
-#: includes/class-admin-dashboard.php:386 includes/class-admin-settings.php:620
+#: includes/class-admin-dashboard.php:386 includes/class-admin-settings.php:622
 msgid "Trigger"
 msgstr "Déclencheur"
 
-#: includes/class-admin-dashboard.php:387 includes/class-admin-settings.php:621
+#: includes/class-admin-dashboard.php:387 includes/class-admin-settings.php:623
 msgid "Status"
 msgstr "État"
 
-#: includes/class-admin-dashboard.php:388 includes/class-admin-settings.php:540
-#: includes/class-admin-settings.php:622
+#: includes/class-admin-dashboard.php:388 includes/class-admin-settings.php:542
+#: includes/class-admin-settings.php:624
 msgid "Created"
 msgstr "Créés"
 
-#: includes/class-admin-dashboard.php:389 includes/class-admin-settings.php:544
-#: includes/class-admin-settings.php:623
+#: includes/class-admin-dashboard.php:389 includes/class-admin-settings.php:546
+#: includes/class-admin-settings.php:625
 msgid "Updated"
 msgstr "Mis à jour"
 
 #: includes/class-admin-dashboard.php:390
-#: includes/class-admin-dashboard.php:438 includes/class-admin-settings.php:549
-#: includes/class-admin-settings.php:624 includes/class-admin-settings.php:661
+#: includes/class-admin-dashboard.php:438 includes/class-admin-settings.php:551
+#: includes/class-admin-settings.php:626 includes/class-admin-settings.php:663
 msgid "Failed"
 msgstr "Échoués"
 
-#: includes/class-admin-dashboard.php:391 includes/class-admin-settings.php:625
+#: includes/class-admin-dashboard.php:391 includes/class-admin-settings.php:627
 msgid "Deleted"
 msgstr "Supprimés"
 
-#: includes/class-admin-dashboard.php:392 includes/class-admin-settings.php:628
+#: includes/class-admin-dashboard.php:392 includes/class-admin-settings.php:630
 msgid "Total"
 msgstr "Total"
 
@@ -256,7 +255,7 @@ msgstr "Aujourd'hui"
 msgid "Yesterday"
 msgstr "Hier"
 
-#: includes/class-admin-dashboard.php:434 includes/class-admin-settings.php:657
+#: includes/class-admin-dashboard.php:434 includes/class-admin-settings.php:659
 msgid "Purged"
 msgstr "Purgé"
 
@@ -285,7 +284,7 @@ msgstr "Jeton API"
 msgid "Create a static API token at %s."
 msgstr "Créez un jeton API statique sur %s."
 
-#: includes/class-admin-dashboard.php:505 includes/class-admin-settings.php:787
+#: includes/class-admin-dashboard.php:505 includes/class-admin-settings.php:789
 msgid "Timeout (seconds)"
 msgstr "Délai d'attente (secondes)"
 
@@ -293,7 +292,7 @@ msgstr "Délai d'attente (secondes)"
 msgid "Retries"
 msgstr "Tentatives"
 
-#: includes/class-admin-dashboard.php:514 includes/class-admin-settings.php:959
+#: includes/class-admin-dashboard.php:514 includes/class-admin-settings.php:961
 msgid "Test connection"
 msgstr "Tester la connexion"
 
@@ -301,11 +300,11 @@ msgstr "Tester la connexion"
 msgid "Scheduling"
 msgstr "Planification"
 
-#: includes/class-admin-dashboard.php:523 includes/class-admin-settings.php:799
+#: includes/class-admin-dashboard.php:523 includes/class-admin-settings.php:801
 msgid "Sync interval"
 msgstr "Intervalle de synchronisation"
 
-#: includes/class-admin-dashboard.php:531 includes/class-admin-settings.php:809
+#: includes/class-admin-dashboard.php:531 includes/class-admin-settings.php:811
 msgid "Batch size"
 msgstr "Taille du lot"
 
@@ -313,7 +312,7 @@ msgstr "Taille du lot"
 msgid "Sync Options"
 msgstr "Options de synchronisation"
 
-#: includes/class-admin-dashboard.php:541 includes/class-admin-settings.php:816
+#: includes/class-admin-dashboard.php:541 includes/class-admin-settings.php:818
 msgid "Sync categories"
 msgstr "Synchroniser les catégories"
 
@@ -321,11 +320,11 @@ msgstr "Synchroniser les catégories"
 msgid "Sync grouped products (variable)"
 msgstr "Synchroniser les produits groupés (variable)"
 
-#: includes/class-admin-dashboard.php:543 includes/class-admin-settings.php:835
+#: includes/class-admin-dashboard.php:543 includes/class-admin-settings.php:837
 msgid "Sync manufacturers"
 msgstr "Synchroniser les fabricants"
 
-#: includes/class-admin-dashboard.php:544 includes/class-admin-settings.php:842
+#: includes/class-admin-dashboard.php:544 includes/class-admin-settings.php:844
 msgid "Sync custom classes"
 msgstr "Synchroniser les classes personnalisées"
 
@@ -333,11 +332,11 @@ msgstr "Synchroniser les classes personnalisées"
 msgid "Include trade item custom classes"
 msgstr "Inclure les classes personnalisées des articles commerciaux"
 
-#: includes/class-admin-dashboard.php:549 includes/class-admin-settings.php:822
+#: includes/class-admin-dashboard.php:549 includes/class-admin-settings.php:824
 msgid "Super category ID"
 msgstr "ID de super catégorie"
 
-#: includes/class-admin-dashboard.php:550 includes/class-admin-settings.php:824
+#: includes/class-admin-dashboard.php:550 includes/class-admin-settings.php:826
 msgid "e.g. 42"
 msgstr "ex. 42"
 
@@ -350,131 +349,199 @@ msgstr "Trouvez vos identifiants de catégorie sur %s."
 msgid "Selection IDs"
 msgstr "ID de sélection"
 
-#: includes/class-admin-dashboard.php:563 includes/class-admin-settings.php:866
+#: includes/class-admin-dashboard.php:563 includes/class-admin-settings.php:868
 msgid "e.g. 123, 456"
 msgstr "ex. 123, 456"
 
-#: includes/class-admin-dashboard.php:569 includes/class-admin-settings.php:850
+#: includes/class-admin-dashboard.php:568
+#, php-format
+msgid "Find your selection IDs at %s."
+msgstr "Trouvez vos identifiants de catégorie sur %s."
+
+#: includes/class-admin-dashboard.php:578 includes/class-admin-settings.php:852
 msgid "Custom class filter"
 msgstr "Filtre de classes personnalisées"
 
-#: includes/class-admin-dashboard.php:571
+#: includes/class-admin-dashboard.php:580
 msgid "No filter"
 msgstr "Pas de filtre"
 
-#: includes/class-admin-dashboard.php:572
+#: includes/class-admin-dashboard.php:581
 msgid "Whitelist"
 msgstr "Liste blanche"
 
-#: includes/class-admin-dashboard.php:573
+#: includes/class-admin-dashboard.php:582
 msgid "Blacklist"
 msgstr "Liste noire"
 
-#: includes/class-admin-dashboard.php:577
+#: includes/class-admin-dashboard.php:586
 msgid "Class IDs / codes"
 msgstr "ID / codes de classes"
 
-#: includes/class-admin-dashboard.php:578 includes/class-admin-settings.php:859
+#: includes/class-admin-dashboard.php:587 includes/class-admin-settings.php:861
 msgid "e.g. 12, 45, BUIS"
 msgstr "ex. 12, 45, BUIS"
 
-#: includes/class-admin-dashboard.php:585
+#: includes/class-admin-dashboard.php:594
 msgid "Media & Language"
 msgstr "Médias & Langue"
 
-#: includes/class-admin-dashboard.php:588 includes/class-admin-settings.php:871
+#: includes/class-admin-dashboard.php:597 includes/class-admin-settings.php:873
 msgid "Import images"
 msgstr "Importer les images"
 
-#: includes/class-admin-dashboard.php:590
+#: includes/class-admin-dashboard.php:599
+#: includes/class-admin-dashboard.php:684
 msgid "Yes"
 msgstr "Oui"
 
-#: includes/class-admin-dashboard.php:591
+#: includes/class-admin-dashboard.php:600
+#: includes/class-admin-dashboard.php:684
 msgid "No"
 msgstr "Non"
 
-#: includes/class-admin-dashboard.php:595 includes/class-admin-settings.php:945
+#: includes/class-admin-dashboard.php:604 includes/class-admin-settings.php:947
 msgid "SKU field"
 msgstr "Champ SKU"
 
-#: includes/class-admin-dashboard.php:608 includes/class-admin-settings.php:881
+#: includes/class-admin-dashboard.php:617 includes/class-admin-settings.php:883
 msgid "Content language"
 msgstr "Langue du contenu"
 
-#: includes/class-admin-dashboard.php:613 includes/class-admin-settings.php:891
+#: includes/class-admin-dashboard.php:622 includes/class-admin-settings.php:893
 msgid "Other…"
 msgstr "Autre…"
 
-#: includes/class-admin-dashboard.php:621 includes/class-admin-settings.php:900
+#: includes/class-admin-dashboard.php:630 includes/class-admin-settings.php:902
 msgid "API languages (include_languages)"
 msgstr "Langues API (include_languages)"
 
-#: includes/class-admin-dashboard.php:632
+#: includes/class-admin-dashboard.php:641
 msgid "Additional: e.g. es, pt-BR"
 msgstr "Supplémentaires : ex. es, pt-BR"
 
-#: includes/class-admin-dashboard.php:638
+#: includes/class-admin-dashboard.php:649
+msgid "Product name"
+msgstr "Nom du produit"
+
+#: includes/class-admin-dashboard.php:650
+#: includes/class-permalink-settings.php:127
+#: includes/class-permalink-settings.php:145
+msgid "Internal product code (SKU)"
+msgstr "Code article interne (SKU)"
+
+#: includes/class-admin-dashboard.php:651
+#: includes/class-permalink-settings.php:128
+#: includes/class-permalink-settings.php:146
+msgid "Manufacturer product code"
+msgstr "Code article fabricant"
+
+#: includes/class-admin-dashboard.php:652
+#: includes/class-permalink-settings.php:129
+#: includes/class-permalink-settings.php:147
+msgid "External product ID"
+msgstr "ID produit externe"
+
+#: includes/class-admin-dashboard.php:653
+#: includes/class-permalink-settings.php:130
+#: includes/class-permalink-settings.php:148
+msgid "Skwirrel product ID"
+msgstr "ID produit Skwirrel"
+
+#: includes/class-admin-dashboard.php:658
+msgid "None (auto-number)"
+msgstr "Aucun (numérotation automatique)"
+
+#: includes/class-admin-dashboard.php:664
+msgid "Permalinks"
+msgstr "Permaliens"
+
+#: includes/class-admin-dashboard.php:668
+msgid "Slug settings have changed."
+msgstr "Les paramètres de slug ont changé."
+
+#: includes/class-admin-dashboard.php:669
+msgid "Run a full sync to update product URLs. Changing slugs may break existing links and SEO rankings."
+msgstr "Lancez une synchronisation complète pour mettre à jour les URL des produits. La modification des slugs peut casser les liens existants et le référencement."
+
+#: includes/class-admin-dashboard.php:675
+#: includes/class-permalink-settings.php:80
+msgid "Slug source"
+msgstr "Source du slug"
+
+#: includes/class-admin-dashboard.php:679
+msgid "Suffix on duplicate"
+msgstr "Suffixe en cas de doublon"
+
+#: includes/class-admin-dashboard.php:683
+msgid "Update on re-sync"
+msgstr "Mettre à jour lors de la re-synchronisation"
+
+#: includes/class-admin-dashboard.php:688
+msgid "Edit permalink settings"
+msgstr "Modifier les paramètres de permalien"
+
+#: includes/class-admin-dashboard.php:694
 msgid "Advanced"
 msgstr "Avancé"
 
-#: includes/class-admin-dashboard.php:640 includes/class-admin-settings.php:925
+#: includes/class-admin-dashboard.php:696 includes/class-admin-settings.php:927
 msgid "Verbose logging"
 msgstr "Journalisation détaillée"
 
-#: includes/class-admin-dashboard.php:641
+#: includes/class-admin-dashboard.php:697
 msgid "Clean up deleted products after full sync"
 msgstr "Nettoyer les produits supprimés après la synchronisation complète"
 
-#: includes/class-admin-dashboard.php:642
+#: includes/class-admin-dashboard.php:698
 msgid "Show delete warning on Skwirrel products"
 msgstr "Afficher l'avertissement de suppression sur les produits Skwirrel"
 
-#: includes/class-admin-dashboard.php:647 includes/class-admin-settings.php:955
+#: includes/class-admin-dashboard.php:703 includes/class-admin-settings.php:957
 msgid "Save settings"
 msgstr "Enregistrer les paramètres"
 
-#: includes/class-admin-dashboard.php:654 includes/class-admin-settings.php:963
+#: includes/class-admin-dashboard.php:710 includes/class-admin-settings.php:965
 msgid "Danger zone"
 msgstr "Zone de danger"
 
-#: includes/class-admin-dashboard.php:655
+#: includes/class-admin-dashboard.php:711
 msgid "Delete all products created or synced by Skwirrel. This cannot be undone if you empty the trash."
 msgstr "Supprimer tous les produits créés ou synchronisés par Skwirrel. Cette action est irréversible si vous videz la corbeille."
 
-#: includes/class-admin-dashboard.php:659 includes/class-admin-settings.php:971
+#: includes/class-admin-dashboard.php:715 includes/class-admin-settings.php:973
 msgid "Also empty the trash (permanently delete)"
 msgstr "Vider également la corbeille (suppression permanente)"
 
-#: includes/class-admin-dashboard.php:661 includes/class-admin-settings.php:976
+#: includes/class-admin-dashboard.php:717 includes/class-admin-settings.php:978
 msgid "Delete all Skwirrel products"
 msgstr "Supprimer tous les produits Skwirrel"
 
-#: includes/class-admin-dashboard.php:674
+#: includes/class-admin-dashboard.php:730
 msgid "Debug Variation Attributes"
 msgstr "Déboguer les attributs de variation"
 
-#: includes/class-admin-dashboard.php:675
+#: includes/class-admin-dashboard.php:731
 msgid "If variations show \"Any Colour\" or \"Any Number of cups\" instead of real values:"
 msgstr "Si les variations affichent \"Any Colour\" ou \"Any Number of cups\" au lieu des valeurs réelles :"
 
-#: includes/class-admin-dashboard.php:677
+#: includes/class-admin-dashboard.php:733
 msgid "Add to wp-config.php:"
 msgstr "Ajouter dans wp-config.php :"
 
-#: includes/class-admin-dashboard.php:678
+#: includes/class-admin-dashboard.php:734
 msgid "Run \"Sync Now\" from the dashboard."
 msgstr "Exécutez \"Sync Now\" depuis le tableau de bord."
 
-#: includes/class-admin-dashboard.php:679
+#: includes/class-admin-dashboard.php:735
 msgid "Check:"
 msgstr "Vérifiez :"
 
-#: includes/class-admin-dashboard.php:680
+#: includes/class-admin-dashboard.php:736
 msgid "If etim_values_found is empty: API languages must match (e.g. en, en-GB)."
 msgstr "Si etim_values_found est vide : les langues API doivent correspondre (ex. en, en-GB)."
 
-#: includes/class-admin-dashboard.php:681
+#: includes/class-admin-dashboard.php:737
 msgid "If ATTR VERIFY FAIL: check wp_postmeta for attribute_pa_ entries."
 msgstr "Si ATTR VERIFY FAIL : vérifiez wp_postmeta pour les entrées attribute_pa_."
 
@@ -488,7 +555,7 @@ msgstr "Synchroniser les produits"
 
 #: includes/class-admin-settings.php:86 includes/class-admin-settings.php:216
 #: includes/class-admin-settings.php:244 includes/class-admin-settings.php:299
-#: includes/class-admin-settings.php:357 includes/class-admin-settings.php:485
+#: includes/class-admin-settings.php:357 includes/class-admin-settings.php:487
 #: includes/class-product-sync-meta-box.php:146
 msgid "Access denied."
 msgstr "Accès refusé."
@@ -505,301 +572,301 @@ msgstr "Tous les produits Skwirrel seront déplacés vers la corbeille.\\n\\nÊt
 msgid "Delete all sync history?"
 msgstr "Supprimer tout l'historique de synchronisation ?"
 
-#: includes/class-admin-settings.php:512
+#: includes/class-admin-settings.php:514
 msgid "Sync status"
 msgstr "État de la synchronisation"
 
-#: includes/class-admin-settings.php:526
+#: includes/class-admin-settings.php:528
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: includes/class-admin-settings.php:530
+#: includes/class-admin-settings.php:532
 msgid "Sync results"
 msgstr "Résultats de synchronisation"
 
-#: includes/class-admin-settings.php:534
+#: includes/class-admin-settings.php:536
 msgid "Category"
 msgstr "Catégorie"
 
-#: includes/class-admin-settings.php:535
+#: includes/class-admin-settings.php:537
 msgid "Count"
 msgstr "Nombre"
 
-#: includes/class-admin-settings.php:558
+#: includes/class-admin-settings.php:560
 msgid "Deleted (trash)"
 msgstr "Supprimés (corbeille)"
 
-#: includes/class-admin-settings.php:563
+#: includes/class-admin-settings.php:565
 msgid "↳ Categories cleaned up"
 msgstr "↳ Catégories nettoyées"
 
-#: includes/class-admin-settings.php:574
+#: includes/class-admin-settings.php:576
 msgid "↳ With attributes"
 msgstr "↳ Avec attributs"
 
-#: includes/class-admin-settings.php:578
+#: includes/class-admin-settings.php:580
 msgid "↳ Without attributes"
 msgstr "↳ Sans attributs"
 
-#: includes/class-admin-settings.php:583
+#: includes/class-admin-settings.php:585
 msgid "Total processed"
 msgstr "Total traité"
 
-#: includes/class-admin-settings.php:591
+#: includes/class-admin-settings.php:593
 msgid "Error message:"
 msgstr "Message d'erreur :"
 
-#: includes/class-admin-settings.php:597
+#: includes/class-admin-settings.php:599
 msgid "No sync has been run yet. Click \"Sync Products\" to get started."
 msgstr "Aucune synchronisation effectuée. Cliquez sur \"Synchroniser les produits\" pour commencer."
 
-#: includes/class-admin-settings.php:603
+#: includes/class-admin-settings.php:605
 msgid "Sync history"
 msgstr "Historique de synchronisation"
 
-#: includes/class-admin-settings.php:619
+#: includes/class-admin-settings.php:621
 msgid "Date & Time"
 msgstr "Date et heure"
 
-#: includes/class-admin-settings.php:626
+#: includes/class-admin-settings.php:628
 msgid "With attr."
 msgstr "Avec attr."
 
-#: includes/class-admin-settings.php:627
+#: includes/class-admin-settings.php:629
 msgid "Without attr."
 msgstr "Sans attr."
 
-#: includes/class-admin-settings.php:659
+#: includes/class-admin-settings.php:661
 msgid "Successful"
 msgstr "Réussi"
 
-#: includes/class-admin-settings.php:764
+#: includes/class-admin-settings.php:766
 msgid "JSON-RPC Endpoint URL"
 msgstr "URL du point de terminaison JSON-RPC"
 
-#: includes/class-admin-settings.php:767
+#: includes/class-admin-settings.php:769
 msgid "Full URL to the Skwirrel JSON-RPC endpoint."
 msgstr "URL complète vers le point de terminaison JSON-RPC Skwirrel."
 
-#: includes/class-admin-settings.php:771
+#: includes/class-admin-settings.php:773
 msgid "Authentication type"
 msgstr "Type d'authentification"
 
-#: includes/class-admin-settings.php:774
+#: includes/class-admin-settings.php:776
 msgid "Bearer token"
 msgstr "Jeton Bearer"
 
-#: includes/class-admin-settings.php:775
+#: includes/class-admin-settings.php:777
 msgid "API static token (X-Skwirrel-Api-Token)"
 msgstr "Jeton API statique (X-Skwirrel-Api-Token)"
 
-#: includes/class-admin-settings.php:780
+#: includes/class-admin-settings.php:782
 msgid "Token"
 msgstr "Jeton"
 
-#: includes/class-admin-settings.php:782
+#: includes/class-admin-settings.php:784
 msgid "Enter token…"
 msgstr "Saisir le jeton…"
 
-#: includes/class-admin-settings.php:783
+#: includes/class-admin-settings.php:785
 msgid "After saving, the token will not be shown in plain text."
 msgstr "Après l'enregistrement, le jeton ne sera pas affiché en texte clair."
 
-#: includes/class-admin-settings.php:793
+#: includes/class-admin-settings.php:795
 msgid "Number of retries"
 msgstr "Nombre de tentatives"
 
-#: includes/class-admin-settings.php:812
+#: includes/class-admin-settings.php:814
 msgid "Products per API page (1–500)."
 msgstr "Produits par page API (1–500)."
 
-#: includes/class-admin-settings.php:818
+#: includes/class-admin-settings.php:820
 msgid "Create and assign categories from product_groups"
 msgstr "Créer et lier les catégories depuis product_groups"
 
-#: includes/class-admin-settings.php:825
+#: includes/class-admin-settings.php:827
 msgid "Skwirrel super category ID. The entire category tree under this category will be synced to WooCommerce."
 msgstr "ID de super catégorie Skwirrel. L'arborescence complète sous cette catégorie sera synchronisée avec WooCommerce."
 
-#: includes/class-admin-settings.php:829
+#: includes/class-admin-settings.php:831
 msgid "Sync grouped products"
 msgstr "Synchroniser les produits groupés"
 
-#: includes/class-admin-settings.php:831
+#: includes/class-admin-settings.php:833
 msgid "Fetch grouped products via getGroupedProducts (products within a group can be variable)"
 msgstr "Récupérer les produits groupés via getGroupedProducts (les produits dans un groupe peuvent être variables)"
 
-#: includes/class-admin-settings.php:837
+#: includes/class-admin-settings.php:839
 msgid "Sync manufacturer_name to product_manufacturer taxonomy"
 msgstr "Synchroniser manufacturer_name vers la taxonomie product_manufacturer"
 
-#: includes/class-admin-settings.php:838
+#: includes/class-admin-settings.php:840
 msgid "Registers the product_manufacturer taxonomy and assigns manufacturers from Skwirrel product data."
 msgstr "Enregistre la taxonomie product_manufacturer et attribue les fabricants à partir des données produit Skwirrel."
 
-#: includes/class-admin-settings.php:844
+#: includes/class-admin-settings.php:846
 msgid "Fetch custom class attributes and save as product attributes"
 msgstr "Récupérer les attributs des classes personnalisées et les enregistrer comme attributs de produit"
 
-#: includes/class-admin-settings.php:846
+#: includes/class-admin-settings.php:848
 msgid "Also include trade item custom classes"
 msgstr "Inclure également les classes personnalisées des articles commerciaux"
 
-#: includes/class-admin-settings.php:854
+#: includes/class-admin-settings.php:856
 msgid "No filter (all classes)"
 msgstr "Pas de filtre (toutes les classes)"
 
-#: includes/class-admin-settings.php:855
+#: includes/class-admin-settings.php:857
 msgid "Whitelist (only these classes)"
 msgstr "Liste blanche (uniquement ces classes)"
 
-#: includes/class-admin-settings.php:856
+#: includes/class-admin-settings.php:858
 msgid "Blacklist (all except these classes)"
 msgstr "Liste noire (toutes sauf ces classes)"
 
-#: includes/class-admin-settings.php:860
+#: includes/class-admin-settings.php:862
 msgid "Comma-separated class IDs or codes. Numeric values are used as ID, others as class code."
 msgstr "ID de classes ou codes séparés par des virgules. Les valeurs numériques sont utilisées comme ID, les autres comme code de classe."
 
-#: includes/class-admin-settings.php:864
+#: includes/class-admin-settings.php:866
 msgid "Collection IDs (filter)"
 msgstr "ID de collections (filtre)"
 
-#: includes/class-admin-settings.php:867
+#: includes/class-admin-settings.php:869
 msgid "Comma-separated collection IDs. Only products from these collections will be synced. Empty = sync all."
 msgstr "ID de collections séparés par des virgules. Seuls les produits de ces collections seront synchronisés. Vide = tout synchroniser."
 
-#: includes/class-admin-settings.php:874
+#: includes/class-admin-settings.php:876
 msgid "Yes, to media library"
 msgstr "Oui, vers la médiathèque"
 
-#: includes/class-admin-settings.php:875
+#: includes/class-admin-settings.php:877
 msgid "No, skip"
 msgstr "Non, ignorer"
 
-#: includes/class-admin-settings.php:877
+#: includes/class-admin-settings.php:879
 msgid "If media library import fails (e.g. due to security plugin), choose \"No\" to skip images."
 msgstr "Si l'import vers la médiathèque échoue (ex. plugin de sécurité), choisissez \"Non\" pour ignorer les images."
 
-#: includes/class-admin-settings.php:896
+#: includes/class-admin-settings.php:898
 msgid "Language code for all text: image alt/caption, ETIM attributes."
 msgstr "Code langue pour tous les textes : alt/légende des images, attributs ETIM."
 
-#: includes/class-admin-settings.php:918
+#: includes/class-admin-settings.php:920
 msgid "Additional language codes (comma-separated):"
 msgstr "Codes langue supplémentaires (séparés par des virgules) :"
 
-#: includes/class-admin-settings.php:921
+#: includes/class-admin-settings.php:923
 msgid "Select the languages the API should include for product translations and ETIM."
 msgstr "Sélectionnez les langues que l'API doit inclure pour les traductions de produits et ETIM."
 
-#: includes/class-admin-settings.php:927
+#: includes/class-admin-settings.php:929
 msgid "Log per product: sources, ETIM, attributes (see WooCommerce → Status → Logs)"
 msgstr "Journal par produit : sources, ETIM, attributs (voir WooCommerce → État → Journaux)"
 
-#: includes/class-admin-settings.php:931
+#: includes/class-admin-settings.php:933
 msgid "Clean up deleted products"
 msgstr "Nettoyer les produits supprimés"
 
-#: includes/class-admin-settings.php:933
+#: includes/class-admin-settings.php:935
 msgid "Automatically trash products and categories no longer in Skwirrel during full sync"
 msgstr "Mettre automatiquement à la corbeille les produits et catégories qui ne sont plus dans Skwirrel lors de la synchronisation complète"
 
-#: includes/class-admin-settings.php:934
+#: includes/class-admin-settings.php:936
 msgid "Only active during full sync (manual sync or after deletion in WooCommerce). Not active during delta sync or when collection filter is set."
 msgstr "Actif uniquement lors de la synchronisation complète (synchronisation manuelle ou après suppression dans WooCommerce). Inactif lors de la synchronisation delta ou lorsqu'un filtre de collection est défini."
 
-#: includes/class-admin-settings.php:938
+#: includes/class-admin-settings.php:940
 msgid "Show delete warning"
 msgstr "Afficher l'avertissement de suppression"
 
-#: includes/class-admin-settings.php:940
+#: includes/class-admin-settings.php:942
 msgid "Show warning when deleting Skwirrel products and categories in WooCommerce"
 msgstr "Afficher un avertissement lors de la suppression de produits et catégories Skwirrel dans WooCommerce"
 
-#: includes/class-admin-settings.php:941
+#: includes/class-admin-settings.php:943
 msgid "Skwirrel is the source of truth: deleted products will be recreated during the next sync. This warning reminds users of this."
 msgstr "Skwirrel est la source de vérité : les produits supprimés seront recréés lors de la prochaine synchronisation. Cet avertissement en rappelle les utilisateurs."
 
-#: includes/class-admin-settings.php:948
+#: includes/class-admin-settings.php:950
 msgid "internal_product_code"
 msgstr "internal_product_code"
 
-#: includes/class-admin-settings.php:949
+#: includes/class-admin-settings.php:951
 msgid "manufacturer_product_code"
 msgstr "manufacturer_product_code"
 
-#: includes/class-admin-settings.php:964
+#: includes/class-admin-settings.php:966
 msgid "Delete all products created or synced by Skwirrel. This action cannot be undone if you empty the trash."
 msgstr "Supprimer tous les produits créés ou synchronisés par Skwirrel. Cette action ne peut pas être annulée si vous videz la corbeille."
 
-#: includes/class-admin-settings.php:992 includes/class-admin-settings.php:995
+#: includes/class-admin-settings.php:994 includes/class-admin-settings.php:997
 msgid "View logs"
 msgstr "Voir les journaux"
 
-#: includes/class-admin-settings.php:998
+#: includes/class-admin-settings.php:1000
 msgid "No log file available."
 msgstr "Aucun fichier journal disponible."
 
-#: includes/class-admin-settings.php:1001
+#: includes/class-admin-settings.php:1003
 msgid "Debug variation attributes"
 msgstr "Déboguer les attributs de variation"
 
-#: includes/class-admin-settings.php:1002
+#: includes/class-admin-settings.php:1004
 msgid "If variations show \"Any Colour\" / \"Any Number of cups\" instead of real values:"
 msgstr "Si les variations affichent \"Any Colour\" / \"Any Number of cups\" au lieu des valeurs réelles :"
 
-#: includes/class-admin-settings.php:1004
+#: includes/class-admin-settings.php:1006
 msgid "Add to wp-config.php: define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
 msgstr "Ajouter dans wp-config.php : define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
 
-#: includes/class-admin-settings.php:1005
+#: includes/class-admin-settings.php:1007
 msgid "Run \"Sync Products\"."
 msgstr "Exécuter \"Synchroniser les produits\"."
 
-#: includes/class-admin-settings.php:1006
+#: includes/class-admin-settings.php:1008
 msgid "Check wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
 msgstr "Voir wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
 
-#: includes/class-admin-settings.php:1007
+#: includes/class-admin-settings.php:1009
 msgid "Check: etim_values_found empty? → API languages must match getProducts (e.g. en, en-GB)."
 msgstr "Vérifiez : etim_values_found vide ? → Les langues API doivent correspondre à getProducts (ex. en, en-GB)."
 
-#: includes/class-admin-settings.php:1008
+#: includes/class-admin-settings.php:1010
 msgid "ATTR VERIFY FAIL in the log? → meta is not being written correctly; check wp_postmeta for attribute_pa_color/attribute_pa_cups."
 msgstr "ATTR VERIFY FAIL dans le journal ? → les meta ne sont pas correctement écrites ; vérifiez wp_postmeta pour attribute_pa_color/attribute_pa_cups."
 
-#: includes/class-admin-settings.php:1018
+#: includes/class-admin-settings.php:1020
 msgid "Connection test successful."
 msgstr "Test de connexion réussi."
 
-#: includes/class-admin-settings.php:1021
+#: includes/class-admin-settings.php:1023
 msgid "Connection failed."
 msgstr "Connexion échouée."
 
-#: includes/class-admin-settings.php:1027
+#: includes/class-admin-settings.php:1029
 msgid "Sync started in the background. Results will appear here once the sync is completed. Refresh the page to check the status."
 msgstr "La synchronisation a démarré en arrière-plan. Les résultats apparaîtront ici une fois la synchronisation terminée. Actualisez la page pour vérifier l'état."
 
-#: includes/class-admin-settings.php:1031
+#: includes/class-admin-settings.php:1033
 msgid "Sync history deleted."
 msgstr "Historique de synchronisation supprimé."
 
-#: includes/class-admin-settings.php:1035
+#: includes/class-admin-settings.php:1037
 msgid "Purge started in the background. All Skwirrel products, imported media, categories and attributes will be deleted. Refresh the page to check the status."
 msgstr "Le nettoyage a démarré en arrière-plan. Tous les produits Skwirrel, médias importés, catégories et attributs seront supprimés. Actualisez la page pour vérifier l'état."
 
-#: includes/class-admin-settings.php:1045
+#: includes/class-admin-settings.php:1047
 #, php-format
 msgid "Sync completed. Created: %1$d, Updated: %2$d, Failed: %3$d"
 msgstr "Synchronisation terminée. Créés : %1$d, mis à jour : %2$d, échoués : %3$d"
 
-#: includes/class-admin-settings.php:1053
+#: includes/class-admin-settings.php:1055
 #, php-format
 msgid "(with attributes: %1$d, without: %2$d)"
 msgstr "(avec attributs : %1$d, sans : %2$d)"
 
-#: includes/class-admin-settings.php:1060
+#: includes/class-admin-settings.php:1062
 msgid "Sync completed. Check the logs for details."
 msgstr "Synchronisation terminée. Consultez les journaux pour plus de détails."
 
@@ -912,10 +979,6 @@ msgstr "Cette catégorie a été créée par Skwirrel Sync et sera recréée lor
 msgid "Skwirrel product slugs"
 msgstr "Slugs de produits Skwirrel"
 
-#: includes/class-permalink-settings.php:80
-msgid "Slug source"
-msgstr "Source du slug"
-
 #: includes/class-permalink-settings.php:88
 msgid "Slug suffix (on duplicate)"
 msgstr "Suffixe du slug (en cas de doublon)"
@@ -935,26 +998,6 @@ msgstr "Configurez comment Skwirrel génère les slugs d'URL de produits lors de
 #: includes/class-permalink-settings.php:126
 msgid "Product name (default)"
 msgstr "Nom du produit (par défaut)"
-
-#: includes/class-permalink-settings.php:127
-#: includes/class-permalink-settings.php:145
-msgid "Internal product code (SKU)"
-msgstr "Code article interne (SKU)"
-
-#: includes/class-permalink-settings.php:128
-#: includes/class-permalink-settings.php:146
-msgid "Manufacturer product code"
-msgstr "Code article fabricant"
-
-#: includes/class-permalink-settings.php:129
-#: includes/class-permalink-settings.php:147
-msgid "External product ID"
-msgstr "ID produit externe"
-
-#: includes/class-permalink-settings.php:130
-#: includes/class-permalink-settings.php:148
-msgid "Skwirrel product ID"
-msgstr "ID produit Skwirrel"
 
 #: includes/class-permalink-settings.php:132
 msgid "The source field used as the base URL (slug) for new products."
@@ -1128,7 +1171,7 @@ msgstr "Filtrer par fabricant"
 msgid "GTIN / Manufacturer code"
 msgstr "GTIN / Code article fabricant"
 
-#: skwirrel-pim-sync.php:329
+#: skwirrel-pim-sync.php:330
 #, php-format
 msgid "WooCommerce is required. <a href=\"%1$s\">Install WooCommerce</a> or <a href=\"%2$s\">activate WooCommerce</a>."
 msgstr "WooCommerce est requis. <a href=\"%1$s\">Installer WooCommerce</a> ou <a href=\"%2$s\">activer WooCommerce</a>."

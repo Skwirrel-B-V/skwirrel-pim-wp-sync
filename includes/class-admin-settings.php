@@ -447,6 +447,8 @@ class Skwirrel_WC_Sync_Admin_Settings {
             . '   var catDomains = document.querySelectorAll(".skwirrel-link-domain");'
             . '   catDomains.forEach(function(el) { el.textContent = v || "<your-subdomain>"; });'
             . '   if (catLink && v) catLink.href = "https://" + v + ".skwirrel.eu/base/categories";'
+            . '   var selLink = document.getElementById("skwirrel-selections-link");'
+            . '   if (selLink && v) selLink.href = "https://" + v + ".skwirrel.eu/data/selections";'
             . '  });'
             . ' }'
             . ' var historyBtn = document.getElementById("skwirrel-clear-history-btn");'

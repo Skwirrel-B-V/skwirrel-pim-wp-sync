@@ -2,6 +2,13 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [2.0.3]
+
+* Add Permalinks section in Settings showing current slug configuration with link to Settings → Permalinks
+* Show warning banner when slug settings change — advises a full resync and warns about potential link breakage
+* Warning auto-clears after a successful sync completes
+* Add Selection IDs hint link to Skwirrel selections page with dynamic subdomain URL
+
 ## [2.0.2]
 
 * Add GTIN / Manufacturer product code search filter on the WooCommerce product list page

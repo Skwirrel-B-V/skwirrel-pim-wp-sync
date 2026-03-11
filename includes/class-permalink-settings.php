@@ -216,6 +216,16 @@ class Skwirrel_WC_Sync_Permalink_Settings {
 			'manufacturer_base'     => '' !== $manufacturer_base ? $manufacturer_base : 'manufacturer',
 		];
 
+		// Flag resync needed when slug-related settings change.
+		$old = get_option( self::OPTION_KEY, [] );
+		if (
+			( $old['slug_source_field'] ?? '' ) !== $opts['slug_source_field']
+			|| ( $old['slug_suffix_field'] ?? '' ) !== $opts['slug_suffix_field']
+			|| ! empty( $old['update_slug_on_resync'] ) !== $opts['update_slug_on_resync']
+		) {
+			update_option( 'skwirrel_wc_sync_slug_resync_needed', true );
+		}
+
 		update_option( self::OPTION_KEY, $opts );
 	}
 }

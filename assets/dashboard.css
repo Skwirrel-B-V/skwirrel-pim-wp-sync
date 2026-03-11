@@ -805,6 +805,46 @@
 	gap: 12px;
 }
 
+/* -- Inline notices -- */
+.skw-notice {
+	padding: 10px 14px;
+	border-radius: 6px;
+	font-size: 13px;
+	line-height: 1.5;
+	margin-bottom: 12px;
+}
+
+.skw-notice-warning {
+	background: #fef9c3;
+	border-left: 4px solid #eab308;
+	color: #854d0e;
+}
+
+/* -- Summary table (read-only settings overview) -- */
+.skw-summary-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+	margin-bottom: 8px;
+}
+
+.skw-summary-table th,
+.skw-summary-table td {
+	padding: 6px 0;
+	border-bottom: 1px solid #f0f0f0;
+	text-align: left;
+}
+
+.skw-summary-table th {
+	color: #6b7280;
+	font-weight: 500;
+	width: 45%;
+}
+
+.skw-summary-table td {
+	color: var(--skw-dark);
+}
+
 /* ==========================================================================
    Buttons
    ========================================================================== */

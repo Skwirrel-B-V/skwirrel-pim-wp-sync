@@ -141,6 +141,11 @@ class Skwirrel_WC_Sync_History {
 		delete_transient( self::SYNC_IN_PROGRESS );
 		self::clear_sync_progress();
 
+		// Clear slug resync flag after successful sync.
+		if ( $ok ) {
+			delete_option( 'skwirrel_wc_sync_slug_resync_needed' );
+		}
+
 		self::append_to_history( $result );
 	}
 
