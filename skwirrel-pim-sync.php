@@ -3,7 +3,7 @@
  * Plugin Name: Skwirrel PIM sync for WooCommerce
  * Plugin URI: https://github.com/Skwirrel-B-V/skwirrel-pim-sync-for-woocommerce
  * Description: Sync plugin for Skwirrel PIM via Skwirrel JSON-RPC API to WooCommerce.
- * Version: 2.0.3
+ * Version: 2.0.4
  * Author: Skwirrel B.V.
  * Author URI: https://skwirrel.eu
  * Requires at least: 6.0
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SKWIRREL_WC_SYNC_VERSION', '2.0.3' );
+define( 'SKWIRREL_WC_SYNC_VERSION', '2.0.4' );
 define( 'SKWIRREL_WC_SYNC_PLUGIN_FILE', __FILE__ );
 define( 'SKWIRREL_WC_SYNC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SKWIRREL_WC_SYNC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
