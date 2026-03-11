@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Skwirrel PIM sync for WooCommerce 1.7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 12:00+0000\n"
+"POT-Creation-Date: 2026-03-11 17:07+0100\n"
 "PO-Revision-Date: 2026-02-26 12:00+0000\n"
 "Last-Translator: Skwirrel Sync <info@skwirrel.eu>\n"
 "Language-Team: Français (France)\n"
@@ -16,676 +16,1010 @@ msgstr ""
 "X-Generator: Skwirrel PIM sync for WooCommerce 1.7.0\n"
 "X-Domain: skwirrel-pim-sync\n"
 
-#: skwirrel-pim-sync.php
+#: skwirrel-pim-sync.php:47
 msgid "Skwirrel PIM sync for WooCommerce requires WooCommerce to function."
 msgstr "Skwirrel PIM sync for WooCommerce nécessite WooCommerce pour fonctionner."
 
-#: skwirrel-pim-sync.php
+#: skwirrel-pim-sync.php:49
 msgid "Install WooCommerce"
 msgstr "Installer WooCommerce"
 
-#: skwirrel-pim-sync.php
+#: skwirrel-pim-sync.php:202
+msgid "Filter by manufacturer"
+msgstr "Filtrer par fabricant"
+
+#: skwirrel-pim-sync.php:275
+#, php-format
 msgid "WooCommerce is required. <a href=\"%1$s\">Install WooCommerce</a> or <a href=\"%2$s\">activate WooCommerce</a>."
 msgstr "WooCommerce est requis. <a href=\"%1$s\">Installer WooCommerce</a> ou <a href=\"%2$s\">activer WooCommerce</a>."
 
-#: includes/class-admin-settings.php
-msgid "Skwirrel Sync"
-msgstr "Skwirrel Sync"
-
-#: includes/class-admin-settings.php
-msgid "Sync Products"
-msgstr "Synchroniser les produits"
-
-#: includes/class-admin-settings.php
-msgid "Access denied."
-msgstr "Accès refusé."
-
-#: includes/class-admin-settings.php
-msgid "Skwirrel PIM sync for WooCommerce"
-msgstr "Skwirrel PIM sync for WooCommerce"
-
-#: includes/class-admin-settings.php
-msgid "Settings"
-msgstr "Paramètres"
-
-#: includes/class-admin-settings.php
-msgid "Logs"
-msgstr "Journaux"
-
-#: includes/class-admin-settings.php
-msgid "Sync status"
-msgstr "État de la synchronisation"
-
-#: includes/class-admin-settings.php
-msgid "Last sync successful"
-msgstr "Dernière synchronisation réussie"
-
-#: includes/class-admin-settings.php
-msgid "Last sync failed"
-msgstr "Dernière synchronisation échouée"
-
-#: includes/class-admin-settings.php
-msgid "Unknown"
-msgstr "Inconnu"
-
-#: includes/class-admin-settings.php
-msgid "Sync results"
-msgstr "Résultats de synchronisation"
-
-#: includes/class-admin-settings.php
-msgid "Category"
-msgstr "Catégorie"
-
-#: includes/class-admin-settings.php
-msgid "Count"
-msgstr "Nombre"
-
-#: includes/class-admin-settings.php
-msgid "Created"
-msgstr "Créés"
-
-#: includes/class-admin-settings.php
-msgid "Updated"
-msgstr "Mis à jour"
-
-#: includes/class-admin-settings.php
-msgid "Failed"
-msgstr "Échoués"
-
-#: includes/class-admin-settings.php
-msgid "Deleted (trash)"
-msgstr "Supprimés (corbeille)"
-
-#: includes/class-admin-settings.php
-msgid "↳ Categories cleaned up"
-msgstr "↳ Catégories nettoyées"
-
-#: includes/class-admin-settings.php
-msgid "↳ With attributes"
-msgstr "↳ Avec attributs"
-
-#: includes/class-admin-settings.php
-msgid "↳ Without attributes"
-msgstr "↳ Sans attributs"
-
-#: includes/class-admin-settings.php
-msgid "Total processed"
-msgstr "Total traité"
-
-#: includes/class-admin-settings.php
-msgid "Error message:"
-msgstr "Message d'erreur :"
-
-#: includes/class-admin-settings.php
-msgid "No sync has been run yet. Click \"Sync Products\" to get started."
-msgstr "Aucune synchronisation effectuée. Cliquez sur \"Synchroniser les produits\" pour commencer."
-
-#: includes/class-admin-settings.php
-msgid "Sync history"
-msgstr "Historique de synchronisation"
-
-#: includes/class-admin-settings.php
-msgid "Date & Time"
-msgstr "Date et heure"
-
-#: includes/class-admin-settings.php
-msgid "Status"
-msgstr "État"
-
-#: includes/class-admin-settings.php
-msgid "Successful"
-msgstr "Réussi"
-
-#: includes/class-admin-settings.php
-msgid "Deleted"
-msgstr "Supprimés"
-
-#: includes/class-admin-settings.php
-msgid "With attr."
-msgstr "Avec attr."
-
-#: includes/class-admin-settings.php
-msgid "Without attr."
-msgstr "Sans attr."
-
-#: includes/class-admin-settings.php
-msgid "Total"
-msgstr "Total"
-
-#: includes/class-admin-settings.php
-msgid "JSON-RPC Endpoint URL"
-msgstr "URL du point de terminaison JSON-RPC"
-
-#: includes/class-admin-settings.php
-msgid "Full URL to the Skwirrel JSON-RPC endpoint."
-msgstr "URL complète vers le point de terminaison JSON-RPC Skwirrel."
-
-#: includes/class-admin-settings.php
-msgid "Authentication type"
-msgstr "Type d'authentification"
-
-#: includes/class-admin-settings.php
-msgid "Bearer token"
-msgstr "Jeton Bearer"
-
-#: includes/class-admin-settings.php
-msgid "API static token (X-Skwirrel-Api-Token)"
-msgstr "Jeton API statique (X-Skwirrel-Api-Token)"
-
-#: includes/class-admin-settings.php
-msgid "Token"
-msgstr "Jeton"
-
-#: includes/class-admin-settings.php
-msgid "Enter token…"
-msgstr "Saisir le jeton…"
-
-#: includes/class-admin-settings.php
-msgid "After saving, the token will not be shown in plain text."
-msgstr "Après l'enregistrement, le jeton ne sera pas affiché en texte clair."
-
-#: includes/class-admin-settings.php
-msgid "Timeout (seconds)"
-msgstr "Délai d'attente (secondes)"
-
-#: includes/class-admin-settings.php
-msgid "Number of retries"
-msgstr "Nombre de tentatives"
-
-#: includes/class-admin-settings.php
-msgid "Sync interval"
-msgstr "Intervalle de synchronisation"
-
-#: includes/class-admin-settings.php
-msgid "Batch size"
-msgstr "Taille du lot"
-
-#: includes/class-admin-settings.php
-msgid "Products per API page (1–500)."
-msgstr "Produits par page API (1–500)."
-
-#: includes/class-admin-settings.php
-msgid "Sync categories"
-msgstr "Synchroniser les catégories"
-
-#: includes/class-admin-settings.php
-msgid "Create and assign categories from product_groups"
-msgstr "Créer et lier les catégories depuis product_groups"
-
-#: includes/class-admin-settings.php
-msgid "Sync grouped products"
-msgstr "Synchroniser les produits groupés"
-
-#: includes/class-admin-settings.php
-msgid "Fetch grouped products via getGroupedProducts (products within a group can be variable)"
-msgstr "Récupérer les produits groupés via getGroupedProducts (les produits dans un groupe peuvent être variables)"
-
-#: includes/class-admin-settings.php
-msgid "Sync custom classes"
-msgstr "Synchroniser les classes personnalisées"
-
-#: includes/class-admin-settings.php
-msgid "Fetch custom class attributes and save as product attributes"
-msgstr "Récupérer les attributs des classes personnalisées et les enregistrer comme attributs de produit"
-
-#: includes/class-admin-settings.php
-msgid "Also include trade item custom classes"
-msgstr "Inclure également les classes personnalisées des articles commerciaux"
-
-#: includes/class-admin-settings.php
-msgid "Custom class filter"
-msgstr "Filtre de classes personnalisées"
-
-#: includes/class-admin-settings.php
-msgid "No filter (all classes)"
-msgstr "Pas de filtre (toutes les classes)"
-
-#: includes/class-admin-settings.php
-msgid "Whitelist (only these classes)"
-msgstr "Liste blanche (uniquement ces classes)"
-
-#: includes/class-admin-settings.php
-msgid "Blacklist (all except these classes)"
-msgstr "Liste noire (toutes sauf ces classes)"
-
-#: includes/class-admin-settings.php
-msgid "e.g. 12, 45, BUIS"
-msgstr "ex. 12, 45, BUIS"
-
-#: includes/class-admin-settings.php
-msgid "Comma-separated class IDs or codes. Numeric values are used as ID, others as class code."
-msgstr "ID de classes ou codes séparés par des virgules. Les valeurs numériques sont utilisées comme ID, les autres comme code de classe."
-
-#: includes/class-admin-settings.php
-msgid "Collection IDs (filter)"
-msgstr "ID de collections (filtre)"
-
-#: includes/class-admin-settings.php
-msgid "e.g. 123, 456"
-msgstr "ex. 123, 456"
-
-#: includes/class-admin-settings.php
-msgid "Comma-separated collection IDs. Only products from these collections will be synced. Empty = sync all."
-msgstr "ID de collections séparés par des virgules. Seuls les produits de ces collections seront synchronisés. Vide = tout synchroniser."
-
-#: includes/class-admin-settings.php
-msgid "Import images"
-msgstr "Importer les images"
-
-#: includes/class-admin-settings.php
-msgid "Yes, to media library"
-msgstr "Oui, vers la médiathèque"
-
-#: includes/class-admin-settings.php
-msgid "No, skip"
-msgstr "Non, ignorer"
-
-#: includes/class-admin-settings.php
-msgid "If media library import fails (e.g. due to security plugin), choose \"No\" to skip images."
-msgstr "Si l'import vers la médiathèque échoue (ex. plugin de sécurité), choisissez \"Non\" pour ignorer les images."
-
-#: includes/class-admin-settings.php
-msgid "Content language"
-msgstr "Langue du contenu"
-
-#: includes/class-admin-settings.php
-msgid "Other…"
-msgstr "Autre…"
-
-#: includes/class-admin-settings.php
-msgid "Language code for all text: image alt/caption, ETIM attributes."
-msgstr "Code langue pour tous les textes : alt/légende des images, attributs ETIM."
-
-#: includes/class-admin-settings.php
-msgid "API languages (include_languages)"
-msgstr "Langues API (include_languages)"
-
-#: includes/class-admin-settings.php
-msgid "Additional language codes (comma-separated):"
-msgstr "Codes langue supplémentaires (séparés par des virgules) :"
-
-#: includes/class-admin-settings.php
-msgid "Select the languages the API should include for product translations and ETIM."
-msgstr "Sélectionnez les langues que l'API doit inclure pour les traductions de produits et ETIM."
-
-#: includes/class-admin-settings.php
-msgid "Verbose logging"
-msgstr "Journalisation détaillée"
-
-#: includes/class-admin-settings.php
-msgid "Log per product: sources, ETIM, attributes (see WooCommerce → Status → Logs)"
-msgstr "Journal par produit : sources, ETIM, attributs (voir WooCommerce → État → Journaux)"
-
-#: includes/class-admin-settings.php
-msgid "Clean up deleted products"
-msgstr "Nettoyer les produits supprimés"
-
-#: includes/class-admin-settings.php
-msgid "Automatically trash products and categories no longer in Skwirrel during full sync"
-msgstr "Mettre automatiquement à la corbeille les produits et catégories qui ne sont plus dans Skwirrel lors de la synchronisation complète"
-
-#: includes/class-admin-settings.php
-msgid "Only active during full sync (manual sync or after deletion in WooCommerce). Not active during delta sync or when collection filter is set."
-msgstr "Actif uniquement lors de la synchronisation complète (synchronisation manuelle ou après suppression dans WooCommerce). Inactif lors de la synchronisation delta ou lorsqu'un filtre de collection est défini."
-
-#: includes/class-admin-settings.php
-msgid "Show delete warning"
-msgstr "Afficher l'avertissement de suppression"
-
-#: includes/class-admin-settings.php
-msgid "Show warning when deleting Skwirrel products and categories in WooCommerce"
-msgstr "Afficher un avertissement lors de la suppression de produits et catégories Skwirrel dans WooCommerce"
-
-#: includes/class-admin-settings.php
-msgid "Skwirrel is the source of truth: deleted products will be recreated during the next sync. This warning reminds users of this."
-msgstr "Skwirrel est la source de vérité : les produits supprimés seront recréés lors de la prochaine synchronisation. Cet avertissement en rappelle les utilisateurs."
-
-#: includes/class-admin-settings.php
-msgid "SKU field"
-msgstr "Champ SKU"
-
-#: includes/class-admin-settings.php
-msgid "internal_product_code"
-msgstr "internal_product_code"
-
-#: includes/class-admin-settings.php
-msgid "manufacturer_product_code"
-msgstr "manufacturer_product_code"
-
-#: includes/class-admin-settings.php
-msgid "Save settings"
-msgstr "Enregistrer les paramètres"
-
-#: includes/class-admin-settings.php
-msgid "Test connection"
-msgstr "Tester la connexion"
-
-#: includes/class-admin-settings.php
-msgid "Danger zone"
-msgstr "Zone de danger"
-
-#: includes/class-admin-settings.php
-msgid "Delete all products created or synced by Skwirrel. This action cannot be undone if you empty the trash."
-msgstr "Supprimer tous les produits créés ou synchronisés par Skwirrel. Cette action ne peut pas être annulée si vous videz la corbeille."
-
-#: includes/class-admin-settings.php
-msgid "Also empty the trash (permanently delete)"
-msgstr "Vider également la corbeille (suppression permanente)"
-
-#: includes/class-admin-settings.php
-msgid "Delete all Skwirrel products"
-msgstr "Supprimer tous les produits Skwirrel"
-
-#: includes/class-admin-settings.php
-msgid "WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n\nAre you sure?"
-msgstr "AVERTISSEMENT : Tous les produits Skwirrel seront DÉFINITIVEMENT supprimés. Cette action est irréversible !\n\nÊtes-vous sûr ?"
-
-#: includes/class-admin-settings.php
-msgid "All Skwirrel products will be moved to the trash.\n\nAre you sure?"
-msgstr "Tous les produits Skwirrel seront déplacés vers la corbeille.\n\nÊtes-vous sûr ?"
-
-#: includes/class-admin-settings.php
-msgid "View logs"
-msgstr "Voir les journaux"
-
-#: includes/class-admin-settings.php
-msgid "No log file available."
-msgstr "Aucun fichier journal disponible."
-
-#: includes/class-admin-settings.php
-msgid "Debug variation attributes"
-msgstr "Déboguer les attributs de variation"
-
-#: includes/class-admin-settings.php
-msgid "If variations show \"Any Colour\" / \"Any Number of cups\" instead of real values:"
-msgstr "Si les variations affichent \"Any Colour\" / \"Any Number of cups\" au lieu des valeurs réelles :"
-
-#: includes/class-admin-settings.php
-msgid "Add to wp-config.php: define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
-msgstr "Ajouter dans wp-config.php : define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
-
-#: includes/class-admin-settings.php
-msgid "Run \"Sync Products\"."
-msgstr "Exécuter \"Synchroniser les produits\"."
-
-#: includes/class-admin-settings.php
-msgid "Check wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
-msgstr "Voir wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
-
-#: includes/class-admin-settings.php
-msgid "Check: etim_values_found empty? → API languages must match getProducts (e.g. en, en-GB)."
-msgstr "Vérifiez : etim_values_found vide ? → Les langues API doivent correspondre à getProducts (ex. en, en-GB)."
-
-#: includes/class-admin-settings.php
-msgid "ATTR VERIFY FAIL in the log? → meta is not being written correctly; check wp_postmeta for attribute_pa_color/attribute_pa_cups."
-msgstr "ATTR VERIFY FAIL dans le journal ? → les meta ne sont pas correctement écrites ; vérifiez wp_postmeta pour attribute_pa_color/attribute_pa_cups."
-
-#: includes/class-admin-settings.php
-msgid "Connection test successful."
-msgstr "Test de connexion réussi."
-
-#: includes/class-admin-settings.php
-msgid "Connection failed."
-msgstr "Connexion échouée."
-
-#: includes/class-admin-settings.php
-msgid "Sync started in the background. Results will appear here once the sync is completed. Refresh the page to check the status."
-msgstr "La synchronisation a démarré en arrière-plan. Les résultats apparaîtront ici une fois la synchronisation terminée. Actualisez la page pour vérifier l'état."
-
-#: includes/class-admin-settings.php
-msgid "Purge started in the background. All Skwirrel products, imported media, categories and attributes will be deleted. Refresh the page to check the status."
-msgstr "Le nettoyage a démarré en arrière-plan. Tous les produits Skwirrel, médias importés, catégories et attributs seront supprimés. Actualisez la page pour vérifier l'état."
-
-#: includes/class-admin-settings.php
-msgid "Sync completed. Created: %1$d, Updated: %2$d, Failed: %3$d"
-msgstr "Synchronisation terminée. Créés : %1$d, mis à jour : %2$d, échoués : %3$d"
-
-#: includes/class-admin-settings.php
-msgid "(with attributes: %1$d, without: %2$d)"
-msgstr "(avec attributs : %1$d, sans : %2$d)"
-
-#: includes/class-admin-settings.php
-msgid "Sync completed. Check the logs for details."
-msgstr "Synchronisation terminée. Consultez les journaux pour plus de détails."
-
-#: includes/class-admin-settings.php
-msgid "Sync in progress…"
-msgstr "Synchronisation en cours…"
-
-#: includes/class-admin-settings.php
-msgid "The page will refresh automatically when the sync is completed."
-msgstr "La page sera automatiquement actualisée lorsque la synchronisation sera terminée."
-
-#: includes/class-admin-settings.php
-msgid "Super category ID"
-msgstr "ID de super catégorie"
-
-#: includes/class-admin-settings.php
-msgid "e.g. 42"
-msgstr "ex. 42"
-
-#: includes/class-admin-settings.php
-msgid "Skwirrel super category ID. The entire category tree under this category will be synced to WooCommerce."
-msgstr "ID de super catégorie Skwirrel. L'arborescence complète sous cette catégorie sera synchronisée avec WooCommerce."
-
-#: includes/class-product-mapper.php
-msgid "Manual"
-msgstr "Manuel"
-
-#: includes/class-product-mapper.php
-msgid "Datasheet"
-msgstr "Fiche technique"
-
-#: includes/class-product-mapper.php
-msgid "Certificate"
-msgstr "Certificat"
-
-#: includes/class-product-mapper.php
-msgid "Warranty"
-msgstr "Garantie"
-
-#: includes/class-product-mapper.php
-msgid "Other document"
-msgstr "Autre document"
-
-#: includes/class-product-documents.php
-msgid "Documents"
-msgstr "Documents"
-
-#: includes/class-product-documents.php
-msgid "Skwirrel documents"
-msgstr "Documents Skwirrel"
-
-#: includes/class-product-documents.php
-msgid "No documents linked to this product."
-msgstr "Aucun document lié à ce produit."
-
-#: includes/class-product-documents.php
-msgid "Edit"
-msgstr "Modifier"
-
-#: includes/class-action-scheduler.php
-msgid "Disabled"
-msgstr "Désactivé"
-
-#: includes/class-action-scheduler.php
-msgid "Hourly"
-msgstr "Toutes les heures"
-
-#: includes/class-action-scheduler.php
+#: includes/class-action-scheduler.php:94
+#: includes/class-action-scheduler.php:114
 msgid "Twice daily"
 msgstr "Deux fois par jour"
 
-#: includes/class-action-scheduler.php
+#: includes/class-action-scheduler.php:112
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: includes/class-action-scheduler.php:113
+msgid "Hourly"
+msgstr "Toutes les heures"
+
+#: includes/class-action-scheduler.php:115
 msgid "Daily"
 msgstr "Quotidien"
 
-#: includes/class-action-scheduler.php
+#: includes/class-action-scheduler.php:116
 msgid "Weekly"
 msgstr "Hebdomadaire"
 
-#: includes/class-delete-protection.php
-msgid "This product is managed by Skwirrel. Changes to product data should be made in Skwirrel."
-msgstr "Ce produit est géré par Skwirrel. Les modifications des données produit doivent être effectuées dans Skwirrel."
+#: includes/class-admin-dashboard.php:62
+msgid "Skwirrel PIM sync"
+msgstr "Skwirrel PIM sync"
 
-#: includes/class-delete-protection.php
-msgid "If you delete or trash this product, it will be automatically recreated during the next sync."
-msgstr "Si vous supprimez ce produit, il sera automatiquement recréé lors de la prochaine synchronisation."
+#: includes/class-admin-dashboard.php:69
+msgid "Dashboard"
+msgstr "Tableau de bord"
 
-#: includes/class-delete-protection.php
-msgid "Last synced: %s"
-msgstr "Dernière synchronisation : %s"
+#: includes/class-admin-dashboard.php:135 includes/class-admin-settings.php:498
+msgid "Last sync successful"
+msgstr "Dernière synchronisation réussie"
 
-#: includes/class-delete-protection.php
-msgid "This product is managed by Skwirrel and will be recreated during the next sync.\n\nAre you sure you want to trash this product?"
-msgstr "Ce produit est géré par Skwirrel et sera recréé lors de la prochaine synchronisation.\n\nÊtes-vous sûr de vouloir mettre ce produit à la corbeille ?"
+#: includes/class-admin-dashboard.php:135 includes/class-admin-settings.php:500
+msgid "Last sync failed"
+msgstr "Dernière synchronisation échouée"
 
-#: includes/class-delete-protection.php
-msgid "This category was created by Skwirrel Sync and will be recreated during the next sync.\n\nAre you sure you want to delete this category?"
-msgstr "Cette catégorie a été créée par Skwirrel Sync et sera recréée lors de la prochaine synchronisation.\n\nÊtes-vous sûr de vouloir supprimer cette catégorie ?"
+#: includes/class-admin-dashboard.php:141
+msgid "created"
+msgstr "créés"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:142
+msgid "updated"
+msgstr "mis à jour"
+
+#: includes/class-admin-dashboard.php:143
+msgid "failed"
+msgstr "échoués"
+
+#: includes/class-admin-dashboard.php:160
+#: includes/class-admin-dashboard.php:280 includes/class-admin-settings.php:682
+msgid "Sync in progress…"
+msgstr "Synchronisation en cours…"
+
+#: includes/class-admin-dashboard.php:161
+msgid "Products are being synchronized. This page refreshes automatically."
+msgstr "Les produits sont en cours de synchronisation. Cette page se rafraîchit automatiquement."
+
+#: includes/class-admin-dashboard.php:170
+msgid "Sync Now"
+msgstr "Synchroniser maintenant"
+
+#: includes/class-admin-dashboard.php:171
+msgid "Start a full product synchronization from Skwirrel PIM."
+msgstr "Lancer une synchronisation complète des produits depuis Skwirrel PIM."
+
+#: includes/class-admin-dashboard.php:183
+#: includes/class-admin-dashboard.php:329
+msgid "Sync History"
+msgstr "Historique de synchronisation"
+
+#: includes/class-admin-dashboard.php:187
+#, php-format
+msgid "%d sync runs recorded."
+msgstr "%d exécutions de synchronisation enregistrées."
+
+#: includes/class-admin-dashboard.php:200
+#: includes/class-admin-dashboard.php:454
+msgid "Settings"
+msgstr "Paramètres"
+
+#: includes/class-admin-dashboard.php:201
+msgid "Configure API connection, sync options, and scheduling."
+msgstr "Configurez la connexion API, les options de synchronisation et la planification."
+
+#: includes/class-admin-dashboard.php:216
+msgid "Sync Logs"
+msgstr "Journaux de synchronisation"
+
+#: includes/class-admin-dashboard.php:217
+msgid "View detailed sync log files in WooCommerce."
+msgstr "Consultez les fichiers journaux de synchronisation détaillés dans WooCommerce."
+
+#: includes/class-admin-dashboard.php:227
+msgid "Debug"
+msgstr "Débogage"
+
+#: includes/class-admin-dashboard.php:236
+msgid "Danger Zone"
+msgstr "Zone de danger"
+
+#: includes/class-admin-dashboard.php:247
+msgid "Recent syncs"
+msgstr "Synchronisations récentes"
+
+#: includes/class-admin-dashboard.php:248
+msgid "View all"
+msgstr "Voir tout"
+
+#: includes/class-admin-dashboard.php:264 includes/class-admin-settings.php:666
+msgid "Assign categories, brands & manufacturers"
+msgstr "Attribuer catégories, marques & fabricants"
+
+#: includes/class-admin-dashboard.php:265 includes/class-admin-settings.php:667
+msgid "Assign categories & brands"
+msgstr "Attribuer catégories & marques"
+
+#: includes/class-admin-dashboard.php:268 includes/class-admin-settings.php:670
+msgid "Fetch products from API"
+msgstr "Récupérer les produits via l'API"
+
+#: includes/class-admin-dashboard.php:269 includes/class-admin-settings.php:671
+msgid "Create & update products"
+msgstr "Créer & mettre à jour les produits"
+
+#: includes/class-admin-dashboard.php:271 includes/class-admin-settings.php:673
+msgid "Connect attributes"
+msgstr "Connecter les attributs"
+
+#: includes/class-admin-dashboard.php:272 includes/class-admin-settings.php:674
+msgid "Download images & documents"
+msgstr "Télécharger images & documents"
+
+#: includes/class-admin-dashboard.php:273 includes/class-admin-settings.php:675
+msgid "Cleanup & finalize"
+msgstr "Nettoyage & finalisation"
+
+#: includes/class-admin-dashboard.php:295 includes/class-admin-settings.php:709
+#, php-format
+msgid "%d fetched"
+msgstr "%d récupérés"
+
+#: includes/class-admin-dashboard.php:315 includes/class-admin-settings.php:725
+msgid "This page refreshes automatically every 5 seconds."
+msgstr "Cette page se rafraîchit automatiquement toutes les 5 secondes."
+
+#: includes/class-admin-dashboard.php:330
+msgid "Overview of all synchronization runs, grouped by date."
+msgstr "Aperçu de toutes les exécutions de synchronisation, regroupées par date."
+
+#: includes/class-admin-dashboard.php:336 includes/class-admin-settings.php:586
 msgid "All"
 msgstr "Tout"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:337 includes/class-admin-settings.php:587
 msgid "Older than 7 days"
 msgstr "Plus ancien que 7 jours"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:338 includes/class-admin-settings.php:588
 msgid "Older than 30 days"
 msgstr "Plus ancien que 30 jours"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:339 includes/class-admin-settings.php:589
 msgid "Older than 90 days"
 msgstr "Plus ancien que 90 jours"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:341 includes/class-admin-settings.php:591
 msgid "Delete history"
 msgstr "Supprimer l'historique"
 
-#: includes/class-admin-settings.php
-msgid "Delete all sync history?"
-msgstr "Supprimer tout l'historique de synchronisation ?"
+#: includes/class-admin-dashboard.php:345
+msgid "No sync history available."
+msgstr "Aucun historique de synchronisation disponible."
 
-#: includes/class-admin-settings.php
-msgid "Sync history deleted."
-msgstr "Historique de synchronisation supprimé."
-
-#: includes/class-admin-settings.php
-msgid "Trigger"
-msgstr "Déclencheur"
-
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:361 includes/class-admin-settings.php:624
 msgctxt "sync trigger"
 msgid "Manual"
 msgstr "Manuel"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:362 includes/class-admin-settings.php:625
 msgid "Scheduled"
 msgstr "Planifié"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:363 includes/class-admin-settings.php:626
 msgid "Purge"
 msgstr "Purge"
 
-#: includes/class-admin-settings.php
+#: includes/class-admin-dashboard.php:376
+msgid "Time"
+msgstr "Heure"
+
+#: includes/class-admin-dashboard.php:377 includes/class-admin-settings.php:598
+msgid "Trigger"
+msgstr "Déclencheur"
+
+#: includes/class-admin-dashboard.php:378 includes/class-admin-settings.php:599
+msgid "Status"
+msgstr "État"
+
+#: includes/class-admin-dashboard.php:379 includes/class-admin-settings.php:518
+#: includes/class-admin-settings.php:600
+msgid "Created"
+msgstr "Créés"
+
+#: includes/class-admin-dashboard.php:380 includes/class-admin-settings.php:522
+#: includes/class-admin-settings.php:601
+msgid "Updated"
+msgstr "Mis à jour"
+
+#: includes/class-admin-dashboard.php:381
+#: includes/class-admin-dashboard.php:429 includes/class-admin-settings.php:527
+#: includes/class-admin-settings.php:602 includes/class-admin-settings.php:639
+msgid "Failed"
+msgstr "Échoués"
+
+#: includes/class-admin-dashboard.php:382 includes/class-admin-settings.php:603
+msgid "Deleted"
+msgstr "Supprimés"
+
+#: includes/class-admin-dashboard.php:383 includes/class-admin-settings.php:606
+msgid "Total"
+msgstr "Total"
+
+#: includes/class-admin-dashboard.php:407
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: includes/class-admin-dashboard.php:409
+msgid "Yesterday"
+msgstr "Hier"
+
+#: includes/class-admin-dashboard.php:425 includes/class-admin-settings.php:635
 msgid "Purged"
 msgstr "Purgé"
 
-#: includes/class-permalink-settings.php
+#: includes/class-admin-dashboard.php:427
+msgid "Success"
+msgstr "Succès"
+
+#: includes/class-admin-dashboard.php:455
+msgid "Configure your Skwirrel PIM API connection and synchronization options."
+msgstr "Configurez votre connexion API Skwirrel PIM et les options de synchronisation."
+
+#: includes/class-admin-dashboard.php:463
+msgid "API Connection"
+msgstr "Connexion API"
+
+#: includes/class-admin-dashboard.php:472
+msgid "Skwirrel subdomain"
+msgstr "Sous-domaine Skwirrel"
+
+#: includes/class-admin-dashboard.php:482
+msgid "API Token"
+msgstr "Jeton API"
+
+#: includes/class-admin-dashboard.php:487 includes/class-admin-settings.php:765
+msgid "Timeout (seconds)"
+msgstr "Délai d'attente (secondes)"
+
+#: includes/class-admin-dashboard.php:491
+msgid "Retries"
+msgstr "Tentatives"
+
+#: includes/class-admin-dashboard.php:496 includes/class-admin-settings.php:937
+msgid "Test connection"
+msgstr "Tester la connexion"
+
+#: includes/class-admin-dashboard.php:502
+msgid "Scheduling"
+msgstr "Planification"
+
+#: includes/class-admin-dashboard.php:505 includes/class-admin-settings.php:777
+msgid "Sync interval"
+msgstr "Intervalle de synchronisation"
+
+#: includes/class-admin-dashboard.php:513 includes/class-admin-settings.php:787
+msgid "Batch size"
+msgstr "Taille du lot"
+
+#: includes/class-admin-dashboard.php:521
+msgid "Sync Options"
+msgstr "Options de synchronisation"
+
+#: includes/class-admin-dashboard.php:523 includes/class-admin-settings.php:794
+msgid "Sync categories"
+msgstr "Synchroniser les catégories"
+
+#: includes/class-admin-dashboard.php:524
+msgid "Sync grouped products (variable)"
+msgstr "Synchroniser les produits groupés (variable)"
+
+#: includes/class-admin-dashboard.php:525 includes/class-admin-settings.php:813
+msgid "Sync manufacturers"
+msgstr "Synchroniser les fabricants"
+
+#: includes/class-admin-dashboard.php:526 includes/class-admin-settings.php:820
+msgid "Sync custom classes"
+msgstr "Synchroniser les classes personnalisées"
+
+#: includes/class-admin-dashboard.php:527
+msgid "Include trade item custom classes"
+msgstr "Inclure les classes personnalisées des articles commerciaux"
+
+#: includes/class-admin-dashboard.php:531 includes/class-admin-settings.php:800
+msgid "Super category ID"
+msgstr "ID de super catégorie"
+
+#: includes/class-admin-dashboard.php:532 includes/class-admin-settings.php:802
+msgid "e.g. 42"
+msgstr "ex. 42"
+
+#: includes/class-admin-dashboard.php:535
+msgid "Collection IDs"
+msgstr "ID de collections"
+
+#: includes/class-admin-dashboard.php:536 includes/class-admin-settings.php:844
+msgid "e.g. 123, 456"
+msgstr "ex. 123, 456"
+
+#: includes/class-admin-dashboard.php:542 includes/class-admin-settings.php:828
+msgid "Custom class filter"
+msgstr "Filtre de classes personnalisées"
+
+#: includes/class-admin-dashboard.php:544
+msgid "No filter"
+msgstr "Pas de filtre"
+
+#: includes/class-admin-dashboard.php:545
+msgid "Whitelist"
+msgstr "Liste blanche"
+
+#: includes/class-admin-dashboard.php:546
+msgid "Blacklist"
+msgstr "Liste noire"
+
+#: includes/class-admin-dashboard.php:550
+msgid "Class IDs / codes"
+msgstr "ID / codes de classes"
+
+#: includes/class-admin-dashboard.php:551 includes/class-admin-settings.php:837
+msgid "e.g. 12, 45, BUIS"
+msgstr "ex. 12, 45, BUIS"
+
+#: includes/class-admin-dashboard.php:558
+msgid "Media & Language"
+msgstr "Médias & Langue"
+
+#: includes/class-admin-dashboard.php:561 includes/class-admin-settings.php:849
+msgid "Import images"
+msgstr "Importer les images"
+
+#: includes/class-admin-dashboard.php:563
+msgid "Yes"
+msgstr "Oui"
+
+#: includes/class-admin-dashboard.php:564
+msgid "No"
+msgstr "Non"
+
+#: includes/class-admin-dashboard.php:568 includes/class-admin-settings.php:923
+msgid "SKU field"
+msgstr "Champ SKU"
+
+#: includes/class-admin-dashboard.php:581 includes/class-admin-settings.php:859
+msgid "Content language"
+msgstr "Langue du contenu"
+
+#: includes/class-admin-dashboard.php:586 includes/class-admin-settings.php:869
+msgid "Other…"
+msgstr "Autre…"
+
+#: includes/class-admin-dashboard.php:594 includes/class-admin-settings.php:878
+msgid "API languages (include_languages)"
+msgstr "Langues API (include_languages)"
+
+#: includes/class-admin-dashboard.php:605
+msgid "Additional: e.g. es, pt-BR"
+msgstr "Supplémentaires : ex. es, pt-BR"
+
+#: includes/class-admin-dashboard.php:611
+msgid "Advanced"
+msgstr "Avancé"
+
+#: includes/class-admin-dashboard.php:613 includes/class-admin-settings.php:903
+msgid "Verbose logging"
+msgstr "Journalisation détaillée"
+
+#: includes/class-admin-dashboard.php:614
+msgid "Clean up deleted products after full sync"
+msgstr "Nettoyer les produits supprimés après la synchronisation complète"
+
+#: includes/class-admin-dashboard.php:615
+msgid "Show delete warning on Skwirrel products"
+msgstr "Afficher l'avertissement de suppression sur les produits Skwirrel"
+
+#: includes/class-admin-dashboard.php:620 includes/class-admin-settings.php:933
+msgid "Save settings"
+msgstr "Enregistrer les paramètres"
+
+#: includes/class-admin-dashboard.php:627 includes/class-admin-settings.php:941
+msgid "Danger zone"
+msgstr "Zone de danger"
+
+#: includes/class-admin-dashboard.php:628
+msgid "Delete all products created or synced by Skwirrel. This cannot be undone if you empty the trash."
+msgstr "Supprimer tous les produits créés ou synchronisés par Skwirrel. Cette action est irréversible si vous videz la corbeille."
+
+#: includes/class-admin-dashboard.php:632 includes/class-admin-settings.php:949
+msgid "Also empty the trash (permanently delete)"
+msgstr "Vider également la corbeille (suppression permanente)"
+
+#: includes/class-admin-dashboard.php:634 includes/class-admin-settings.php:954
+msgid "Delete all Skwirrel products"
+msgstr "Supprimer tous les produits Skwirrel"
+
+#: includes/class-admin-dashboard.php:647
+msgid "Debug Variation Attributes"
+msgstr "Déboguer les attributs de variation"
+
+#: includes/class-admin-dashboard.php:648
+msgid "If variations show \"Any Colour\" or \"Any Number of cups\" instead of real values:"
+msgstr "Si les variations affichent \"Any Colour\" ou \"Any Number of cups\" au lieu des valeurs réelles :"
+
+#: includes/class-admin-dashboard.php:650
+msgid "Add to wp-config.php:"
+msgstr "Ajouter dans wp-config.php :"
+
+#: includes/class-admin-dashboard.php:651
+msgid "Run \"Sync Now\" from the dashboard."
+msgstr "Exécutez \"Sync Now\" depuis le tableau de bord."
+
+#: includes/class-admin-dashboard.php:652
+msgid "Check:"
+msgstr "Vérifiez :"
+
+#: includes/class-admin-dashboard.php:653
+msgid "If etim_values_found is empty: API languages must match (e.g. en, en-GB)."
+msgstr "Si etim_values_found est vide : les langues API doivent correspondre (ex. en, en-GB)."
+
+#: includes/class-admin-dashboard.php:654
+msgid "If ATTR VERIFY FAIL: check wp_postmeta for attribute_pa_ entries."
+msgstr "Si ATTR VERIFY FAIL : vérifiez wp_postmeta pour les entrées attribute_pa_."
+
+#: includes/class-admin-settings.php:63 includes/class-admin-settings.php:64
+msgid "Skwirrel Sync"
+msgstr "Skwirrel Sync"
+
+#: includes/class-admin-settings.php:70 includes/class-admin-settings.php:73
+msgid "Sync Products"
+msgstr "Synchroniser les produits"
+
+#: includes/class-admin-settings.php:86 includes/class-admin-settings.php:216
+#: includes/class-admin-settings.php:244 includes/class-admin-settings.php:299
+#: includes/class-admin-settings.php:357 includes/class-admin-settings.php:463
+#: includes/class-product-sync-meta-box.php:146
+msgid "Access denied."
+msgstr "Accès refusé."
+
+#: includes/class-admin-settings.php:412
+msgid "WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\\n\\nAre you sure?"
+msgstr "AVERTISSEMENT : Tous les produits Skwirrel seront DÉFINITIVEMENT supprimés. Cette action est irréversible !\\n\\nÊtes-vous sûr ?"
+
+#: includes/class-admin-settings.php:413
+msgid "All Skwirrel products will be moved to the trash.\\n\\nAre you sure?"
+msgstr "Tous les produits Skwirrel seront déplacés vers la corbeille.\\n\\nÊtes-vous sûr ?"
+
+#: includes/class-admin-settings.php:414
+msgid "Delete all sync history?"
+msgstr "Supprimer tout l'historique de synchronisation ?"
+
+#: includes/class-admin-settings.php:490
+msgid "Sync status"
+msgstr "État de la synchronisation"
+
+#: includes/class-admin-settings.php:504
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: includes/class-admin-settings.php:508
+msgid "Sync results"
+msgstr "Résultats de synchronisation"
+
+#: includes/class-admin-settings.php:512
+msgid "Category"
+msgstr "Catégorie"
+
+#: includes/class-admin-settings.php:513
+msgid "Count"
+msgstr "Nombre"
+
+#: includes/class-admin-settings.php:536
+msgid "Deleted (trash)"
+msgstr "Supprimés (corbeille)"
+
+#: includes/class-admin-settings.php:541
+msgid "↳ Categories cleaned up"
+msgstr "↳ Catégories nettoyées"
+
+#: includes/class-admin-settings.php:552
+msgid "↳ With attributes"
+msgstr "↳ Avec attributs"
+
+#: includes/class-admin-settings.php:556
+msgid "↳ Without attributes"
+msgstr "↳ Sans attributs"
+
+#: includes/class-admin-settings.php:561
+msgid "Total processed"
+msgstr "Total traité"
+
+#: includes/class-admin-settings.php:569
+msgid "Error message:"
+msgstr "Message d'erreur :"
+
+#: includes/class-admin-settings.php:575
+msgid "No sync has been run yet. Click \"Sync Products\" to get started."
+msgstr "Aucune synchronisation effectuée. Cliquez sur \"Synchroniser les produits\" pour commencer."
+
+#: includes/class-admin-settings.php:581
+msgid "Sync history"
+msgstr "Historique de synchronisation"
+
+#: includes/class-admin-settings.php:597
+msgid "Date & Time"
+msgstr "Date et heure"
+
+#: includes/class-admin-settings.php:604
+msgid "With attr."
+msgstr "Avec attr."
+
+#: includes/class-admin-settings.php:605
+msgid "Without attr."
+msgstr "Sans attr."
+
+#: includes/class-admin-settings.php:637
+msgid "Successful"
+msgstr "Réussi"
+
+#: includes/class-admin-settings.php:742
+msgid "JSON-RPC Endpoint URL"
+msgstr "URL du point de terminaison JSON-RPC"
+
+#: includes/class-admin-settings.php:745
+msgid "Full URL to the Skwirrel JSON-RPC endpoint."
+msgstr "URL complète vers le point de terminaison JSON-RPC Skwirrel."
+
+#: includes/class-admin-settings.php:749
+msgid "Authentication type"
+msgstr "Type d'authentification"
+
+#: includes/class-admin-settings.php:752
+msgid "Bearer token"
+msgstr "Jeton Bearer"
+
+#: includes/class-admin-settings.php:753
+msgid "API static token (X-Skwirrel-Api-Token)"
+msgstr "Jeton API statique (X-Skwirrel-Api-Token)"
+
+#: includes/class-admin-settings.php:758
+msgid "Token"
+msgstr "Jeton"
+
+#: includes/class-admin-settings.php:760
+msgid "Enter token…"
+msgstr "Saisir le jeton…"
+
+#: includes/class-admin-settings.php:761
+msgid "After saving, the token will not be shown in plain text."
+msgstr "Après l'enregistrement, le jeton ne sera pas affiché en texte clair."
+
+#: includes/class-admin-settings.php:771
+msgid "Number of retries"
+msgstr "Nombre de tentatives"
+
+#: includes/class-admin-settings.php:790
+msgid "Products per API page (1–500)."
+msgstr "Produits par page API (1–500)."
+
+#: includes/class-admin-settings.php:796
+msgid "Create and assign categories from product_groups"
+msgstr "Créer et lier les catégories depuis product_groups"
+
+#: includes/class-admin-settings.php:803
+msgid "Skwirrel super category ID. The entire category tree under this category will be synced to WooCommerce."
+msgstr "ID de super catégorie Skwirrel. L'arborescence complète sous cette catégorie sera synchronisée avec WooCommerce."
+
+#: includes/class-admin-settings.php:807
+msgid "Sync grouped products"
+msgstr "Synchroniser les produits groupés"
+
+#: includes/class-admin-settings.php:809
+msgid "Fetch grouped products via getGroupedProducts (products within a group can be variable)"
+msgstr "Récupérer les produits groupés via getGroupedProducts (les produits dans un groupe peuvent être variables)"
+
+#: includes/class-admin-settings.php:815
+msgid "Sync manufacturer_name to product_manufacturer taxonomy"
+msgstr "Synchroniser manufacturer_name vers la taxonomie product_manufacturer"
+
+#: includes/class-admin-settings.php:816
+msgid "Registers the product_manufacturer taxonomy and assigns manufacturers from Skwirrel product data."
+msgstr "Enregistre la taxonomie product_manufacturer et attribue les fabricants à partir des données produit Skwirrel."
+
+#: includes/class-admin-settings.php:822
+msgid "Fetch custom class attributes and save as product attributes"
+msgstr "Récupérer les attributs des classes personnalisées et les enregistrer comme attributs de produit"
+
+#: includes/class-admin-settings.php:824
+msgid "Also include trade item custom classes"
+msgstr "Inclure également les classes personnalisées des articles commerciaux"
+
+#: includes/class-admin-settings.php:832
+msgid "No filter (all classes)"
+msgstr "Pas de filtre (toutes les classes)"
+
+#: includes/class-admin-settings.php:833
+msgid "Whitelist (only these classes)"
+msgstr "Liste blanche (uniquement ces classes)"
+
+#: includes/class-admin-settings.php:834
+msgid "Blacklist (all except these classes)"
+msgstr "Liste noire (toutes sauf ces classes)"
+
+#: includes/class-admin-settings.php:838
+msgid "Comma-separated class IDs or codes. Numeric values are used as ID, others as class code."
+msgstr "ID de classes ou codes séparés par des virgules. Les valeurs numériques sont utilisées comme ID, les autres comme code de classe."
+
+#: includes/class-admin-settings.php:842
+msgid "Collection IDs (filter)"
+msgstr "ID de collections (filtre)"
+
+#: includes/class-admin-settings.php:845
+msgid "Comma-separated collection IDs. Only products from these collections will be synced. Empty = sync all."
+msgstr "ID de collections séparés par des virgules. Seuls les produits de ces collections seront synchronisés. Vide = tout synchroniser."
+
+#: includes/class-admin-settings.php:852
+msgid "Yes, to media library"
+msgstr "Oui, vers la médiathèque"
+
+#: includes/class-admin-settings.php:853
+msgid "No, skip"
+msgstr "Non, ignorer"
+
+#: includes/class-admin-settings.php:855
+msgid "If media library import fails (e.g. due to security plugin), choose \"No\" to skip images."
+msgstr "Si l'import vers la médiathèque échoue (ex. plugin de sécurité), choisissez \"Non\" pour ignorer les images."
+
+#: includes/class-admin-settings.php:874
+msgid "Language code for all text: image alt/caption, ETIM attributes."
+msgstr "Code langue pour tous les textes : alt/légende des images, attributs ETIM."
+
+#: includes/class-admin-settings.php:896
+msgid "Additional language codes (comma-separated):"
+msgstr "Codes langue supplémentaires (séparés par des virgules) :"
+
+#: includes/class-admin-settings.php:899
+msgid "Select the languages the API should include for product translations and ETIM."
+msgstr "Sélectionnez les langues que l'API doit inclure pour les traductions de produits et ETIM."
+
+#: includes/class-admin-settings.php:905
+msgid "Log per product: sources, ETIM, attributes (see WooCommerce → Status → Logs)"
+msgstr "Journal par produit : sources, ETIM, attributs (voir WooCommerce → État → Journaux)"
+
+#: includes/class-admin-settings.php:909
+msgid "Clean up deleted products"
+msgstr "Nettoyer les produits supprimés"
+
+#: includes/class-admin-settings.php:911
+msgid "Automatically trash products and categories no longer in Skwirrel during full sync"
+msgstr "Mettre automatiquement à la corbeille les produits et catégories qui ne sont plus dans Skwirrel lors de la synchronisation complète"
+
+#: includes/class-admin-settings.php:912
+msgid "Only active during full sync (manual sync or after deletion in WooCommerce). Not active during delta sync or when collection filter is set."
+msgstr "Actif uniquement lors de la synchronisation complète (synchronisation manuelle ou après suppression dans WooCommerce). Inactif lors de la synchronisation delta ou lorsqu'un filtre de collection est défini."
+
+#: includes/class-admin-settings.php:916
+msgid "Show delete warning"
+msgstr "Afficher l'avertissement de suppression"
+
+#: includes/class-admin-settings.php:918
+msgid "Show warning when deleting Skwirrel products and categories in WooCommerce"
+msgstr "Afficher un avertissement lors de la suppression de produits et catégories Skwirrel dans WooCommerce"
+
+#: includes/class-admin-settings.php:919
+msgid "Skwirrel is the source of truth: deleted products will be recreated during the next sync. This warning reminds users of this."
+msgstr "Skwirrel est la source de vérité : les produits supprimés seront recréés lors de la prochaine synchronisation. Cet avertissement en rappelle les utilisateurs."
+
+#: includes/class-admin-settings.php:926
+msgid "internal_product_code"
+msgstr "internal_product_code"
+
+#: includes/class-admin-settings.php:927
+msgid "manufacturer_product_code"
+msgstr "manufacturer_product_code"
+
+#: includes/class-admin-settings.php:942
+msgid "Delete all products created or synced by Skwirrel. This action cannot be undone if you empty the trash."
+msgstr "Supprimer tous les produits créés ou synchronisés par Skwirrel. Cette action ne peut pas être annulée si vous videz la corbeille."
+
+#: includes/class-admin-settings.php:970 includes/class-admin-settings.php:973
+msgid "View logs"
+msgstr "Voir les journaux"
+
+#: includes/class-admin-settings.php:976
+msgid "No log file available."
+msgstr "Aucun fichier journal disponible."
+
+#: includes/class-admin-settings.php:979
+msgid "Debug variation attributes"
+msgstr "Déboguer les attributs de variation"
+
+#: includes/class-admin-settings.php:980
+msgid "If variations show \"Any Colour\" / \"Any Number of cups\" instead of real values:"
+msgstr "Si les variations affichent \"Any Colour\" / \"Any Number of cups\" au lieu des valeurs réelles :"
+
+#: includes/class-admin-settings.php:982
+msgid "Add to wp-config.php: define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
+msgstr "Ajouter dans wp-config.php : define('SKWIRREL_WC_SYNC_DEBUG_ETIM', true);"
+
+#: includes/class-admin-settings.php:983
+msgid "Run \"Sync Products\"."
+msgstr "Exécuter \"Synchroniser les produits\"."
+
+#: includes/class-admin-settings.php:984
+msgid "Check wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
+msgstr "Voir wp-content/uploads/skwirrel-pim-sync/skwirrel-variation-debug.log"
+
+#: includes/class-admin-settings.php:985
+msgid "Check: etim_values_found empty? → API languages must match getProducts (e.g. en, en-GB)."
+msgstr "Vérifiez : etim_values_found vide ? → Les langues API doivent correspondre à getProducts (ex. en, en-GB)."
+
+#: includes/class-admin-settings.php:986
+msgid "ATTR VERIFY FAIL in the log? → meta is not being written correctly; check wp_postmeta for attribute_pa_color/attribute_pa_cups."
+msgstr "ATTR VERIFY FAIL dans le journal ? → les meta ne sont pas correctement écrites ; vérifiez wp_postmeta pour attribute_pa_color/attribute_pa_cups."
+
+#: includes/class-admin-settings.php:996
+msgid "Connection test successful."
+msgstr "Test de connexion réussi."
+
+#: includes/class-admin-settings.php:999
+msgid "Connection failed."
+msgstr "Connexion échouée."
+
+#: includes/class-admin-settings.php:1005
+msgid "Sync started in the background. Results will appear here once the sync is completed. Refresh the page to check the status."
+msgstr "La synchronisation a démarré en arrière-plan. Les résultats apparaîtront ici une fois la synchronisation terminée. Actualisez la page pour vérifier l'état."
+
+#: includes/class-admin-settings.php:1009
+msgid "Sync history deleted."
+msgstr "Historique de synchronisation supprimé."
+
+#: includes/class-admin-settings.php:1013
+msgid "Purge started in the background. All Skwirrel products, imported media, categories and attributes will be deleted. Refresh the page to check the status."
+msgstr "Le nettoyage a démarré en arrière-plan. Tous les produits Skwirrel, médias importés, catégories et attributs seront supprimés. Actualisez la page pour vérifier l'état."
+
+#: includes/class-admin-settings.php:1023
+#, php-format
+msgid "Sync completed. Created: %1$d, Updated: %2$d, Failed: %3$d"
+msgstr "Synchronisation terminée. Créés : %1$d, mis à jour : %2$d, échoués : %3$d"
+
+#: includes/class-admin-settings.php:1031
+#, php-format
+msgid "(with attributes: %1$d, without: %2$d)"
+msgstr "(avec attributs : %1$d, sans : %2$d)"
+
+#: includes/class-admin-settings.php:1038
+msgid "Sync completed. Check the logs for details."
+msgstr "Synchronisation terminée. Consultez les journaux pour plus de détails."
+
+#: includes/class-attachment-handler.php:247
+msgid "Manual"
+msgstr "Manuel"
+
+#: includes/class-attachment-handler.php:248
+msgid "Datasheet"
+msgstr "Fiche technique"
+
+#: includes/class-attachment-handler.php:249
+msgid "Certificate"
+msgstr "Certificat"
+
+#: includes/class-attachment-handler.php:250
+msgid "Warranty"
+msgstr "Garantie"
+
+#: includes/class-attachment-handler.php:251
+msgid "Other document"
+msgstr "Autre document"
+
+#: includes/class-brand-sync.php:44 includes/class-brand-sync.php:52
+msgid "Brands"
+msgstr "Marques"
+
+#: includes/class-brand-sync.php:45
+msgid "Brand"
+msgstr "Marque"
+
+#: includes/class-brand-sync.php:46
+msgid "Search brands"
+msgstr "Rechercher des marques"
+
+#: includes/class-brand-sync.php:47
+msgid "All brands"
+msgstr "Toutes les marques"
+
+#: includes/class-brand-sync.php:48
+msgid "Edit brand"
+msgstr "Modifier la marque"
+
+#: includes/class-brand-sync.php:49
+msgid "Update brand"
+msgstr "Mettre à jour la marque"
+
+#: includes/class-brand-sync.php:50
+msgid "Add new brand"
+msgstr "Ajouter une marque"
+
+#: includes/class-brand-sync.php:51
+msgid "New brand name"
+msgstr "Nouveau nom de marque"
+
+#: includes/class-brand-sync.php:81 includes/class-brand-sync.php:89
+msgid "Manufacturers"
+msgstr "Fabricants"
+
+#: includes/class-brand-sync.php:82
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#: includes/class-brand-sync.php:83
+msgid "Search manufacturers"
+msgstr "Rechercher des fabricants"
+
+#: includes/class-brand-sync.php:84
+msgid "All manufacturers"
+msgstr "Tous les fabricants"
+
+#: includes/class-brand-sync.php:85
+msgid "Edit manufacturer"
+msgstr "Modifier le fabricant"
+
+#: includes/class-brand-sync.php:86
+msgid "Update manufacturer"
+msgstr "Mettre à jour le fabricant"
+
+#: includes/class-brand-sync.php:87
+msgid "Add new manufacturer"
+msgstr "Ajouter un fabricant"
+
+#: includes/class-brand-sync.php:88
+msgid "New manufacturer name"
+msgstr "Nouveau nom de fabricant"
+
+#: includes/class-delete-protection.php:112
+msgid "This product is managed by Skwirrel. Changes to product data should be made in Skwirrel."
+msgstr "Ce produit est géré par Skwirrel. Les modifications des données produit doivent être effectuées dans Skwirrel."
+
+#: includes/class-delete-protection.php:115
+msgid "If you delete or trash this product, it will be automatically recreated during the next sync."
+msgstr "Si vous supprimez ce produit, il sera automatiquement recréé lors de la prochaine synchronisation."
+
+#: includes/class-delete-protection.php:118
+#, php-format
+msgid "Last synced: %s"
+msgstr "Dernière synchronisation : %s"
+
+#: includes/class-delete-protection.php:189
+msgid "This product is managed by Skwirrel and will be recreated during the next sync.\\n\\nAre you sure you want to trash this product?"
+msgstr "Ce produit est géré par Skwirrel et sera recréé lors de la prochaine synchronisation.\\n\\nÊtes-vous sûr de vouloir mettre ce produit à la corbeille ?"
+
+#: includes/class-delete-protection.php:206
+msgid "This category was created by Skwirrel Sync and will be recreated during the next sync.\\n\\nAre you sure you want to delete this category?"
+msgstr "Cette catégorie a été créée par Skwirrel Sync et sera recréée lors de la prochaine synchronisation.\\n\\nÊtes-vous sûr de vouloir supprimer cette catégorie ?"
+
+#: includes/class-permalink-settings.php:73
 msgid "Skwirrel product slugs"
 msgstr "Slugs de produits Skwirrel"
 
-#: includes/class-permalink-settings.php
-msgid "Configure how Skwirrel generates product URL slugs during sync."
-msgstr "Configurez comment Skwirrel génère les slugs d'URL de produits lors de la synchronisation."
-
-#: includes/class-permalink-settings.php
+#: includes/class-permalink-settings.php:80
 msgid "Slug source"
 msgstr "Source du slug"
 
-#: includes/class-permalink-settings.php
-msgid "Product name (default)"
-msgstr "Nom du produit (par défaut)"
-
-#: includes/class-permalink-settings.php
-msgid "Internal product code (SKU)"
-msgstr "Code article interne (SKU)"
-
-#: includes/class-permalink-settings.php
-msgid "Manufacturer product code"
-msgstr "Code article fabricant"
-
-#: includes/class-permalink-settings.php
-msgid "External product ID"
-msgstr "ID produit externe"
-
-#: includes/class-permalink-settings.php
-msgid "Skwirrel product ID"
-msgstr "ID produit Skwirrel"
-
-#: includes/class-permalink-settings.php
-msgid "The source field used as the base URL (slug) for new products."
-msgstr "Le champ source utilisé comme URL de base (slug) pour les nouveaux produits."
-
-#: includes/class-permalink-settings.php
+#: includes/class-permalink-settings.php:88
 msgid "Slug suffix (on duplicate)"
 msgstr "Suffixe du slug (en cas de doublon)"
 
-#: includes/class-permalink-settings.php
-msgid "None — WordPress auto-numbers (-2, -3)"
-msgstr "Aucun — WordPress numérote automatiquement (-2, -3)"
-
-#: includes/class-permalink-settings.php
-msgid "If the slug already exists, this field is appended as a suffix. Existing slugs are not changed."
-msgstr "Si le slug existe déjà, ce champ est ajouté comme suffixe. Les slugs existants ne sont pas modifiés."
-
-#: includes/class-permalink-settings.php
+#: includes/class-permalink-settings.php:96
 msgid "Update slug on re-sync"
 msgstr "Mettre à jour le slug lors de la re-synchronisation"
-
-#: includes/class-permalink-settings.php
-msgid "Also update slugs for existing products during sync"
-msgstr "Mettre également à jour les slugs des produits existants lors de la synchronisation"
-
-#: includes/class-permalink-settings.php
-msgid "When enabled, product slugs are updated on every sync based on the source field above. When disabled, only new products get a slug from Skwirrel."
-msgstr "Lorsque activé, les slugs de produits sont mis à jour à chaque synchronisation en fonction du champ source ci-dessus. Lorsque désactivé, seuls les nouveaux produits reçoivent un slug de Skwirrel."
 
 #: includes/class-permalink-settings.php:104
 msgid "Product manufacturer base"
 msgstr "Base du fabricant produit"
 
+#: includes/class-permalink-settings.php:115
+msgid "Configure how Skwirrel generates product URL slugs during sync."
+msgstr "Configurez comment Skwirrel génère les slugs d'URL de produits lors de la synchronisation."
+
+#: includes/class-permalink-settings.php:126
+msgid "Product name (default)"
+msgstr "Nom du produit (par défaut)"
+
+#: includes/class-permalink-settings.php:127
+#: includes/class-permalink-settings.php:145
+msgid "Internal product code (SKU)"
+msgstr "Code article interne (SKU)"
+
+#: includes/class-permalink-settings.php:128
+#: includes/class-permalink-settings.php:146
+msgid "Manufacturer product code"
+msgstr "Code article fabricant"
+
+#: includes/class-permalink-settings.php:129
+#: includes/class-permalink-settings.php:147
+msgid "External product ID"
+msgstr "ID produit externe"
+
+#: includes/class-permalink-settings.php:130
+#: includes/class-permalink-settings.php:148
+msgid "Skwirrel product ID"
+msgstr "ID produit Skwirrel"
+
+#: includes/class-permalink-settings.php:132
+msgid "The source field used as the base URL (slug) for new products."
+msgstr "Le champ source utilisé comme URL de base (slug) pour les nouveaux produits."
+
+#: includes/class-permalink-settings.php:144
+msgid "None — WordPress auto-numbers (-2, -3)"
+msgstr "Aucun — WordPress numérote automatiquement (-2, -3)"
+
+#: includes/class-permalink-settings.php:150
+msgid "If the slug already exists, this field is appended as a suffix. Existing slugs are not changed."
+msgstr "Si le slug existe déjà, ce champ est ajouté comme suffixe. Les slugs existants ne sont pas modifiés."
+
+#: includes/class-permalink-settings.php:163
+msgid "Also update slugs for existing products during sync"
+msgstr "Mettre également à jour les slugs des produits existants lors de la synchronisation"
+
+#: includes/class-permalink-settings.php:165
+msgid "When enabled, product slugs are updated on every sync based on the source field above. When disabled, only new products get a slug from Skwirrel."
+msgstr "Lorsque activé, les slugs de produits sont mis à jour à chaque synchronisation en fonction du champ source ci-dessus. Lorsque désactivé, seuls les nouveaux produits reçoivent un slug de Skwirrel."
+
 #: includes/class-permalink-settings.php:177
 msgid "The base slug for the product manufacturer taxonomy URLs."
 msgstr "Le slug de base pour les URL de la taxonomie des fabricants de produits."
 
-#: includes/class-product-sync-meta-box.php:70
+#: includes/class-product-documents.php:56
+msgid "Documents"
+msgstr "Documents"
+
+#: includes/class-product-documents.php:100
+msgid "Skwirrel documents"
+msgstr "Documents Skwirrel"
+
+#: includes/class-product-documents.php:118
+msgid "No documents linked to this product."
+msgstr "Aucun document lié à ce produit."
+
+#: includes/class-product-documents.php:129
+msgid "Edit"
+msgstr "Modifier"
+
+#: includes/class-product-sync-meta-box.php:40
+msgid "Skwirrel"
+msgstr "Skwirrel"
+
+#: includes/class-product-sync-meta-box.php:63
 msgid "This product is not managed by Skwirrel."
 msgstr "Ce produit n'est pas géré par Skwirrel."
 
-#: includes/class-product-sync-meta-box.php:78
+#: includes/class-product-sync-meta-box.php:72
 msgid "Product ID:"
 msgstr "ID produit :"
 
-#: includes/class-product-sync-meta-box.php:83
+#: includes/class-product-sync-meta-box.php:78
 msgid "Last synced:"
 msgstr "Dernière synchronisation :"
 
-#: includes/class-product-sync-meta-box.php:93
+#: includes/class-product-sync-meta-box.php:88
 msgid "Sync this product"
 msgstr "Synchroniser ce produit"
 
-#: includes/class-product-sync-meta-box.php:167
-msgid "Product synced successfully (%s)."
-msgstr "Produit synchronisé avec succès (%s)."
-
-#: includes/class-product-sync-meta-box.php:133
+#: includes/class-product-sync-meta-box.php:125
+#: includes/class-product-sync-meta-box.php:175
 msgid "Sync failed."
 msgstr "La synchronisation a échoué."
 
-#: includes/class-product-sync-meta-box.php:139
+#: includes/class-product-sync-meta-box.php:133
 msgid "Network error. Please try again."
 msgstr "Erreur réseau. Veuillez réessayer."
 
@@ -697,149 +1031,129 @@ msgstr "ID de produit invalide."
 msgid "No Skwirrel product ID found for this product."
 msgstr "Aucun ID produit Skwirrel trouvé pour ce produit."
 
-msgid "Fetch products from API"
-msgstr "Récupérer les produits via l'API"
-
-msgid "Fetching products from API…"
-msgstr "Récupération des produits via l'API…"
-
+#: includes/class-product-sync-meta-box.php:167
 #, php-format
-msgid "Fetching products from API… (%d found)"
-msgstr "Récupération des produits via l'API… (%d trouvés)"
+msgid "Product synced successfully (%s)."
+msgstr "Produit synchronisé avec succès (%s)."
 
-msgid "Create & update products"
-msgstr "Créer & mettre à jour les produits"
-
-msgid "Creating & updating products…"
-msgstr "Création & mise à jour des produits…"
-
-msgid "Assign categories & brands"
-msgstr "Attribuer catégories & marques"
-
-msgid "Assigning categories & brands…"
-msgstr "Attribution des catégories & marques…"
-
-msgid "Assign categories, brands & manufacturers"
-msgstr "Attribuer catégories, marques & fabricants"
-
-msgid "Assigning categories, brands & manufacturers…"
-msgstr "Attribution des catégories, marques & fabricants…"
-
-msgid "Connect attributes"
-msgstr "Connecter les attributs"
-
-msgid "Connecting attributes…"
-msgstr "Connexion des attributs…"
-
-msgid "Download images & documents"
-msgstr "Télécharger images & documents"
-
-msgid "Downloading images & documents…"
-msgstr "Téléchargement des images & documents…"
-
-msgid "Cleanup & finalize"
-msgstr "Nettoyage & finalisation"
-
-msgid "Cleaning up…"
-msgstr "Nettoyage…"
-
-#, php-format
-msgid "%d fetched"
-msgstr "%d récupérés"
-
-msgid "This page refreshes automatically every 5 seconds."
-msgstr "Cette page se rafraîchit automatiquement toutes les 5 secondes."
-
-msgid "Sync manufacturers"
-msgstr "Synchroniser les fabricants"
-
-msgid "Sync manufacturer_name to product_manufacturer taxonomy"
-msgstr "Synchroniser manufacturer_name vers la taxonomie product_manufacturer"
-
-msgid "Registers the product_manufacturer taxonomy and assigns manufacturers from Skwirrel product data."
-msgstr "Enregistre la taxonomie product_manufacturer et attribue les fabricants à partir des données produit Skwirrel."
-
-msgid "Brands"
-msgstr "Marques"
-
-msgid "Brand"
-msgstr "Marque"
-
-msgid "Search brands"
-msgstr "Rechercher des marques"
-
-msgid "All brands"
-msgstr "Toutes les marques"
-
-msgid "Edit brand"
-msgstr "Modifier la marque"
-
-msgid "Update brand"
-msgstr "Mettre à jour la marque"
-
-msgid "Add new brand"
-msgstr "Ajouter une marque"
-
-msgid "New brand name"
-msgstr "Nouveau nom de marque"
-
-msgid "Manufacturers"
-msgstr "Fabricants"
-
-msgid "Manufacturer"
-msgstr "Fabricant"
-
-msgid "Search manufacturers"
-msgstr "Rechercher des fabricants"
-
-msgid "All manufacturers"
-msgstr "Tous les fabricants"
-
-msgid "Edit manufacturer"
-msgstr "Modifier le fabricant"
-
-msgid "Update manufacturer"
-msgstr "Mettre à jour le fabricant"
-
-msgid "Add new manufacturer"
-msgstr "Ajouter un fabricant"
-
-msgid "New manufacturer name"
-msgstr "Nouveau nom de fabricant"
-
-msgid "Skwirrel"
-msgstr "Skwirrel"
-
+#: includes/class-product-upserter.php:796
 #, php-format
 msgid "Product %s"
 msgstr "Produit %s"
 
+#: includes/class-sync-service.php:179
+msgid "Fetching products from API…"
+msgstr "Récupération des produits via l'API…"
+
+#: includes/class-sync-service.php:267
+#, php-format
+msgid "Fetching products from API… (%d found)"
+msgstr "Récupération des produits via l'API… (%d trouvés)"
+
+#: includes/class-sync-service.php:294 includes/class-sync-service.php:332
+msgid "Creating & updating products…"
+msgstr "Création & mise à jour des produits…"
+
+#: includes/class-sync-service.php:342
+msgid "Assigning categories, brands & manufacturers…"
+msgstr "Attribution des catégories, marques & fabricants…"
+
+#: includes/class-sync-service.php:343
+msgid "Assigning categories & brands…"
+msgstr "Attribution des catégories & marques…"
+
+#: includes/class-sync-service.php:390 includes/class-sync-service.php:419
+msgid "Connecting attributes…"
+msgstr "Connexion des attributs…"
+
+#: includes/class-sync-service.php:436 includes/class-sync-service.php:463
+#: includes/class-sync-service.php:488
+msgid "Downloading images & documents…"
+msgstr "Téléchargement des images & documents…"
+
+#: includes/class-sync-service.php:503
+msgid "Cleaning up…"
+msgstr "Nettoyage…"
+
+#: includes/class-taxonomy-manager.php:141
+#: includes/class-taxonomy-manager.php:153
 msgid "Variant"
 msgstr "Variante"
 
+#: includes/class-taxonomy-manager.php:282
 #, php-format
 msgid "Search %s"
 msgstr "Rechercher %s"
 
+#: includes/class-taxonomy-manager.php:284
 #, php-format
 msgid "All %s"
 msgstr "Tous les %s"
 
+#: includes/class-taxonomy-manager.php:286
 #, php-format
 msgid "Edit %s"
 msgstr "Modifier %s"
 
+#: includes/class-taxonomy-manager.php:288
 #, php-format
 msgid "Update %s"
 msgstr "Mettre à jour %s"
 
+#: includes/class-taxonomy-manager.php:290
 #, php-format
 msgid "Add new %s"
 msgstr "Ajouter %s"
 
+#: includes/class-taxonomy-manager.php:292
 #, php-format
 msgid "New %s"
 msgstr "Nouveau %s"
 
-msgid "Filter by manufacturer"
-msgstr "Filtrer par fabricant"
+#~ msgid "Static token (X-Skwirrel-Api-Token)"
+#~ msgstr "Jeton statique (X-Skwirrel-Api-Token)"
+
+#~ msgid "Skwirrel PIM sync for WooCommerce"
+#~ msgstr "Skwirrel PIM sync for WooCommerce"
+
+#~ msgid "Logs"
+#~ msgstr "Journaux"
+
+#~ msgid ""
+#~ "WARNING: All Skwirrel products will be PERMANENTLY deleted. This cannot be undone!\n"
+#~ "\n"
+#~ "Are you sure?"
+#~ msgstr ""
+#~ "AVERTISSEMENT : Tous les produits Skwirrel seront DÉFINITIVEMENT supprimés. Cette action est irréversible !\n"
+#~ "\n"
+#~ "Êtes-vous sûr ?"
+
+#~ msgid ""
+#~ "All Skwirrel products will be moved to the trash.\n"
+#~ "\n"
+#~ "Are you sure?"
+#~ msgstr ""
+#~ "Tous les produits Skwirrel seront déplacés vers la corbeille.\n"
+#~ "\n"
+#~ "Êtes-vous sûr ?"
+
+#~ msgid "The page will refresh automatically when the sync is completed."
+#~ msgstr "La page sera automatiquement actualisée lorsque la synchronisation sera terminée."
+
+#~ msgid ""
+#~ "This product is managed by Skwirrel and will be recreated during the next sync.\n"
+#~ "\n"
+#~ "Are you sure you want to trash this product?"
+#~ msgstr ""
+#~ "Ce produit est géré par Skwirrel et sera recréé lors de la prochaine synchronisation.\n"
+#~ "\n"
+#~ "Êtes-vous sûr de vouloir mettre ce produit à la corbeille ?"
+
+#~ msgid ""
+#~ "This category was created by Skwirrel Sync and will be recreated during the next sync.\n"
+#~ "\n"
+#~ "Are you sure you want to delete this category?"
+#~ msgstr ""
+#~ "Cette catégorie a été créée par Skwirrel Sync et sera recréée lors de la prochaine synchronisation.\n"
+#~ "\n"
+#~ "Êtes-vous sûr de vouloir supprimer cette catégorie ?"

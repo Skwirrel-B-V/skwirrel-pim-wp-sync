@@ -401,6 +401,8 @@ class Skwirrel_WC_Sync_Admin_Settings {
         }
 
         wp_enqueue_style('skwirrel-pim-sync-admin', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/admin.css', [], SKWIRREL_WC_SYNC_VERSION);
+        wp_enqueue_style('skwirrel-pim-sync-dashboard', SKWIRREL_WC_SYNC_PLUGIN_URL . 'assets/dashboard.css', [], SKWIRREL_WC_SYNC_VERSION);
+        wp_enqueue_style('skwirrel-pim-sync-inter-font', 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap', [], null);
 
         // Admin page JS (purge confirmation + auto-reload).
         wp_register_script('skwirrel-pim-sync-admin', false, [], SKWIRREL_WC_SYNC_VERSION, true);
@@ -431,6 +433,13 @@ class Skwirrel_WC_Sync_Admin_Settings {
             . '   if (this.value !== "_custom") { document.getElementById("image_language_custom").value = ""; }'
             . '  });'
             . ' }'
+            . ' var subInput = document.getElementById("skwirrel_subdomain");'
+            . ' var urlField = document.getElementById("endpoint_url");'
+            . ' if (subInput && urlField) {'
+            . '  subInput.addEventListener("input", function() {'
+            . '   urlField.value = this.value ? "https://" + this.value + ".skwirrel.eu/jsonrpc" : "";'
+            . '  });'
+            . ' }'
             . ' var historyBtn = document.getElementById("skwirrel-clear-history-btn");'
             . ' if (historyBtn) {'
             . '  historyBtn.addEventListener("click", function(e) {'
@@ -441,10 +450,10 @@ class Skwirrel_WC_Sync_Admin_Settings {
             . '})();'
         );
 
-        // Auto-reload when sync is in progress — only on the sync tab.
+        // Auto-reload when sync is in progress — only on the dashboard.
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- tab parameter is display-only
-        $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'sync';
-        if ($current_tab === 'sync' && get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
+        $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'dashboard';
+        if (in_array($current_tab, ['dashboard', 'sync'], true) && get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS)) {
             wp_add_inline_script('skwirrel-pim-sync-admin', 'setTimeout(function(){ window.location.reload(); }, 5000);');
         }
     }
@@ -457,48 +466,18 @@ class Skwirrel_WC_Sync_Admin_Settings {
         $this->maybe_show_notices();
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- tab parameter is display-only
-        $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'sync';
-        $allowed_tabs = ['sync', 'settings', 'logs'];
-        if (!in_array($active_tab, $allowed_tabs, true)) {
-            $active_tab = 'sync';
+        $active_view = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'dashboard';
+        $allowed_views = ['dashboard', 'sync', 'history', 'settings', 'debug'];
+        if (!in_array($active_view, $allowed_views, true)) {
+            $active_view = 'dashboard';
+        }
+        // Legacy: map 'sync' tab to dashboard.
+        if ($active_view === 'sync') {
+            $active_view = 'dashboard';
         }
 
-        $base_url = admin_url('admin.php?page=' . self::PAGE_SLUG);
-
-        ?>
-        <?php $sync_in_progress = (bool) get_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS); ?>
-        <div class="wrap skwirrel-sync-wrap">
-            <h1 class="wp-heading-inline"><?php esc_html_e('Skwirrel PIM sync for WooCommerce', 'skwirrel-pim-sync'); ?></h1>
-            <?php if ($sync_in_progress) : ?>
-                <span class="page-title-action" style="opacity: 0.5; pointer-events: none; cursor: default;">⟳ <?php esc_html_e('Sync in progress…', 'skwirrel-pim-sync'); ?></span>
-            <?php else : ?>
-                <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=skwirrel_wc_sync_run'), 'skwirrel_wc_sync_run', '_wpnonce')); ?>" class="page-title-action"><?php esc_html_e('Sync Products', 'skwirrel-pim-sync'); ?></a>
-            <?php endif; ?>
-            <hr class="wp-header-end">
-
-            <nav class="nav-tab-wrapper">
-                <a href="<?php echo esc_url(add_query_arg('tab', 'sync', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'sync' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Sync Products', 'skwirrel-pim-sync'); ?></a>
-                <a href="<?php echo esc_url(add_query_arg('tab', 'settings', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Settings', 'skwirrel-pim-sync'); ?></a>
-                <a href="<?php echo esc_url(add_query_arg('tab', 'logs', $base_url)); ?>" class="nav-tab <?php echo esc_attr( $active_tab === 'logs' ? 'nav-tab-active' : '' ); ?>"><?php esc_html_e('Logs', 'skwirrel-pim-sync'); ?></a>
-            </nav>
-
-            <div class="skwirrel-tab-content">
-                <?php
-                switch ($active_tab) {
-                    case 'settings':
-                        $this->render_tab_settings();
-                        break;
-                    case 'logs':
-                        $this->render_tab_logs();
-                        break;
-                    default:
-                        $this->render_tab_sync();
-                        break;
-                }
-                ?>
-            </div>
-        </div>
-        <?php
+        $dashboard = new Skwirrel_WC_Sync_Admin_Dashboard();
+        $dashboard->render($active_view);
     }
 
     private function render_tab_sync(): void {
