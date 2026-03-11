@@ -45,21 +45,12 @@
     - SVN_URL="https://plugins.svn.wordpress.org/skwirrel-pim-sync/trunk"
     - SVN_DIR="/tmp/svn-trunk"
     - ""
-    - "# Checkout trunk"
-    - svn co "$SVN_URL" "$SVN_DIR" --username "$WP_SVN_USERNAME" --password "$WP_SVN_PASSWORD" --non-interactive --trust-server-cert
-    - ""
-    - "# Sync your plugin files into the SVN working copy"
-    - "# $BUDDY_PIPELINE_WORKSPACE is where your Git repo lives"
-    - rsync -av --delete \
-    - '  --exclude=''.git'' \'
-    - '  --exclude=''.github'' \'
-    - '  --exclude=''node_modules'' \'
-    - '  --exclude=''.buddy'' \'
-    - '  --exclude=''vendor'' \'
-    - '  --exclude=''composer.json'' \'
-    - '  --exclude=''composer.lock'' \'
-    - '  "$BUDDY_PIPELINE_WORKSPACE/" "$SVN_DIR/"'
-    - ""
+    - "# Checkout or update"
+    - "if [ -d \"$SVN_DIR/.svn\" ]; then"
+    - '  svn up "$SVN_DIR" --username "$WP_SVN_USERNAME" --password "$WP_SVN_PASSWORD" --non-interactive --trust-server-cert'
+    - else
+    - '  svn co "$SVN_URL" "$SVN_DIR" --username "$WP_SVN_USERNAME" --password "$WP_SVN_PASSWORD" --non-interactive --trust-server-cert'
+    - fi
     setup_commands:
     - apt-get update -qq && apt-get install -y -qq subversion rsync
     shell: BASH
