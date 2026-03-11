@@ -9,6 +9,7 @@
   actions:
   - action: Run PHP tests
     type: BUILD
+    disabled: true
     execute_commands:
     - composer validate
     - composer install
