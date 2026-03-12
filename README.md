@@ -28,7 +28,7 @@ Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwir
 ## Requirements
 
 - WordPress 6.0 or higher
-- WooCommerce 9.6 or higher (tested up to 10.6)
+- WooCommerce 8.0 or higher (9.6+ recommended for native brand support; tested up to 10.6)
 - PHP 8.1 or higher
 - An active Skwirrel account with API access
 

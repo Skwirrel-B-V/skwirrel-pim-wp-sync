@@ -8,7 +8,7 @@
  * Author URI: https://skwirrel.eu
  * Requires at least: 6.0
  * Requires PHP: 8.1
- * WC requires at least: 9.6
+ * WC requires at least: 8.0
  * WC tested up to: 10.6
  * License: GPL v2 or later
  * Text Domain: skwirrel-pim-sync
