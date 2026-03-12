@@ -2,7 +2,7 @@
 Contributors: skwirrel
 Tags: woocommerce, sync, erp, pim, skwirrel
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 6.9.4
 Requires PHP: 8.1
 Stable tag: 2.0.4
 License: GPLv2 or later
@@ -35,7 +35,7 @@ Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwir
 **Requirements:**
 
 * WordPress 6.0 or higher
-* WooCommerce 8.0 or higher (tested up to 10.5)
+* WooCommerce 9.7 or higher (tested up to 10.6)
 * PHP 8.1 or higher
 * An active Skwirrel account with API access
 
