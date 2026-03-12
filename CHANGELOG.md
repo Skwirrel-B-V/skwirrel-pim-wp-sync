@@ -2,6 +2,14 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [2.0.5]
+
+* Update README and plugin description to reflect current feature set
+* Replace "ERP/PIM" references with "PIM" throughout
+* Update WooCommerce minimum to 8.0 (9.6+ recommended for native brand support)
+* Update WooCommerce tested up to 10.6
+* Update WordPress tested up to 6.9.4
+
 ## [2.0.4]
 
 * Inline "Update on re-sync" toggle in Permalinks section — saves instantly via AJAX with ✓ indicator

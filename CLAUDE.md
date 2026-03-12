@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-WordPress plugin that synchronises products from the Skwirrel ERP/PIM system into WooCommerce via a JSON-RPC 2.0 API. Written in PHP 8.1+, targeting WordPress 6.x and WooCommerce 8+ (tested up to 10.5).
+WordPress plugin that synchronises products from the Skwirrel PIM system into WooCommerce via a JSON-RPC 2.0 API. Written in PHP 8.1+, targeting WordPress 6.x and WooCommerce 8+ (9.6+ recommended for native brand support; tested up to 10.6).
 
 All UI strings use English source text with translatable strings (text domain `skwirrel-pim-sync`). Translations are available for nl_NL, nl_BE, de_DE, fr_FR, fr_BE, en_US, and en_GB.
 

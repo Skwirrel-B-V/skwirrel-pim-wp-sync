@@ -1,31 +1,41 @@
 === Skwirrel PIM sync for WooCommerce ===
 Contributors: skwirrel
-Tags: woocommerce, sync, erp, pim, skwirrel
+Tags: woocommerce, sync, pim, skwirrel, product-sync
 Requires at least: 6.0
-Tested up to: 6.9
+Tested up to: 6.9.4
 Requires PHP: 8.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Synchronises products from the Skwirrel ERP/PIM system to WooCommerce via a JSON-RPC 2.0 API.
+Synchronises products from the Skwirrel PIM system to WooCommerce via a JSON-RPC 2.0 API.
 
 == Description ==
 
-Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, images and documents are synchronised automatically.
+Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
 
 **Features:**
 
-* Full and delta product synchronisation
-* Support for simple and variable products
-* Automatic import of product images and documents
+* Full and delta (incremental) product synchronisation
+* Simple and variable product support with ETIM classification for variation axes
+* Automatic category tree sync with parent-child hierarchy
+* Brand sync via WooCommerce native product_brand taxonomy
+* Manufacturer sync with dedicated product_manufacturer taxonomy
+* Product image and document import into the WordPress media library
+* Custom class attributes (alphanumeric, logical, numeric, range, date, multi)
+* Configurable product URL slugs (source field, suffix, update on re-sync)
+* GTIN and manufacturer product code search filter on the product list page
 * Scheduled synchronisation via WP-Cron or Action Scheduler
-* Manual synchronisation from the WordPress admin panel
-* ETIM classification support for variation axes
+* Manual synchronisation from the admin dashboard with live progress tracking
+* Date-grouped sync history (last 20 runs)
+* Stale product and category purge after full sync
+* Delete protection with warnings and automatic full re-sync
+* Multilingual support with 7 locales (nl_NL, nl_BE, de_DE, fr_FR, fr_BE, en_US, en_GB)
 
 **Requirements:**
 
-* WooCommerce 8.0 or higher
+* WordPress 6.0 or higher
+* WooCommerce 8.0 or higher (9.6+ recommended for native brand support; tested up to 10.6)
 * PHP 8.1 or higher
 * An active Skwirrel account with API access
 
@@ -52,6 +62,13 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 2.0.5 =
+* Update README and plugin description to reflect current feature set
+* Replace "ERP/PIM" references with "PIM" throughout
+* Update WooCommerce minimum to 8.0 (9.6+ recommended for native brand support)
+* Update WooCommerce tested up to 10.6
+* Update WordPress tested up to 6.9.4
 
 = 2.0.4 =
 * Inline "Update on re-sync" toggle in Permalinks section — saves instantly via AJAX
