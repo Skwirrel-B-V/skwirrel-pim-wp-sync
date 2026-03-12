@@ -1,6 +1,6 @@
 === Skwirrel PIM sync for WooCommerce ===
 Contributors: skwirrel
-Tags: woocommerce, sync, erp, pim, skwirrel
+Tags: woocommerce, sync, pim, skwirrel, product-sync
 Requires at least: 6.0
 Tested up to: 6.9.4
 Requires PHP: 8.1
@@ -8,11 +8,11 @@ Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Synchronises products from the Skwirrel ERP/PIM system to WooCommerce via a JSON-RPC 2.0 API.
+Synchronises products from the Skwirrel PIM system to WooCommerce via a JSON-RPC 2.0 API.
 
 == Description ==
 
-Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
+Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
 
 **Features:**
 

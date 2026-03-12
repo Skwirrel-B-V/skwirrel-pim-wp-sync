@@ -1,10 +1,10 @@
 # Skwirrel PIM sync for WooCommerce
 
-**Version 2.0.4** — WordPress plugin that synchronises products from the Skwirrel ERP/PIM system to WooCommerce via a JSON-RPC 2.0 API.
+**Version 2.0.4** — WordPress plugin that synchronises products from the Skwirrel PIM system to WooCommerce via a JSON-RPC 2.0 API.
 
 ## Description
 
-Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel ERP/PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
+Skwirrel PIM sync for WooCommerce connects your WooCommerce webshop to the Skwirrel PIM system. Products, variations, categories, brands, manufacturers, images, and documents are synchronised automatically or on demand.
 
 **Features:**
 
