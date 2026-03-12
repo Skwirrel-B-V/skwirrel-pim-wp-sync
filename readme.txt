@@ -4,7 +4,7 @@ Tags: woocommerce, sync, pim, skwirrel, product-sync
 Requires at least: 6.0
 Tested up to: 6.9.4
 Requires PHP: 8.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,13 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 2.0.5 =
+* Update README and plugin description to reflect current feature set
+* Replace "ERP/PIM" references with "PIM" throughout
+* Update WooCommerce minimum to 8.0 (9.6+ recommended for native brand support)
+* Update WooCommerce tested up to 10.6
+* Update WordPress tested up to 6.9.4
 
 = 2.0.4 =
 * Inline "Update on re-sync" toggle in Permalinks section — saves instantly via AJAX
