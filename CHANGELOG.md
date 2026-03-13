@@ -2,6 +2,10 @@
 
 All notable changes to Skwirrel PIM sync for WooCommerce will be documented in this file.
 
+## [2.0.6]
+
+* Auto-register WordPress uploads directory as WooCommerce approved download directory during sync — fixes "downloadable file cannot be used" errors on sites with WooCommerce's Approved Download Directories enforcement enabled
+
 ## [2.0.5]
 
 * Update README and plugin description to reflect current feature set

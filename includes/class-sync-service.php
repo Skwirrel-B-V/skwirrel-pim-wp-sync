@@ -62,6 +62,7 @@ class Skwirrel_WC_Sync_Service {
 		}
 
 		$sync_started_at = time();
+		$this->ensure_uploads_approved_directory();
 		$this->category_sync->reset_seen_category_ids();
 		Skwirrel_WC_Sync_History::sync_heartbeat();
 		Skwirrel_WC_Sync_History::clear_sync_progress();
@@ -773,6 +774,45 @@ class Skwirrel_WC_Sync_Service {
 		}
 		$parts = preg_split( '/[\s,]+/', $raw, -1, PREG_SPLIT_NO_EMPTY );
 		return array_values( array_map( 'intval', array_filter( $parts, 'is_numeric' ) ) );
+	}
+
+	/**
+	 * Ensure the WordPress uploads directory is registered as a WooCommerce
+	 * approved download directory so that imported files can be used as
+	 * downloadable product files without manual configuration.
+	 *
+	 * @since 2.0.6
+	 */
+	private function ensure_uploads_approved_directory(): void {
+		if ( ! class_exists( 'Automattic\WooCommerce\Internal\ProductDownloads\Download_Directories' ) ) {
+			return;
+		}
+
+		try {
+			$download_directories = wc_get_container()->get(
+				\Automattic\WooCommerce\Internal\ProductDownloads\Download_Directories::class
+			);
+
+			$upload_dir = wp_upload_dir();
+			$upload_url = $upload_dir['baseurl'] ?? '';
+
+			if ( '' === $upload_url ) {
+				return;
+			}
+
+			// Trailing slash ensures only this directory tree is approved.
+			$upload_url = trailingslashit( $upload_url );
+
+			if ( ! $download_directories->is_valid_path( $upload_url ) ) {
+				$download_directories->add_approved_directory( $upload_url );
+				$this->logger->info( 'Registered uploads directory as WooCommerce approved download directory', [ 'url' => $upload_url ] );
+			}
+		} catch ( \Throwable $e ) {
+			$this->logger->verbose(
+				'Could not register uploads as approved download directory',
+				[ 'error' => $e->getMessage() ]
+			);
+		}
 	}
 
 	private function get_include_languages(): array {
