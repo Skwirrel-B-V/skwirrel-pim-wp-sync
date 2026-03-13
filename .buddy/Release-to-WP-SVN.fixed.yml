@@ -41,6 +41,7 @@
     docker_image_tag: 8.5
   - action: Upload to WP SVN
     type: BUILD
+    disabled: true
     execute_commands:
     - set -ex
     - ""
