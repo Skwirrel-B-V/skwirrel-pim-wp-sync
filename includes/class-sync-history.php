@@ -108,6 +108,7 @@ class Skwirrel_WC_Sync_History {
 	 * @param int    $trashed            Number of stale products trashed.
 	 * @param int    $categories_removed Number of stale categories removed.
 	 * @param string $trigger            What initiated the sync: 'manual', 'scheduled', or 'purge'.
+	 * @param array  $failed_products    List of failed product details (product_id, sku, name, error).
 	 *
 	 * @return void
 	 */
@@ -121,7 +122,8 @@ class Skwirrel_WC_Sync_History {
 		int $without_attrs = 0,
 		int $trashed = 0,
 		int $categories_removed = 0,
-		string $trigger = self::TRIGGER_MANUAL
+		string $trigger = self::TRIGGER_MANUAL,
+		array $failed_products = []
 	): void {
 		$result = [
 			'success'            => $ok,
@@ -135,6 +137,7 @@ class Skwirrel_WC_Sync_History {
 			'without_attributes' => $without_attrs,
 			'trigger'            => $trigger,
 			'timestamp'          => time(),
+			'failed_products'    => array_slice( $failed_products, 0, 50 ),
 		];
 
 		update_option( self::OPTION_LAST_SYNC_RESULT, $result, false );
@@ -147,6 +150,25 @@ class Skwirrel_WC_Sync_History {
 		}
 
 		self::append_to_history( $result );
+	}
+
+	/**
+	 * Update just the failed_products list in the last sync result.
+	 *
+	 * Used after a "resync failed" run to replace the failed list with
+	 * only the products that are still failing.
+	 *
+	 * @param array $failed_products Updated list of failed product details.
+	 * @return void
+	 */
+	public static function update_failed_products( array $failed_products ): void {
+		$result = get_option( self::OPTION_LAST_SYNC_RESULT, null );
+		if ( ! is_array( $result ) ) {
+			return;
+		}
+		$result['failed_products'] = array_slice( $failed_products, 0, 50 );
+		$result['failed']          = count( $failed_products );
+		update_option( self::OPTION_LAST_SYNC_RESULT, $result, false );
 	}
 
 	/**

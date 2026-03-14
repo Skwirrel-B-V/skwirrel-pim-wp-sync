@@ -4,7 +4,7 @@ Tags: woocommerce, sync, pim, skwirrel, product-sync
 Requires at least: 6.0
 Tested up to: 6.9.4
 Requires PHP: 8.1
-Stable tag: 2.0.5
+Stable tag: 2.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,14 @@ You can set an automatic schedule (hourly, twice daily, or daily) or synchronise
 The plugin uses the Skwirrel external ID as a unique key. Existing products are updated, not duplicated.
 
 == Changelog ==
+
+= 2.0.7 =
+* Track failed products with details (product ID, SKU, name, error)
+* Show expandable failed products table in sync results
+* Add "Resync failed products" button to retry only failed products
+
+= 2.0.6 =
+* Auto-register uploads directory as WooCommerce approved download directory during sync
 
 = 2.0.5 =
 * Update README and plugin description to reflect current feature set

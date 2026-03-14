@@ -40,6 +40,8 @@ class Skwirrel_WC_Sync_Admin_Settings {
     private const BG_SYNC_TRANSIENT = 'skwirrel_wc_sync_bg_token';
     private const BG_PURGE_ACTION = 'skwirrel_wc_sync_purge_all';
     private const BG_PURGE_TRANSIENT = 'skwirrel_wc_sync_purge_token';
+    private const BG_RETRY_ACTION = 'skwirrel_wc_sync_retry_bg';
+    private const BG_RETRY_TRANSIENT = 'skwirrel_wc_sync_retry_token';
 
     private function __construct() {
         add_action('admin_menu', [$this, 'add_menu'], 99);
@@ -56,6 +58,9 @@ class Skwirrel_WC_Sync_Admin_Settings {
         add_action('wp_ajax_' . self::BG_PURGE_ACTION, [$this, 'handle_background_purge']);
         add_action('wp_ajax_nopriv_' . self::BG_PURGE_ACTION, [$this, 'handle_background_purge']);
         add_action('wp_ajax_skwirrel_wc_sync_save_slug_resync', [$this, 'handle_save_slug_resync']);
+        add_action('admin_post_skwirrel_wc_sync_retry_failed', [$this, 'handle_retry_failed']);
+        add_action('wp_ajax_' . self::BG_RETRY_ACTION, [$this, 'handle_background_retry']);
+        add_action('wp_ajax_nopriv_' . self::BG_RETRY_ACTION, [$this, 'handle_background_retry']);
     }
 
     public function add_menu(): void {
@@ -289,6 +294,62 @@ class Skwirrel_WC_Sync_Admin_Settings {
 
         $service = new Skwirrel_WC_Sync_Service();
         $service->run_sync(false, Skwirrel_WC_Sync_History::TRIGGER_MANUAL);
+
+        delete_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS);
+
+        wp_die('', 200);
+    }
+
+    public function handle_retry_failed(): void {
+        if (!current_user_can('manage_woocommerce')) {
+            wp_die(esc_html__('Access denied.', 'skwirrel-pim-sync'));
+        }
+        check_admin_referer('skwirrel_wc_sync_retry_failed', '_wpnonce');
+
+        $token = bin2hex(random_bytes(16));
+        set_transient(self::BG_RETRY_TRANSIENT . '_' . $token, '1', 120);
+        set_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS, (string) time(), 60);
+
+        $url = add_query_arg([
+            'action' => self::BG_RETRY_ACTION,
+            'token' => $token,
+        ], admin_url('admin-ajax.php'));
+
+        $redirect = add_query_arg([
+            'page' => self::PAGE_SLUG,
+            'tab' => 'sync',
+            'retry' => 'queued',
+        ], admin_url('admin.php'));
+
+        wp_safe_redirect($redirect);
+
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+
+        wp_remote_post($url, [
+            'blocking' => false,
+            'timeout' => 0.01,
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WordPress core filter
+            'sslverify' => apply_filters('https_local_ssl_verify', false),
+        ]);
+
+        exit;
+    }
+
+    public function handle_background_retry(): void {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- uses transient-based token instead of nonce
+        $token = isset($_REQUEST['token']) ? sanitize_text_field(wp_unslash($_REQUEST['token'])) : '';
+        if (empty($token) || strlen($token) !== 32 || !ctype_xdigit($token)) {
+            wp_die('Invalid request', 403);
+        }
+        if (get_transient(self::BG_RETRY_TRANSIENT . '_' . $token) !== '1') {
+            wp_die('Invalid or expired token', 403);
+        }
+        delete_transient(self::BG_RETRY_TRANSIENT . '_' . $token);
+
+        $service = new Skwirrel_WC_Sync_Service();
+        $service->sync_failed_products();
 
         delete_transient(Skwirrel_WC_Sync_History::SYNC_IN_PROGRESS);
 
@@ -636,6 +697,51 @@ class Skwirrel_WC_Sync_Admin_Settings {
                     <strong><?php esc_html_e('Error message:', 'skwirrel-pim-sync'); ?></strong><br>
                     <?php echo esc_html($last_result['error']); ?>
                 </div>
+            <?php endif; ?>
+
+            <?php
+            $fp = $last_result['failed_products'] ?? [];
+            if (!empty($fp)) :
+            ?>
+                <details style="margin-top: 15px;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #d63638; padding: 8px 0;">
+                        <?php
+                        /* translators: %d = number of failed products */
+                        echo esc_html(sprintf(__('Show %d failed product(s)', 'skwirrel-pim-sync'), count($fp)));
+                        ?>
+                    </summary>
+                    <table class="widefat" style="margin-top: 10px;">
+                        <thead>
+                            <tr>
+                                <th><?php esc_html_e('Product ID', 'skwirrel-pim-sync'); ?></th>
+                                <th><?php esc_html_e('SKU', 'skwirrel-pim-sync'); ?></th>
+                                <th><?php esc_html_e('Name', 'skwirrel-pim-sync'); ?></th>
+                                <th><?php esc_html_e('Error', 'skwirrel-pim-sync'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($fp as $fi => $item) : ?>
+                            <tr style="<?php echo esc_attr($fi % 2 === 0 ? '' : 'background-color: #f9f9f9;'); ?>">
+                                <td><?php echo esc_html((string) ($item['product_id'] ?? '?')); ?></td>
+                                <td><?php echo esc_html((string) ($item['sku'] ?? '-')); ?></td>
+                                <td><?php echo esc_html((string) ($item['name'] ?? '-')); ?></td>
+                                <td style="color: #d63638;"><?php echo esc_html((string) ($item['error'] ?? '-')); ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                    <?php if (!$sync_in_progress) : ?>
+                    <p style="margin-top: 10px;">
+                        <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=skwirrel_wc_sync_retry_failed'), 'skwirrel_wc_sync_retry_failed', '_wpnonce')); ?>" class="button button-secondary" style="color: #d63638; border-color: #d63638;">
+                            <?php
+                            /* translators: %d = number of failed products */
+                            echo esc_html(sprintf(__('Resync %d failed product(s)', 'skwirrel-pim-sync'), count($fp)));
+                            ?>
+                        </a>
+                    </p>
+                    <?php endif; ?>
+                </details>
             <?php endif; ?>
         <?php else : ?>
             <div style="background: #f0f0f0; border: 1px solid #ccc; padding: 15px; border-radius: 4px; text-align: center;">
@@ -1074,6 +1180,10 @@ class Skwirrel_WC_Sync_Admin_Settings {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only redirect parameter
         if (isset($_GET['history']) && $_GET['history'] === 'cleared') {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Sync history deleted.', 'skwirrel-pim-sync') . '</p></div>';
+        }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only redirect parameter
+        if (isset($_GET['retry']) && $_GET['retry'] === 'queued') {
+            echo '<div class="notice notice-info is-dismissible"><p>' . esc_html__('Resync of failed products started in the background. Refresh the page to check the status.', 'skwirrel-pim-sync') . '</p></div>';
         }
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only redirect parameter
         if (isset($_GET['purge']) && $_GET['purge'] === 'queued') {
