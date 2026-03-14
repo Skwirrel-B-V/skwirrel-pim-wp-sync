@@ -1,11 +1,8 @@
 - pipeline: release-to-wp-svn
   name: Release to WP-SVN
-  refs:
-  - refs/heads/main
   fail_on_prepare_env_warning: true
   events:
   - type: WEBHOOK
-  - type: PUSH
   actions:
   - action: Run PHP tests
     type: BUILD
@@ -41,6 +38,7 @@
     docker_image_tag: 8.5
   - action: Upload to WP SVN
     type: BUILD
+    disabled: true
     execute_commands:
     - set -ex
     - ""
